@@ -1,0 +1,75 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity GPIO_Wrapper is
+  Generic (
+    IO_PINS : integer := 8
+  );
+  Port ( 
+    clk, rst : in STD_LOGIC;
+    enable : in std_logic;
+    access_mode : in std_logic_vector(1 downto 0); --*0: set, *1: get
+    config_in : in STD_LOGIC_VECTOR(IO_PINS-1 downto 0);
+    scheduler_wanted : out std_logic;
+    scheduler_done : in std_logic;
+    values_out : out STD_LOGIC_VECTOR(IO_PINS-1 downto 0);
+    gpio_data_in : in STD_LOGIC_VECTOR (IO_PINS-1 downto 0);
+    gpio_data_out : out STD_LOGIC_VECTOR (IO_PINS-1 downto 0)
+  );
+end GPIO_Wrapper;
+
+architecture Behavioral of GPIO_Wrapper is
+  component GPIO_Bank_Unit
+    Generic (
+      INPUTS : integer := 8;
+      OUTPUTS : integer := 8
+    );
+    Port ( 
+      clk, rst : in std_logic;
+      write_en : in std_logic;
+      config_in : in STD_LOGIC_VECTOR(OUTPUTS-1 downto 0);
+      values_out : out STD_LOGIC_VECTOR(INPUTS-1 downto 0);
+      gpio_data_in : in STD_LOGIC_VECTOR (INPUTS-1 downto 0);
+      gpio_data_out : out STD_LOGIC_VECTOR (OUTPUTS-1 downto 0)
+    );
+  end component;
+  signal write_mode_en : std_logic := '0';
+  signal write_values : std_logic_vector(IO_PINS-1 downto 0);
+  signal values_read : std_logic_vector(IO_PINS-1 downto 0);
+  signal values_to_scheduler : std_logic_vector(IO_PINS-1 downto 0);
+  signal last_enable : std_logic := '0';
+begin
+  GPIO: GPIO_Bank_Unit generic map(IO_PINS, IO_PINS) port map(clk, rst, write_mode_en, write_values, values_read, gpio_data_in, gpio_data_out);
+
+  MODE: process(clk, rst)
+  begin
+    if rst = '1' then
+      write_mode_en <= '0';
+      scheduler_wanted <= '0';
+      values_to_scheduler <= (others => '0');
+      write_values <= (others => '0');
+    elsif rising_edge(clk) then
+      if scheduler_done = '1' then
+        scheduler_wanted <= '0';
+      end if;
+      last_enable <= enable;
+      if enable = '1' and last_enable = '0' then
+        write_mode_en <= '0';
+        case access_mode(0) is
+          when '0' =>
+            -- write/set
+            write_mode_en <= '1';
+            write_values <= config_in;
+          when '1' =>
+            -- read/get
+            scheduler_wanted <= '1';
+            values_to_scheduler <= values_read;
+          when others => null;
+        end case;
+      end if;
+    end if;
+  end process;
+
+  values_out <= values_to_scheduler;
+  
+end Behavioral;

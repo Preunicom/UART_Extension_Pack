@@ -18,7 +18,8 @@ architecture TESTBENCH of TB_Encoder is
       unit_number : in std_logic_vector(2 downto 0); 
       unit_data : in std_logic_vector(DATA_BITS-1 downto 0);
       uart_out : out std_logic_vector(DATA_BITS-1 downto 0);
-      uart_out_valid : out std_logic
+      uart_out_valid : out std_logic;
+      next_schedule : out std_logic
     );
   end component;
   component UART_Unit

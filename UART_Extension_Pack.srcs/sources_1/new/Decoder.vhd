@@ -30,6 +30,7 @@ architecture Behavioral of Decoder is
 
   signal uart_inp_synced : std_logic_vector(DATA_BITS-1 downto 0);
   signal uart_inp_valid_synced : std_logic;
+  signal last_uart_inp_valid : std_logic := '0';
 begin
 
   SYNC_IO: process(clk, rst)
@@ -40,6 +41,8 @@ begin
       unit_number <= (others => '0');
       unit_data <= (others => '0');
     elsif rising_edge(clk) then
+      -- Set last
+      last_uart_inp_valid <= uart_inp_valid_synced;
       -- Sync in
       uart_inp_synced <= uart_inp;
       uart_inp_valid_synced <= uart_inp_valid;
@@ -69,13 +72,13 @@ begin
     end if;
   end process;
 
-  ASYNC: process(state, uart_inp_synced, unit_number_data, counter_ready, uart_inp_valid_synced)
+  ASYNC: process(state, uart_inp_synced, unit_number_data, counter_ready, uart_inp_valid_synced, last_uart_inp_valid)
   begin
     nextstate <= S0;
     unit_number_data <= unit_number_data;
     case state is
       when S0 => 
-        if uart_inp_valid_synced = '1' then
+        if uart_inp_valid_synced = '1' and last_uart_inp_valid = '0' then
           nextstate <= S1;
           counter_rst <= '1';
           unit_number_data <= uart_inp_synced;
@@ -83,7 +86,7 @@ begin
       when S1 =>
         nextstate <= S1;
         counter_rst <= '0';
-        if uart_inp_valid_synced = '1' then
+        if uart_inp_valid_synced = '1' and last_uart_inp_valid = '0' then
           nextstate <= S2;
           counter_rst <= '1';
         else
@@ -95,7 +98,7 @@ begin
       when S2 =>
         counter_rst <= '0';
         nextstate <= S2;
-        if uart_inp_valid_synced = '1' then
+        if uart_inp_valid_synced = '1' and last_uart_inp_valid = '0' then
           nextstate <= S1;
           counter_rst <= '1';
           unit_number_data <= uart_inp_synced;

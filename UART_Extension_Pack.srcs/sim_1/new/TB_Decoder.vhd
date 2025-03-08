@@ -26,7 +26,7 @@ architecture TESTBENCH of TB_Decoder is
   signal tb_uart_inp_valid : std_logic;
   signal tb_out_en : std_logic;
   signal tb_access_mode : std_logic_vector(1 downto 0);
-  signal tb_unit_number : std_logic_vector(2 downto 0); 
+  signal tb_unit_number : std_logic_vector(2 downto 0);
   signal tb_unit_data : std_logic_vector(7 downto 0);
   constant tbase : time := 10 ns;
 begin
