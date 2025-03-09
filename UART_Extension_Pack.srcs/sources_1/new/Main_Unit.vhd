@@ -145,14 +145,14 @@ architecture Behavioral of Main_Unit is
     );
     Port ( 
       control : in STD_LOGIC_VECTOR (2 downto 0);
-      inp_a : in STD_LOGIC_VECTOR (WIDTH downto 0);
-      inp_b : in STD_LOGIC_VECTOR (WIDTH downto 0);
-      inp_c : in STD_LOGIC_VECTOR (WIDTH downto 0);
-      inp_d : in STD_LOGIC_VECTOR (WIDTH downto 0);
-      inp_e : in STD_LOGIC_VECTOR (WIDTH downto 0);
-      inp_f : in STD_LOGIC_VECTOR (WIDTH downto 0);
-      inp_g : in STD_LOGIC_VECTOR (WIDTH downto 0);
-      inp_h : in STD_LOGIC_VECTOR (WIDTH downto 0);
+      inp_a : in STD_LOGIC_VECTOR (WIDTH-1 downto 0);
+      inp_b : in STD_LOGIC_VECTOR (WIDTH-1 downto 0);
+      inp_c : in STD_LOGIC_VECTOR (WIDTH-1 downto 0);
+      inp_d : in STD_LOGIC_VECTOR (WIDTH-1 downto 0);
+      inp_e : in STD_LOGIC_VECTOR (WIDTH-1 downto 0);
+      inp_f : in STD_LOGIC_VECTOR (WIDTH-1 downto 0);
+      inp_g : in STD_LOGIC_VECTOR (WIDTH-1 downto 0);
+      inp_h : in STD_LOGIC_VECTOR (WIDTH-1 downto 0);
       outp : out STD_LOGIC_VECTOR (WIDTH-1 downto 0)
     );
   end component;
@@ -216,7 +216,7 @@ begin
   B_GPIO: GPIO_Wrapper generic map(8) port map(clk, rst, b_en, decode_access_mode, decode_unit_data, b_scheduler_wanted, b_scheduler_done, b_values_out, gpio_pins_in, gpio_pins_out);
 
   SCHEDULE: PriorityScheduler port map(clk, rst, scheduler_schdule_next, scheduler_write_en, schedule_control_sig, a_new_data_received, b_scheduler_wanted, '0', '0', '0', '0', '0', '0', a_scheduler_done, b_scheduler_done, open, open, open, open, open, open);
-  SCHED_MUX: MUX generic map(8) port map(schedule_control_sig, a_new_data_received & a_received_data, b_scheduler_wanted & b_values_out, (others=>'0'), (others=>'0'), (others=>'0'), (others=>'0'), (others=>'0'), (others=>'0'),  mux_unit_data_out);
+  SCHED_MUX: MUX generic map(8) port map(schedule_control_sig, a_received_data, b_values_out, (others=>'0'), (others=>'0'), (others=>'0'), (others=>'0'), (others=>'0'), (others=>'0'),  mux_unit_data_out);
 
   ENCODE: Encoder generic map(8) port map(clk, rst, scheduler_write_en, not host_full, schedule_control_sig, mux_unit_data_out, host_send_data, host_write_en, scheduler_schdule_next);
 end Behavioral;

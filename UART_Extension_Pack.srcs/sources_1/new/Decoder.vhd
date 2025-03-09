@@ -41,7 +41,7 @@ begin
       unit_number <= (others => '0');
       unit_data <= (others => '0');
     elsif rising_edge(clk) then
-      -- Set last
+      -- Set last_uart_inp_valid to synced current one
       last_uart_inp_valid <= uart_inp_valid_synced;
       -- Sync in
       uart_inp_synced <= uart_inp;
@@ -49,15 +49,19 @@ begin
       -- Sync out
       case state is
         when S2 =>
+          -- set decoded data pair data to outputs
           access_mode <= unit_number_data(4 downto 3);
           unit_number <= unit_number_data(2 downto 0);
           unit_data <= uart_inp_synced;
           if nextstate = S2 then
+            -- no new data detected
             out_en <= '1';
           else
+            -- new data detected --> output not valid anymore (to bypass 2 cycle sync delay of outputs and inputs)
             out_en <= '0';
           end if;
         when others =>
+          -- invalid output in S0 and S1
           out_en <= '0';
       end case;
     end if;
@@ -78,31 +82,41 @@ begin
     unit_number_data <= unit_number_data;
     case state is
       when S0 => 
+        -- no input to decode given
         if uart_inp_valid_synced = '1' and last_uart_inp_valid = '0' then
+          -- edge detected of uart_inp_valid_synced
+          --> New data
           nextstate <= S1;
           counter_rst <= '1';
           unit_number_data <= uart_inp_synced;
         end if;
       when S1 =>
-        nextstate <= S1;
+        -- get first half of the data
         counter_rst <= '0';
         if uart_inp_valid_synced = '1' and last_uart_inp_valid = '0' then
+          -- edge detected of uart_inp_valid_synced
+          --> New data
           nextstate <= S2;
           counter_rst <= '1';
         else
           nextstate <= S1;
         end if;
         if counter_ready = '1' then
+          -- resets after 1ms if no new data is available during this time
           nextstate <= S0;
         end if;
       when S2 =>
+        -- get second half of the data
         counter_rst <= '0';
         nextstate <= S2;
         if uart_inp_valid_synced = '1' and last_uart_inp_valid = '0' then
+          -- edge detected of uart_inp_valid_synced
+          --> New data (next pair of data)
           nextstate <= S1;
           counter_rst <= '1';
           unit_number_data <= uart_inp_synced;
         elsif counter_ready = '1' then
+          -- resets after 1ms if no new data is available during this time
           nextstate <= S0;
         end if;
       when others => null;
@@ -110,6 +124,7 @@ begin
   end process;
 
   TIMER: process(clk, counter_rst)
+    -- timer for 1 ms
   begin
     if counter_rst = '1' then
       counter <= 0;
@@ -117,6 +132,7 @@ begin
       counter_ready <= '0';
       counter <= counter + 1;
       if counter = (IN_FREQ_HZ / 1000) - 1 then
+        -- timer ends
         counter <= 0;
         counter_ready <= '1';
       end if;

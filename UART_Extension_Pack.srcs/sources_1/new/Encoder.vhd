@@ -46,6 +46,7 @@ begin
         uart_out <= (others => '0');
         schedule_next <= '1';
         if write_en = '1' then
+          -- got new data
           schedule_next <= '0';
           nextstate <= S1;
         end if;
@@ -59,6 +60,7 @@ begin
           nextstate <= S2;
         end if;
       when S2 =>
+        -- uart slot free and giving data to uart in progress
         uart_out_valid <= '1';
         uart_out <= zero_prefix_unit_number & unit_number;
         nextstate <= S2;
@@ -76,6 +78,7 @@ begin
           nextstate <= S4;
         end if;
       when S4 => 
+        -- uart slot free and giving data to uart in progress
         uart_out_valid <= '1';
         uart_out <= unit_data; 
         nextstate <= S4;

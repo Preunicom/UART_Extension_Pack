@@ -27,9 +27,11 @@ entity PriorityScheduler is
 end PriorityScheduler;
 
 architecture Behavioral of PriorityScheduler is
+  -- outputs signalizes the unit that their scheduled data was sent
   signal outputs : std_logic_vector(7 downto 0);
   signal next_outputs : std_logic_vector(7 downto 0);
 begin
+  -- build outputs from vector
   outp_a <= outputs(0);
   outp_b <= outputs(1);
   outp_c <= outputs(2);
@@ -55,6 +57,7 @@ begin
       next_outputs <= (others => '0');
     elsif rising_edge(clk) then
       if inp_ressource_ready = '1' then
+        -- scheduling next data (prio is: a > b > ... > h)
         outp_valid <= '1';
         if inp_a = '1' then
           control_sig <= "000";

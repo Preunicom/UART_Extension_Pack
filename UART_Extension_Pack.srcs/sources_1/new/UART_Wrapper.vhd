@@ -59,13 +59,13 @@ architecture Behavioral of UART_Wrapper is
 begin
   UART: UART_Unit generic map(IN_FREQ_HZ, BAUD_FREQ_HZ, DATA_BITS, STOP_BITS, PARITY_ACTIVE, PARITY_MODE) port map(clk, rst, send_data, write_en_int, full_int, TX_pin, received_data, frame_error, parity_error, uart_received_valid, RX_pin);
 
-  process(write_en, write_en_last, full_int, rst)
+  TRANSMIT: process(write_en, write_en_last, full_int, rst)
   begin
     if rst = '1' then
       write_en_int <= '0';
     else 
       if write_en = '1' and write_en_last = '0' then
-        -- new write_en
+        -- new write_en for UART_Unit
         write_en_int <= '1';
       end if;
       if full_int = '1' and write_en = '1' and write_en_last = '1' then
@@ -75,22 +75,24 @@ begin
     end if;
   end process;
   
-  process(clk, rst)
+  EDGE_DETECTION: process(clk, rst)
   begin
     if rst = '1' then
       write_en_last <= '0';
     elsif rising_edge(clk) then
+      -- set write_en_last to current write_en
       write_en_last <= write_en;
     end if;
   end process;
 
   full <= full_int;
   
-  process(uart_received_valid, reset_new_data_received)
+  RECEIVE: process(uart_received_valid, reset_new_data_received)
   begin
     if uart_received_valid = '1' then
       new_data_received <= '1';
     elsif reset_new_data_received = '1' or rst = '1' then
+      -- reset new_data_received
       new_data_received <= '0';
     end if;
   end process;

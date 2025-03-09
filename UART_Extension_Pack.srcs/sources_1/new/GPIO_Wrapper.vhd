@@ -52,6 +52,8 @@ begin
     elsif rising_edge(clk) then
       last_enable_write <= enable;
       if enable = '1' and last_enable_write = '0' then
+        -- edge of enable detected
+        -- no write/set mode if it won't be overridden
         write_mode_en <= '0';
         if access_mode(0) = '0' then
           -- write/set mode
@@ -72,10 +74,11 @@ begin
       last_enable_read <= enable;
       last_values <= values_read;
       if scheduler_done = '1' then
+        -- scheduling finished --> resets demand of scheduler
         scheduler_wanted <= '0';
       end if;
       if (last_values /= values_read) or ((access_mode(0) = '1') and (enable = '1' and last_enable_read = '0')) then
-        -- Interrrupt or read/get mode
+        -- Interrrupt or edge detected of enable and read/get mode
         scheduler_wanted <= '1';
         values_to_scheduler <= values_read;
       end if;
