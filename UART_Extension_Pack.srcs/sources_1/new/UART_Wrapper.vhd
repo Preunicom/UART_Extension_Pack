@@ -20,7 +20,6 @@ entity UART_Wrapper is
     TX_pin : out std_logic;
 
     received_data : out std_logic_vector(DATA_BITS-1 downto 0);
-    frame_error, parity_error : out std_logic;
     new_data_received : out std_logic;
     RX_pin : in std_logic;
     reset_new_data_received : in std_logic
@@ -56,6 +55,7 @@ architecture Behavioral of UART_Wrapper is
   signal write_en_int : std_logic := '0';
   signal write_en_last : std_logic := '0';
   signal full_int : std_logic;
+  signal frame_error, parity_error : std_logic;
 begin
   UART: UART_Unit generic map(IN_FREQ_HZ, BAUD_FREQ_HZ, DATA_BITS, STOP_BITS, PARITY_ACTIVE, PARITY_MODE) port map(clk, rst, send_data, write_en_int, full_int, TX_pin, received_data, frame_error, parity_error, uart_received_valid, RX_pin);
 
@@ -89,7 +89,8 @@ begin
   
   RECEIVE: process(uart_received_valid, reset_new_data_received)
   begin
-    if uart_received_valid = '1' then
+    if uart_received_valid = '1' and frame_error = '0' and parity_error = '0' then    
+      -- new package received with no errors
       new_data_received <= '1';
     elsif reset_new_data_received = '1' or rst = '1' then
       -- reset new_data_received
