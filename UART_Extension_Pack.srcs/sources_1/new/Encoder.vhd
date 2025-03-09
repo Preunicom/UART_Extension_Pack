@@ -24,53 +24,7 @@ architecture Behavioral of Encoder is
   signal state : statetype := S0;
   signal nextstate : statetype;
   signal zero_prefix_unit_number : std_logic_vector(DATA_BITS-1 downto 3) := (others => '0');
-  signal write_en_synced : std_logic;
-  signal unit_number_synced : std_logic_vector(2 downto 0);
-  signal uart_is_empty_synced : std_logic;
-  signal unit_data_synced : std_logic_vector(DATA_BITS-1 downto 0);
 begin
-
-  SYNC_IO: process(clk, rst)
-  begin
-    if rst = '1' then
-      uart_out <= (others => '0');
-      uart_out_valid <= '0';
-    elsif rising_edge(clk) then
-      -- Sync in
-      write_en_synced <= write_en;
-      unit_number_synced <= unit_number;
-      unit_data_synced <= unit_data;
-      uart_is_empty_synced <= uart_is_empty;
-      -- Sync out
-      schedule_next <= '0';
-      case state is 
-        when S0 =>
-          uart_out_valid <= '0';
-          uart_out <= (others => '0');
-          if nextstate = S0 then
-            schedule_next <= '1';
-          end if;
-        when S1 =>
-          uart_out_valid <= '1';
-          uart_out <= zero_prefix_unit_number & unit_number_synced;
-        when S2 => 
-          uart_out_valid <= '0';
-          uart_out <= zero_prefix_unit_number & unit_number_synced;
-        when S3 => 
-          uart_out <= unit_data_synced;
-          uart_out_valid <= '1';
-        when S4 => 
-          uart_out <= unit_data_synced;
-          uart_out_valid <= '0';
-          schedule_next <= '1';
-        when S5 => 
-          uart_out <= unit_data_synced;
-          uart_out_valid <= '0';
-          schedule_next <= '1';
-        when others => null;
-      end case;
-    end if;
-  end process;
 
   SYNC: process(clk, rst)
   begin
@@ -81,30 +35,60 @@ begin
     end if;
   end process;
 
-  ASYNC: process(state, write_en_synced, uart_is_empty_synced)
+  ASYNC: process(state, write_en, uart_is_empty)
   begin
     nextstate <= S0;
+    schedule_next <= '0';
     case state is
       when S0 =>
-        if write_en_synced = '1' then
+        -- waiting for data
+        uart_out_valid <= '0';
+        uart_out <= (others => '0');
+        schedule_next <= '1';
+        if write_en = '1' then
+          schedule_next <= '0';
           nextstate <= S1;
         end if;
       when S1 =>
-        nextstate <= S2;
+        -- waiting for uart slot
+        uart_out_valid <= '0';
+        uart_out <= zero_prefix_unit_number & unit_number;
+        nextstate <= S1;
+        if uart_is_empty = '1' then
+          -- slot free
+          nextstate <= S2;
+        end if;
       when S2 =>
+        uart_out_valid <= '1';
+        uart_out <= zero_prefix_unit_number & unit_number;
         nextstate <= S2;
-        if uart_is_empty_synced = '1' then
+        if uart_is_empty = '0' then
+          -- slot taken
           nextstate <= S3;
         end if;
       when S3 =>
-        nextstate <= S4;
+        -- waiting for uart slot
+        uart_out_valid <= '0';
+        uart_out <= unit_data;
+        nextstate <= S3;
+        if uart_is_empty = '1' then
+          -- slot free
+          nextstate <= S4;
+        end if;
       when S4 => 
+        uart_out_valid <= '1';
+        uart_out <= unit_data; 
         nextstate <= S4;
-        if uart_is_empty_synced = '1' then
+        if uart_is_empty = '0' then
+          -- slot taken
+          schedule_next <= '1';
           nextstate <= S5;
         end if;
       when S5 =>
-        -- 1 clock cyle delay
+        -- one clock cyle delay to meet scheduler timing for scheduling next data
+        uart_out_valid <= '0';
+        uart_out <= (others => '0');
+        schedule_next <= '1';
         nextstate <= S0;
     end case;
   end process;

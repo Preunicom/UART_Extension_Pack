@@ -37,17 +37,18 @@ begin
   end process;
 
   tb_rst <= '1', '0' after 1*tbase;
-  tb_rx_pin_host <= '1', 
-  '0' after 10*tbase, '1' after 12*tbase, '0' after 14*tbase, '1' after 18*tbase, '0' after 20*tbase, '1' after 28*tbase, --0b00001001
+  tb_rx_pin_host <= '1',
+  '0' after 10*tbase, '1' after 12*tbase, '0' after 14*tbase, '1' after 18*tbase, '0' after 20*tbase, '1' after 28*tbase, --0b00001001 (get GPIO data)
   '0' after 40*tbase, '1' after 42*tbase, --0b11111111
-  '0' after 110*tbase, '1' after 112*tbase, '0' after 114*tbase, '1' after 128*tbase, --00001001
+  '0' after 110*tbase, '1' after 112*tbase, '0' after 114*tbase, '1' after 128*tbase, --00000001 (set GPIO data)
   '0' after 140*tbase, '1' after 144*tbase, --0b11111110
-  '0' after 200*tbase, '1' after 218*tbase, --00000000
+  '0' after 200*tbase, '1' after 218*tbase, --00000000 (send UART)
   '0' after 240*tbase,  '1' after 246*tbase, --0b11111100
-  '0' after 300*tbase, '1' after 318*tbase, --00000000
+  '0' after 300*tbase, '1' after 318*tbase, --00000000 (send UART)
   '0' after 340*tbase,  '1' after 350*tbase; --0b11110000
   tb_rx_pin_a <= '1',
                  '0' after 110*tbase, '1' after 120*tbase, '0' after 122*tbase, '1' after 128*tbase; --0b00010000
-  tb_gpio_pins_in <= "11010001"; --0xD1
+  tb_gpio_pins_in <= "01111111", --0x01
+                    "11010011" after 50*tbase; --0xD3
 
 end TESTBENCH;

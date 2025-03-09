@@ -39,14 +39,22 @@ begin
   outp_g <= outputs(6);
   outp_h <= outputs(7);
 
-  SCHED: process(clk, rst)
+  process(inp_ressource_ready, next_outputs, rst)
   begin
     if rst = '1' then
       outputs <= (others => '0');
+    elsif inp_ressource_ready = '1' then
+      -- set outputs async to next_output if scheduling is pending to save a clock cycle
+      outputs <= next_outputs;
+    end if;
+  end process;
+  
+  SCHED: process(clk, rst)
+  begin
+    if rst = '1' then
       next_outputs <= (others => '0');
     elsif rising_edge(clk) then
       if inp_ressource_ready = '1' then
-        outputs <= next_outputs;
         outp_valid <= '1';
         if inp_a = '1' then
           control_sig <= "000";
