@@ -36,36 +36,48 @@ architecture Behavioral of GPIO_Wrapper is
   signal write_mode_en : std_logic := '0';
   signal write_values : std_logic_vector(IO_PINS-1 downto 0);
   signal values_read : std_logic_vector(IO_PINS-1 downto 0);
+  signal last_values : std_logic_vector(IO_PINS-1 downto 0);
   signal values_to_scheduler : std_logic_vector(IO_PINS-1 downto 0);
-  signal last_enable : std_logic := '0';
+  signal last_enable_write : std_logic := '0';
+  signal last_enable_read : std_logic := '0';
 begin
   GPIO: GPIO_Bank_Unit generic map(IO_PINS, IO_PINS) port map(clk, rst, write_mode_en, write_values, values_read, gpio_data_in, gpio_data_out);
 
-  MODE: process(clk, rst)
+  OUTPUTS: process(clk, rst)
   begin
     if rst = '1' then
       write_mode_en <= '0';
+      write_values <= (others => '0');
+      last_enable_write <= '0';
+    elsif rising_edge(clk) then
+      last_enable_write <= enable;
+      if enable = '1' and last_enable_write = '0' then
+        write_mode_en <= '0';
+        if access_mode(0) = '0' then
+          -- write/set mode
+          write_mode_en <= '1';
+          write_values <= config_in;
+        end if;
+      end if;
+    end if;
+  end process;
+
+  INPUTS: process(clk, rst)
+  begin
+    if rst = '1' then
       scheduler_wanted <= '0';
       values_to_scheduler <= (others => '0');
-      write_values <= (others => '0');
+      last_enable_read <= '0';
     elsif rising_edge(clk) then
+      last_enable_read <= enable;
+      last_values <= values_read;
       if scheduler_done = '1' then
         scheduler_wanted <= '0';
       end if;
-      last_enable <= enable;
-      if enable = '1' and last_enable = '0' then
-        write_mode_en <= '0';
-        case access_mode(0) is
-          when '0' =>
-            -- write/set
-            write_mode_en <= '1';
-            write_values <= config_in;
-          when '1' =>
-            -- read/get
-            scheduler_wanted <= '1';
-            values_to_scheduler <= values_read;
-          when others => null;
-        end case;
+      if (last_values /= values_read) or ((access_mode(0) = '1') and (enable = '1' and last_enable_read = '0')) then
+        -- Interrrupt or read/get mode
+        scheduler_wanted <= '1';
+        values_to_scheduler <= values_read;
       end if;
     end if;
   end process;
