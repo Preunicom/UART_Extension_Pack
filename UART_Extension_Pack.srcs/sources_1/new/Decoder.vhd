@@ -12,6 +12,7 @@ entity Decoder is
     rst : in STD_LOGIC;
     uart_inp : in std_logic_vector(DATA_BITS-1 downto 0);
     uart_inp_valid : in std_logic;
+    uart_error : in std_logic;
     out_en : out std_logic;
     access_mode : out std_logic_vector(1 downto 0);
     unit_number : out std_logic_vector(2 downto 0); 
@@ -31,6 +32,9 @@ architecture Behavioral of Decoder is
   signal uart_inp_synced : std_logic_vector(DATA_BITS-1 downto 0);
   signal uart_inp_valid_synced : std_logic;
   signal last_uart_inp_valid : std_logic := '0';
+  signal uart_error_synced : std_logic;
+  signal uart_error_S1 : std_logic;
+  signal uart_error_combined : std_logic := '0';
 begin
 
   SYNC_IO: process(clk, rst)
@@ -46,23 +50,31 @@ begin
       -- Sync in
       uart_inp_synced <= uart_inp;
       uart_inp_valid_synced <= uart_inp_valid;
+      uart_error_synced <= uart_error;
       -- Sync out
       case state is
-        when S2 =>
+        when S0 => -- waiting for data
+          out_en <= '0';
+          -- resets uart errors of others states
+          uart_error_S1 <= '0';
+          uart_error_combined <= '0';
+        when S1 => -- Get first data part
+          out_en <= '0';
+          uart_error_S1 <= uart_error_S1 or uart_error_synced;
+          -- resets uart errors of other states
+          uart_error_combined <= '0';
+        when S2 => -- Get second data part
           -- set decoded data pair data to outputs
           access_mode <= unit_number_data(4 downto 3);
           unit_number <= unit_number_data(2 downto 0);
           unit_data <= uart_inp_synced;
-          if nextstate = S2 then
-            -- no new data detected
-            out_en <= '1';
-          else
-            -- new data detected --> output not valid anymore (to bypass 2 cycle sync delay of outputs and inputs)
-            out_en <= '0';
-          end if;
-        when others =>
-          -- invalid output in S0 and S1
-          out_en <= '0';
+          -- resets uart errors of other states
+          uart_error_S1 <= '0';
+          -- Sets uart_error_combined to one if error was present while receiving one of the 2 packages
+          uart_error_combined <= uart_error_synced or uart_error_combined or uart_error_S1; 
+          -- Enable output if no UART error exists
+          out_en <= not (uart_error_synced or uart_error_combined or uart_error_S1);
+        when others => null;
       end case;
     end if;
   end process;
@@ -85,7 +97,7 @@ begin
         -- no input to decode given
         if uart_inp_valid_synced = '1' and last_uart_inp_valid = '0' then
           -- edge detected of uart_inp_valid_synced
-          --> New data
+          --> New data (first half)
           nextstate <= S1;
           counter_rst <= '1';
           unit_number_data <= uart_inp_synced;
@@ -95,7 +107,7 @@ begin
         counter_rst <= '0';
         if uart_inp_valid_synced = '1' and last_uart_inp_valid = '0' then
           -- edge detected of uart_inp_valid_synced
-          --> New data
+          --> New data (second half)
           nextstate <= S2;
           counter_rst <= '1';
         else

@@ -52,10 +52,21 @@ begin
       if counter = DATA_BITS+STOP_BITS+PARITY_ACTIVE then
         parallel_out <= reg(DATA_BITS+1 downto 2); -- Last Bit not shifted yet (this clock cyle shift) and start bit as offset 
         data_valid <= '1';
-        if (reg(DATA_BITS+STOP_BITS+PARITY_ACTIVE downto DATA_BITS+STOP_BITS+PARITY_ACTIVE-STOP_BITS+1) & serial_in) = stop_bits_suffix then
+        if STOP_BITS = 1 then
+          -- Only one Bit (serial_in) is stop bit
+          if serial_in = stop_bits_suffix(0) then
             frame_error <= '0';
-        else
+          else
             frame_error <= '1';
+          end if;
+        else
+          -- More than one bit is stop bit
+          -- last bits of reg are stop bits --> one offset for last received bit, and one for start bit
+          if (reg(DATA_BITS+STOP_BITS+PARITY_ACTIVE downto DATA_BITS+PARITY_ACTIVE+2) & serial_in) = stop_bits_suffix then
+            frame_error <= '0';
+          else
+              frame_error <= '1';
+          end if;
         end if;
         if PARITY_ACTIVE = 1 then
             -- Calculate parity incl. parity bit

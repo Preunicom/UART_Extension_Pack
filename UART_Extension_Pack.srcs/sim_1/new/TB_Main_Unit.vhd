@@ -38,8 +38,8 @@ begin
 
   tb_rst <= '1', '0' after 1*tbase;
   tb_rx_pin_host <= '1',
-                    '0' after 10*tbase, '1' after 12*tbase, '0' after 14*tbase, '1' after 18*tbase, '0' after 20*tbase, '1' after 28*tbase, --0b00001001 (get GPIO data)
-                    '0' after 40*tbase, '1' after 42*tbase, --0b11111111
+  '0' after 10*tbase, '1' after 12*tbase, '0' after 14*tbase, '1' after 18*tbase, '0' after 20*tbase, -- '1' after 28*tbase, --0b00001001 (get GPIO data)
+                    '0' after 30*tbase, '1' after 32*tbase, --0b11111111
                     '0' after 110*tbase, '1' after 112*tbase, '0' after 114*tbase, '1' after 128*tbase, --00000001 (set GPIO data)
                     '0' after 140*tbase, '1' after 144*tbase, --0b11111110
                     '0' after 200*tbase, '1' after 218*tbase, --00000000 (send UART)

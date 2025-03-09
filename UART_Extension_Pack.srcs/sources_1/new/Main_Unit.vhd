@@ -93,6 +93,7 @@ architecture Behavioral of Main_Unit is
       rst : in STD_LOGIC;
       uart_inp : in std_logic_vector(DATA_BITS-1 downto 0);
       uart_inp_valid : in std_logic;
+      uart_error : in std_logic;
       out_en : out std_logic;
       access_mode : out std_logic_vector(1 downto 0);
       unit_number : out std_logic_vector(2 downto 0); 
@@ -178,6 +179,7 @@ architecture Behavioral of Main_Unit is
   -- host receive
   signal host_received_data : std_logic_vector(7 downto 0);
   signal host_new_data_received : std_logic;
+  signal host_frame_error, host_parity_error : std_logic;
 
   -- decoder
   signal decode_out_en : std_logic;
@@ -208,8 +210,8 @@ architecture Behavioral of Main_Unit is
   signal mux_unit_data_out : std_logic_vector(7 downto 0);
   
 begin
-  UART_HOST: UART_Unit generic map(FPGA_FREQ, HOST_BAUD, 8, 1, 0, 0) port map(clk, rst, host_send_data, host_write_en, host_full, tx_pin_host, host_received_data, open, open, host_new_data_received, rx_pin_host);
-  DECODE: Decoder generic map(8, FPGA_FREQ) port map(clk, rst, host_received_data, host_new_data_received, decode_out_en, decode_access_mode, decode_unit_number, decode_unit_data);
+  UART_HOST: UART_Unit generic map(FPGA_FREQ, HOST_BAUD, 8, 1, 0, 0) port map(clk, rst, host_send_data, host_write_en, host_full, tx_pin_host, host_received_data, host_frame_error, host_parity_error, host_new_data_received, rx_pin_host);
+  DECODE: Decoder generic map(8, FPGA_FREQ) port map(clk, rst, host_received_data, host_new_data_received, (host_frame_error or host_parity_error), decode_out_en, decode_access_mode, decode_unit_number, decode_unit_data);
   EN_DEMUX: DEMUX port map(decode_unit_number, decode_out_en, a_en, b_en, open, open, open, open, open, open);
 
   A_UART: UART_Wrapper generic map(FPGA_FREQ, HOST_BAUD, 8, 1, 0, 0) port map(clk, rst, decode_unit_data, a_en, open, tx_pin_a, a_received_data, open, open, a_new_data_received, rx_pin_a, a_scheduler_done);
