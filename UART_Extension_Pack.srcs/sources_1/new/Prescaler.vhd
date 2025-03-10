@@ -4,7 +4,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity Prescaler is
   Generic(
-    -- IN_FREQ_HZ has to be minimum 2*OUT_FREQ_HZ
+    -- IN_FREQ_HZ has to be minimum 2*BAUD_FREQ_HZ
     IN_FREQ_HZ : integer := 12000000;
     OUT_FREQ_HZ : integer := 9600
   );
@@ -27,10 +27,10 @@ begin
             clk_prescaled <= '1';
             counter <= 1;
           else 
-            counter <= counter + 2; -- 2 edges per clock cycle
+            counter <= counter + 1;
             clk_prescaled_intern <= clk_prescaled_intern;
             clk_prescaled <= clk_prescaled_intern;
-            -- integer gets truncated
+            -- integer gets truncated in VHDL
             if counter >= ((IN_FREQ_HZ + OUT_FREQ_HZ) / (2 * OUT_FREQ_HZ)) then
               clk_prescaled_intern <= clk_prescaled_intern nand clk_prescaled_intern;
               clk_prescaled <= clk_prescaled_intern nand clk_prescaled_intern;

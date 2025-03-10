@@ -44,7 +44,7 @@ architecture Behavioral of Main_Unit is
   end component;
   component UART_Wrapper
     Generic (
-      -- IN_FREQ_HZ has to be minimum 2*OUT_FREQ_HZ
+      -- IN_FREQ_HZ has to be minimum 2*BAUD_FREQ_HZ
       IN_FREQ_HZ : integer := 12000000;
       BAUD_FREQ_HZ : integer := 9600;
       -- DATA_BITS + STOP_BITS <= 15 has to be fullfilled
@@ -213,7 +213,7 @@ begin
   DECODE: Decoder generic map(8, FPGA_FREQ) port map(clk, rst, host_received_data, host_new_data_received, (host_frame_error or host_parity_error), decode_out_en, decode_access_mode, decode_unit_number, decode_unit_data);
   EN_DEMUX: DEMUX port map(decode_unit_number, decode_out_en, a_en, b_en, open, open, open, open, open, open);
 
-  A_UART: UART_Wrapper generic map(FPGA_FREQ, HOST_BAUD, 8, 1, 0, 0) port map(clk, rst, decode_unit_data, a_en, open, tx_pin_a, a_received_data, a_new_data_received, rx_pin_a, a_scheduler_done);
+  A_UART: UART_Wrapper generic map(FPGA_FREQ, 9600, 8, 1, 0, 0) port map(clk, rst, decode_unit_data, a_en, open, tx_pin_a, a_received_data, a_new_data_received, rx_pin_a, a_scheduler_done);
   B_GPIO: GPIO_Wrapper generic map(8) port map(clk, rst, b_en, decode_access_mode, decode_unit_data, b_scheduler_wanted, b_scheduler_done, b_values_out, gpio_pins_in, gpio_pins_out);
 
   SCHEDULE: PriorityScheduler port map(clk, rst, scheduler_schdule_next, scheduler_write_en, schedule_control_sig, a_new_data_received, b_scheduler_wanted, '0', '0', '0', '0', '0', '0', a_scheduler_done, b_scheduler_done, open, open, open, open, open, open);
