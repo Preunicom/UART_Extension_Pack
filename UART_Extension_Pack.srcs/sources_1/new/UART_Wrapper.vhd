@@ -51,10 +51,11 @@ architecture Behavioral of UART_Wrapper is
       RX_pin : in std_logic
     );
   end component;
-  signal uart_received_valid : std_logic;
   signal write_en_int : std_logic := '0';
   signal write_en_last : std_logic := '0';
   signal full_int : std_logic;
+  signal uart_received_valid : std_logic;
+  signal uart_received_valid_last : std_logic;
   signal frame_error, parity_error : std_logic;
 begin
   UART: UART_Unit generic map(IN_FREQ_HZ, BAUD_FREQ_HZ, DATA_BITS, STOP_BITS, PARITY_ACTIVE, PARITY_MODE) port map(clk, rst, send_data, write_en_int, full_int, TX_pin, received_data, frame_error, parity_error, uart_received_valid, RX_pin);
@@ -75,7 +76,7 @@ begin
     end if;
   end process;
   
-  EDGE_DETECTION: process(clk, rst)
+  EDGE_DETECTION_TRANSMIT: process(clk, rst)
   begin
     if rst = '1' then
       write_en_last <= '0';
@@ -89,12 +90,22 @@ begin
   
   RECEIVE: process(uart_received_valid, reset_new_data_received)
   begin
-    if uart_received_valid = '1' and frame_error = '0' and parity_error = '0' then    
+    if uart_received_valid = '1' and uart_received_valid_last = '0' and frame_error = '0' and parity_error = '0' then    
       -- new package received with no errors
       new_data_received <= '1';
     elsif reset_new_data_received = '1' or rst = '1' then
       -- reset new_data_received
       new_data_received <= '0';
+    end if;
+  end process;
+
+  EDGE_DETECTION_RECEIVE: process(clk, rst)
+  begin
+    if rst = '1' then
+      uart_received_valid_last <= '0';
+    elsif rising_edge(clk) then
+      -- set uart_received_valid_last to current uart_received_valid
+      uart_received_valid_last <= uart_received_valid;
     end if;
   end process;
 
