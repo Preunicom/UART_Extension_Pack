@@ -3,13 +3,13 @@
 # SW Build 4029153 on Fri Oct 13 20:13:54 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Tue Mar 11 15:44:19 2025
-# Process ID: 34103
+# Start of session at: Thu Mar 13 21:39:50 2025
+# Process ID: 39344
 # Current directory: /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.runs/synth_1
 # Command line: vivado -log Main_Unit.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source Main_Unit.tcl
 # Log file: /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.runs/synth_1/Main_Unit.vds
 # Journal file: /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.runs/synth_1/vivado.jou
-# Running On: a932da532e97, OS: Linux, CPU Frequency: , CPU Physical cores: 1, Host memory: 10419 MB
+# Running On: c48a8bf37305, OS: Linux, CPU Frequency: , CPU Physical cores: 1, Host memory: 10419 MB
 #-----------------------------------------------------------
 source Main_Unit.tcl -notrace
 WARNING: [Board 49-55] Pin file /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/production/1.1/part0_pins.xml is not available
@@ -23,7 +23,7 @@ Resolution: Please contact your board vendor with this message.
 WARNING: [Board 49-55] Pin file /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/production/1.1/part0_pins.xml is not available
 CRITICAL WARNING: [Board 49-56] Problem parsing board file - /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/production/1.1/board.xml.
 Resolution: Please contact your board vendor with this message.
-create_project: Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 1818.152 ; gain = 94.098 ; free physical = 5302 ; free virtual = 10863
+create_project: Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 1818.145 ; gain = 94.098 ; free physical = 4530 ; free virtual = 10215
 Command: read_checkpoint -auto_incremental -incremental /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/utils_1/imports/synth_1/Main_Unit.dcp
 INFO: [Vivado 12-5825] Read reference checkpoint from /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/utils_1/imports/synth_1/Main_Unit.dcp for incremental synthesis
 INFO: [Vivado 12-7989] Please ensure there are no constraint changes
@@ -36,10 +36,11 @@ INFO: [Designutils 20-5440] No compile time benefit to using incremental synthes
 INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 34142
+INFO: [Synth 8-7075] Helper process launched with PID 39381
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 2597.891 ; gain = 403.988 ; free physical = 4520 ; free virtual = 9880
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 2597.840 ; gain = 404.953 ; free physical = 3657 ; free virtual = 9125
 ---------------------------------------------------------------------------------
+WARNING: [Synth 8-9112] actual for formal port 'rst' is neither a static name nor a globally static expression [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:75]
 WARNING: [Synth 8-9112] actual for formal port 'uart_error' is neither a static name nor a globally static expression [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Main_Unit.vhd:213]
 WARNING: [Synth 8-9112] actual for formal port 'uart_is_empty' is neither a static name nor a globally static expression [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Main_Unit.vhd:222]
 INFO: [Synth 8-638] synthesizing module 'Main_Unit' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Main_Unit.vhd:20]
@@ -111,9 +112,9 @@ INFO: [Synth 8-638] synthesizing module 'UART_Receiver' [/home/user/Data/UART_Ex
 	Parameter PARITY_MODE bound to: 0 - type: integer 
 	Parameter IN_FREQ_HZ bound to: 12000000 - type: integer 
 	Parameter OUT_FREQ_HZ bound to: 1000000 - type: integer 
-INFO: [Synth 8-3491] module 'Prescaler' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Prescaler.vhd:5' bound to instance 'PRES' of component 'Prescaler' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:72]
+INFO: [Synth 8-3491] module 'Prescaler' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Prescaler.vhd:5' bound to instance 'PRES' of component 'Prescaler' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:75]
 	Parameter DATA_BITS bound to: 8 - type: integer 
-INFO: [Synth 8-3491] module 'Buffer_Register_Deserializer' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Buffer_Register_Deserializer.vhd:5' bound to instance 'BRDESER' of component 'Buffer_Register_Deserializer' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:73]
+INFO: [Synth 8-3491] module 'Buffer_Register_Deserializer' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Buffer_Register_Deserializer.vhd:5' bound to instance 'BRDESER' of component 'Buffer_Register_Deserializer' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:76]
 INFO: [Synth 8-638] synthesizing module 'Buffer_Register_Deserializer' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Buffer_Register_Deserializer.vhd:20]
 	Parameter DATA_BITS bound to: 8 - type: integer 
 INFO: [Synth 8-256] done synthesizing module 'Buffer_Register_Deserializer' (0#1) [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Buffer_Register_Deserializer.vhd:20]
@@ -121,7 +122,7 @@ INFO: [Synth 8-256] done synthesizing module 'Buffer_Register_Deserializer' (0#1
 	Parameter STOP_BITS bound to: 1 - type: integer 
 	Parameter PARITY_ACTIVE bound to: 0 - type: integer 
 	Parameter PARITY_MODE bound to: 0 - type: integer 
-INFO: [Synth 8-3491] module 'Deserializer' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Deserializer.vhd:5' bound to instance 'DESER' of component 'Deserializer' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:74]
+INFO: [Synth 8-3491] module 'Deserializer' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Deserializer.vhd:5' bound to instance 'DESER' of component 'Deserializer' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:77]
 INFO: [Synth 8-638] synthesizing module 'Deserializer' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Deserializer.vhd:22]
 	Parameter DATA_BITS bound to: 8 - type: integer 
 	Parameter STOP_BITS bound to: 1 - type: integer 
@@ -142,7 +143,7 @@ INFO: [Synth 8-638] synthesizing module 'DEMUX' [/home/user/Data/UART_Extension_
 INFO: [Synth 8-226] default block is never used [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/DEMUX.vhd:31]
 INFO: [Synth 8-256] done synthesizing module 'DEMUX' (0#1) [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/DEMUX.vhd:19]
 	Parameter IN_FREQ_HZ bound to: 12000000 - type: integer 
-	Parameter BAUD_FREQ_HZ bound to: 9600 - type: integer 
+	Parameter BAUD_FREQ_HZ bound to: 250000 - type: integer 
 	Parameter DATA_BITS bound to: 8 - type: integer 
 	Parameter STOP_BITS bound to: 1 - type: integer 
 	Parameter PARITY_ACTIVE bound to: 0 - type: integer 
@@ -150,13 +151,13 @@ INFO: [Synth 8-256] done synthesizing module 'DEMUX' (0#1) [/home/user/Data/UART
 INFO: [Synth 8-3491] module 'UART_Wrapper' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Wrapper.vhd:4' bound to instance 'A_UART' of component 'UART_Wrapper' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Main_Unit.vhd:216]
 INFO: [Synth 8-638] synthesizing module 'UART_Wrapper' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Wrapper.vhd:29]
 	Parameter IN_FREQ_HZ bound to: 12000000 - type: integer 
-	Parameter BAUD_FREQ_HZ bound to: 9600 - type: integer 
+	Parameter BAUD_FREQ_HZ bound to: 250000 - type: integer 
 	Parameter DATA_BITS bound to: 8 - type: integer 
 	Parameter STOP_BITS bound to: 1 - type: integer 
 	Parameter PARITY_ACTIVE bound to: 0 - type: integer 
 	Parameter PARITY_MODE bound to: 0 - type: integer 
 	Parameter IN_FREQ_HZ bound to: 12000000 - type: integer 
-	Parameter BAUD_FREQ_HZ bound to: 9600 - type: integer 
+	Parameter BAUD_FREQ_HZ bound to: 250000 - type: integer 
 	Parameter DATA_BITS bound to: 8 - type: integer 
 	Parameter STOP_BITS bound to: 1 - type: integer 
 	Parameter PARITY_ACTIVE bound to: 0 - type: integer 
@@ -164,13 +165,13 @@ INFO: [Synth 8-638] synthesizing module 'UART_Wrapper' [/home/user/Data/UART_Ext
 INFO: [Synth 8-3491] module 'UART_Unit' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Unit.vhd:5' bound to instance 'UART' of component 'UART_Unit' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Wrapper.vhd:61]
 INFO: [Synth 8-638] synthesizing module 'UART_Unit__parameterized1' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Unit.vhd:30]
 	Parameter IN_FREQ_HZ bound to: 12000000 - type: integer 
-	Parameter BAUD_FREQ_HZ bound to: 9600 - type: integer 
+	Parameter BAUD_FREQ_HZ bound to: 250000 - type: integer 
 	Parameter DATA_BITS bound to: 8 - type: integer 
 	Parameter STOP_BITS bound to: 1 - type: integer 
 	Parameter PARITY_ACTIVE bound to: 0 - type: integer 
 	Parameter PARITY_MODE bound to: 0 - type: integer 
 	Parameter IN_FREQ_HZ bound to: 12000000 - type: integer 
-	Parameter BAUD_FREQ_HZ bound to: 9600 - type: integer 
+	Parameter BAUD_FREQ_HZ bound to: 250000 - type: integer 
 	Parameter DATA_BITS bound to: 8 - type: integer 
 	Parameter STOP_BITS bound to: 1 - type: integer 
 	Parameter PARITY_ACTIVE bound to: 0 - type: integer 
@@ -178,17 +179,17 @@ INFO: [Synth 8-638] synthesizing module 'UART_Unit__parameterized1' [/home/user/
 INFO: [Synth 8-3491] module 'UART_Transmitter' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Transmitter.vhd:5' bound to instance 'TRANSMITTER' of component 'UART_Transmitter' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Unit.vhd:70]
 INFO: [Synth 8-638] synthesizing module 'UART_Transmitter__parameterized1' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Transmitter.vhd:25]
 	Parameter IN_FREQ_HZ bound to: 12000000 - type: integer 
-	Parameter BAUD_FREQ_HZ bound to: 9600 - type: integer 
+	Parameter BAUD_FREQ_HZ bound to: 250000 - type: integer 
 	Parameter DATA_BITS bound to: 8 - type: integer 
 	Parameter STOP_BITS bound to: 1 - type: integer 
 	Parameter PARITY_ACTIVE bound to: 0 - type: integer 
 	Parameter PARITY_MODE bound to: 0 - type: integer 
 	Parameter IN_FREQ_HZ bound to: 12000000 - type: integer 
-	Parameter OUT_FREQ_HZ bound to: 9600 - type: integer 
+	Parameter OUT_FREQ_HZ bound to: 250000 - type: integer 
 INFO: [Synth 8-3491] module 'Prescaler' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Prescaler.vhd:5' bound to instance 'PRES' of component 'Prescaler' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Transmitter.vhd:69]
 INFO: [Synth 8-638] synthesizing module 'Prescaler__parameterized2' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Prescaler.vhd:17]
 	Parameter IN_FREQ_HZ bound to: 12000000 - type: integer 
-	Parameter OUT_FREQ_HZ bound to: 9600 - type: integer 
+	Parameter OUT_FREQ_HZ bound to: 250000 - type: integer 
 INFO: [Synth 8-256] done synthesizing module 'Prescaler__parameterized2' (0#1) [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Prescaler.vhd:17]
 	Parameter DATA_BITS bound to: 8 - type: integer 
 INFO: [Synth 8-3491] module 'Buffer_Register_Serializer' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Buffer_Register_Serializer.vhd:5' bound to instance 'BRSER' of component 'Buffer_Register_Serializer' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Transmitter.vhd:70]
@@ -199,7 +200,7 @@ INFO: [Synth 8-3491] module 'Buffer_Register_Serializer' declared at '/home/user
 INFO: [Synth 8-3491] module 'Serializer' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Serializer.vhd:5' bound to instance 'SER' of component 'Serializer' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Transmitter.vhd:71]
 INFO: [Synth 8-256] done synthesizing module 'UART_Transmitter__parameterized1' (0#1) [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Transmitter.vhd:25]
 	Parameter IN_FREQ_HZ bound to: 12000000 - type: integer 
-	Parameter BAUD_FREQ_HZ bound to: 9600 - type: integer 
+	Parameter BAUD_FREQ_HZ bound to: 250000 - type: integer 
 	Parameter DATA_BITS bound to: 8 - type: integer 
 	Parameter STOP_BITS bound to: 1 - type: integer 
 	Parameter PARITY_ACTIVE bound to: 0 - type: integer 
@@ -207,21 +208,21 @@ INFO: [Synth 8-256] done synthesizing module 'UART_Transmitter__parameterized1' 
 INFO: [Synth 8-3491] module 'UART_Receiver' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:5' bound to instance 'RECEIVER' of component 'UART_Receiver' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Unit.vhd:71]
 INFO: [Synth 8-638] synthesizing module 'UART_Receiver__parameterized1' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:25]
 	Parameter IN_FREQ_HZ bound to: 12000000 - type: integer 
-	Parameter BAUD_FREQ_HZ bound to: 9600 - type: integer 
+	Parameter BAUD_FREQ_HZ bound to: 250000 - type: integer 
 	Parameter DATA_BITS bound to: 8 - type: integer 
 	Parameter STOP_BITS bound to: 1 - type: integer 
 	Parameter PARITY_ACTIVE bound to: 0 - type: integer 
 	Parameter PARITY_MODE bound to: 0 - type: integer 
 	Parameter IN_FREQ_HZ bound to: 12000000 - type: integer 
-	Parameter OUT_FREQ_HZ bound to: 9600 - type: integer 
-INFO: [Synth 8-3491] module 'Prescaler' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Prescaler.vhd:5' bound to instance 'PRES' of component 'Prescaler' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:72]
+	Parameter OUT_FREQ_HZ bound to: 250000 - type: integer 
+INFO: [Synth 8-3491] module 'Prescaler' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Prescaler.vhd:5' bound to instance 'PRES' of component 'Prescaler' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:75]
 	Parameter DATA_BITS bound to: 8 - type: integer 
-INFO: [Synth 8-3491] module 'Buffer_Register_Deserializer' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Buffer_Register_Deserializer.vhd:5' bound to instance 'BRDESER' of component 'Buffer_Register_Deserializer' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:73]
+INFO: [Synth 8-3491] module 'Buffer_Register_Deserializer' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Buffer_Register_Deserializer.vhd:5' bound to instance 'BRDESER' of component 'Buffer_Register_Deserializer' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:76]
 	Parameter DATA_BITS bound to: 8 - type: integer 
 	Parameter STOP_BITS bound to: 1 - type: integer 
 	Parameter PARITY_ACTIVE bound to: 0 - type: integer 
 	Parameter PARITY_MODE bound to: 0 - type: integer 
-INFO: [Synth 8-3491] module 'Deserializer' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Deserializer.vhd:5' bound to instance 'DESER' of component 'Deserializer' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:74]
+INFO: [Synth 8-3491] module 'Deserializer' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Deserializer.vhd:5' bound to instance 'DESER' of component 'Deserializer' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:77]
 INFO: [Synth 8-256] done synthesizing module 'UART_Receiver__parameterized1' (0#1) [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd:25]
 INFO: [Synth 8-256] done synthesizing module 'UART_Unit__parameterized1' (0#1) [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Unit.vhd:30]
 WARNING: [Synth 8-614] signal 'uart_received_valid_last' is read in the process but is not in the sensitivity list [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Wrapper.vhd:91]
@@ -260,22 +261,22 @@ WARNING: [Synth 8-614] signal 'unit_number' is read in the process but is not in
 WARNING: [Synth 8-614] signal 'unit_data' is read in the process but is not in the sensitivity list [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Encoder.vhd:38]
 INFO: [Synth 8-256] done synthesizing module 'Encoder' (0#1) [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Encoder.vhd:22]
 INFO: [Synth 8-256] done synthesizing module 'Main_Unit' (0#1) [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Main_Unit.vhd:20]
-WARNING: [Synth 8-6014] Unused sequential element clk_prescaled_reg was removed.  [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Prescaler.vhd:27]
-WARNING: [Synth 8-6014] Unused sequential element clk_prescaled_reg was removed.  [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Prescaler.vhd:27]
+WARNING: [Synth 8-6014] Unused sequential element clk_prescaled_reg was removed.  [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Prescaler.vhd:29]
+WARNING: [Synth 8-6014] Unused sequential element clk_prescaled_reg was removed.  [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Prescaler.vhd:29]
 WARNING: [Synth 8-7129] Port access_mode[1] in module GPIO_Wrapper is either unconnected or has no load
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 2680.918 ; gain = 487.016 ; free physical = 3996 ; free virtual = 9551
+Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 2680.875 ; gain = 487.988 ; free physical = 3202 ; free virtual = 8880
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 2695.969 ; gain = 502.066 ; free physical = 3992 ; free virtual = 9547
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 2695.926 ; gain = 503.039 ; free physical = 3194 ; free virtual = 8872
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 2695.969 ; gain = 502.066 ; free physical = 3992 ; free virtual = 9547
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 2695.926 ; gain = 503.039 ; free physical = 3194 ; free virtual = 8872
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2696.660 ; gain = 0.059 ; free physical = 3991 ; free virtual = 9546
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2696.617 ; gain = 0.055 ; free physical = 3189 ; free virtual = 8868
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
@@ -286,28 +287,28 @@ INFO: [Project 1-236] Implementation specific constraints were found while readi
 Resolution: To avoid this warning, move constraints listed in [.Xil/Main_Unit_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2853.785 ; gain = 0.000 ; free physical = 3884 ; free virtual = 9444
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2852.848 ; gain = 0.000 ; free physical = 3088 ; free virtual = 8772
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2856.012 ; gain = 0.000 ; free physical = 3879 ; free virtual = 9439
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2855.070 ; gain = 0.000 ; free physical = 3074 ; free virtual = 8758
 INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
 INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 2856.012 ; gain = 662.109 ; free physical = 3875 ; free virtual = 9436
+Finished Constraint Validation : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 2855.070 ; gain = 662.184 ; free physical = 3062 ; free virtual = 8746
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a35tcpg236-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 2856.012 ; gain = 662.109 ; free physical = 3875 ; free virtual = 9436
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 2855.070 ; gain = 662.184 ; free physical = 3057 ; free virtual = 8742
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 2856.012 ; gain = 662.109 ; free physical = 3875 ; free virtual = 9436
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 2855.070 ; gain = 662.184 ; free physical = 3057 ; free virtual = 8742
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-3936] Found unconnected internal register 'unit_number_data_reg' and it is trimmed from '8' to '5' bits. [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Decoder.vhd:68]
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'Decoder'
@@ -337,7 +338,7 @@ WARNING: [Synth 8-327] inferring latch for variable 'outputs_reg' [/home/user/Da
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'Encoder'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 2856.012 ; gain = 662.109 ; free physical = 3878 ; free virtual = 9438
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 2855.070 ; gain = 662.184 ; free physical = 3057 ; free virtual = 8742
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -353,7 +354,7 @@ Detailed RTL Component Info :
 	                4 Bit    Registers := 4     
 	                3 Bit    Registers := 2     
 	                2 Bit    Registers := 1     
-	                1 Bit    Registers := 39    
+	                1 Bit    Registers := 43    
 +---Muxes : 
 	   2 Input   32 Bit        Muxes := 1     
 	   2 Input   10 Bit        Muxes := 4     
@@ -365,7 +366,7 @@ Detailed RTL Component Info :
 	   2 Input    3 Bit        Muxes := 5     
 	   3 Input    2 Bit        Muxes := 1     
 	   2 Input    2 Bit        Muxes := 5     
-	   2 Input    1 Bit        Muxes := 12    
+	   2 Input    1 Bit        Muxes := 18    
 	   3 Input    1 Bit        Muxes := 7     
 	   8 Input    1 Bit        Muxes := 8     
 	   7 Input    1 Bit        Muxes := 1     
@@ -394,25 +395,25 @@ WARNING: [Synth 8-3332] Sequential element (SCHEDULE/outputs_reg[4]) is unused a
 WARNING: [Synth 8-3332] Sequential element (SCHEDULE/outputs_reg[3]) is unused and will be removed from module Main_Unit.
 WARNING: [Synth 8-3332] Sequential element (SCHEDULE/outputs_reg[2]) is unused and will be removed from module Main_Unit.
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 2856.012 ; gain = 662.109 ; free physical = 3860 ; free virtual = 9422
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 2855.070 ; gain = 662.184 ; free physical = 3082 ; free virtual = 8768
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 2883.934 ; gain = 690.031 ; free physical = 3771 ; free virtual = 9332
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:19 ; elapsed = 00:00:20 . Memory (MB): peak = 2883.023 ; gain = 690.137 ; free physical = 2979 ; free virtual = 8665
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:19 ; elapsed = 00:00:20 . Memory (MB): peak = 2884.219 ; gain = 690.316 ; free physical = 3770 ; free virtual = 9332
+Finished Timing Optimization : Time (s): cpu = 00:00:19 ; elapsed = 00:00:21 . Memory (MB): peak = 2883.312 ; gain = 690.426 ; free physical = 2976 ; free virtual = 8661
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:19 ; elapsed = 00:00:20 . Memory (MB): peak = 2884.449 ; gain = 690.547 ; free physical = 3770 ; free virtual = 9332
+Finished Technology Mapping : Time (s): cpu = 00:00:19 ; elapsed = 00:00:21 . Memory (MB): peak = 2883.547 ; gain = 690.660 ; free physical = 2976 ; free virtual = 8661
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -430,37 +431,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 2884.598 ; gain = 690.695 ; free physical = 3768 ; free virtual = 9329
+Finished IO Insertion : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 2883.688 ; gain = 690.801 ; free physical = 2976 ; free virtual = 8661
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 2884.613 ; gain = 690.711 ; free physical = 3768 ; free virtual = 9329
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 2883.699 ; gain = 690.812 ; free physical = 2976 ; free virtual = 8661
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 2884.672 ; gain = 690.770 ; free physical = 3767 ; free virtual = 9329
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 2883.758 ; gain = 690.871 ; free physical = 2976 ; free virtual = 8661
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 2884.680 ; gain = 690.777 ; free physical = 3767 ; free virtual = 9329
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 2883.770 ; gain = 690.883 ; free physical = 2976 ; free virtual = 8661
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 2884.703 ; gain = 690.801 ; free physical = 3767 ; free virtual = 9329
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 2883.789 ; gain = 690.902 ; free physical = 2976 ; free virtual = 8661
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 2884.707 ; gain = 690.805 ; free physical = 3767 ; free virtual = 9329
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 2883.793 ; gain = 690.906 ; free physical = 2976 ; free virtual = 8661
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -480,14 +481,14 @@ Report Cell Usage:
 |2     |CARRY4 |    56|
 |3     |LUT1   |     6|
 |4     |LUT2   |   147|
-|5     |LUT3   |    31|
-|6     |LUT4   |    21|
+|5     |LUT3   |    37|
+|6     |LUT4   |    23|
 |7     |LUT5   |    74|
 |8     |LUT6   |    31|
 |9     |FDCE   |   163|
 |10    |FDPE   |    66|
-|11    |FDRE   |   148|
-|12    |FDSE   |     8|
+|11    |FDRE   |   156|
+|12    |FDSE   |     4|
 |13    |LD     |     5|
 |14    |LDC    |    11|
 |15    |LDP    |     1|
@@ -495,32 +496,32 @@ Report Cell Usage:
 |17    |OBUF   |    10|
 +------+-------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 2884.738 ; gain = 690.836 ; free physical = 3767 ; free virtual = 9329
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 2883.824 ; gain = 690.938 ; free physical = 2976 ; free virtual = 8661
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 14 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:20 ; elapsed = 00:00:21 . Memory (MB): peak = 2884.777 ; gain = 530.828 ; free physical = 3767 ; free virtual = 9329
-Synthesis Optimization Complete : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 2884.789 ; gain = 690.879 ; free physical = 3767 ; free virtual = 9329
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:21 ; elapsed = 00:00:22 . Memory (MB): peak = 2883.867 ; gain = 531.832 ; free physical = 2975 ; free virtual = 8661
+Synthesis Optimization Complete : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 2883.879 ; gain = 690.980 ; free physical = 2975 ; free virtual = 8661
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2884.930 ; gain = 0.000 ; free physical = 4136 ; free virtual = 9703
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2884.031 ; gain = 0.004 ; free physical = 2961 ; free virtual = 8651
 INFO: [Netlist 29-17] Analyzing 73 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2917.645 ; gain = 0.000 ; free physical = 4177 ; free virtual = 9744
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2916.703 ; gain = 0.000 ; free physical = 3298 ; free virtual = 8989
 INFO: [Project 1-111] Unisim Transformation Summary:
   A total of 17 instances were transformed.
   LD => LDCE: 5 instances
   LDC => LDCE: 11 instances
   LDP => LDPE: 1 instance 
 
-Synth Design complete | Checksum: afc7d099
+Synth Design complete | Checksum: 4e95c9ea
 INFO: [Common 17-83] Releasing license: Synthesis
-95 Infos, 32 Warnings, 3 Critical Warnings and 0 Errors encountered.
+95 Infos, 33 Warnings, 3 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:31 ; elapsed = 00:00:30 . Memory (MB): peak = 2917.645 ; gain = 1094.859 ; free physical = 4170 ; free virtual = 9737
-INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 2427.906; main = 1863.448; forked = 569.394
-INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 5335.059; main = 2871.328; forked = 2481.082
-Write ShapeDB Complete: Time (s): cpu = 00:00:00.05 ; elapsed = 00:00:00.05 . Memory (MB): peak = 2917.645 ; gain = 0.000 ; free physical = 4168 ; free virtual = 9735
+synth_design: Time (s): cpu = 00:00:33 ; elapsed = 00:00:31 . Memory (MB): peak = 2916.703 ; gain = 1093.930 ; free physical = 3297 ; free virtual = 8988
+INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 2418.644; main = 1854.187; forked = 569.419
+INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 5335.148; main = 2866.465; forked = 2482.109
+Write ShapeDB Complete: Time (s): cpu = 00:00:00.04 ; elapsed = 00:00:00.06 . Memory (MB): peak = 2916.703 ; gain = 0.000 ; free physical = 3295 ; free virtual = 8986
 INFO: [Common 17-1381] The checkpoint '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.runs/synth_1/Main_Unit.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file Main_Unit_utilization_synth.rpt -pb Main_Unit_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Tue Mar 11 15:45:02 2025...
+INFO: [Common 17-206] Exiting Vivado at Thu Mar 13 21:40:34 2025...

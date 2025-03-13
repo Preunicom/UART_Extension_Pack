@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date         : Tue Mar 11 15:45:59 2025
-| Host         : a932da532e97 running 64-bit Ubuntu 22.04.5 LTS
+| Date         : Thu Mar 13 21:41:32 2025
+| Host         : c48a8bf37305 running 64-bit Ubuntu 22.04.5 LTS
 | Command      : report_methodology -file Main_Unit_methodology_drc_routed.rpt -pb Main_Unit_methodology_drc_routed.pb -rpx Main_Unit_methodology_drc_routed.rpx
 | Design       : Main_Unit
 | Device       : xc7a35tcpg236-1
@@ -23,13 +23,13 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 127
+             Violations found: 129
 +-----------+------------------+--------------------------------+------------+
 | Rule      | Severity         | Description                    | Violations |
 +-----------+------------------+--------------------------------+------------+
 | TIMING-17 | Critical Warning | Non-clocked sequential cell    | 74         |
 | LUTAR-1   | Warning          | LUT drives async reset alert   | 18         |
-| TIMING-18 | Warning          | Missing input or output delay  | 17         |
+| TIMING-18 | Warning          | Missing input or output delay  | 19         |
 | TIMING-20 | Warning          | Non-clocked latch              | 17         |
 | LATCH-1   | Advisory         | Existing latches in the design | 1          |
 +-----------+------------------+--------------------------------+------------+
@@ -543,40 +543,50 @@ Related violations: <none>
 
 TIMING-18#10 Warning
 Missing input or output delay  
-An output delay is missing on gpio_pins_out[0] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
+An input delay is missing on rx_pin_a relative to the rising and/or falling clock edge(s) of sys_clk_pin.
 Related violations: <none>
 
 TIMING-18#11 Warning
 Missing input or output delay  
-An output delay is missing on gpio_pins_out[1] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
+An input delay is missing on rx_pin_host relative to the rising and/or falling clock edge(s) of sys_clk_pin.
 Related violations: <none>
 
 TIMING-18#12 Warning
 Missing input or output delay  
-An output delay is missing on gpio_pins_out[2] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
+An output delay is missing on gpio_pins_out[0] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
 Related violations: <none>
 
 TIMING-18#13 Warning
 Missing input or output delay  
-An output delay is missing on gpio_pins_out[3] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
+An output delay is missing on gpio_pins_out[1] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
 Related violations: <none>
 
 TIMING-18#14 Warning
 Missing input or output delay  
-An output delay is missing on gpio_pins_out[4] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
+An output delay is missing on gpio_pins_out[2] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
 Related violations: <none>
 
 TIMING-18#15 Warning
 Missing input or output delay  
-An output delay is missing on gpio_pins_out[5] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
+An output delay is missing on gpio_pins_out[3] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
 Related violations: <none>
 
 TIMING-18#16 Warning
 Missing input or output delay  
-An output delay is missing on gpio_pins_out[6] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
+An output delay is missing on gpio_pins_out[4] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
 Related violations: <none>
 
 TIMING-18#17 Warning
+Missing input or output delay  
+An output delay is missing on gpio_pins_out[5] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
+Related violations: <none>
+
+TIMING-18#18 Warning
+Missing input or output delay  
+An output delay is missing on gpio_pins_out[6] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
+Related violations: <none>
+
+TIMING-18#19 Warning
 Missing input or output delay  
 An output delay is missing on gpio_pins_out[7] relative to the rising and/or falling clock edge(s) of sys_clk_pin.
 Related violations: <none>

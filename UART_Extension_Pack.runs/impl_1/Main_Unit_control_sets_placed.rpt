@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date         : Tue Mar 11 15:45:41 2025
-| Host         : a932da532e97 running 64-bit Ubuntu 22.04.5 LTS
+| Date         : Thu Mar 13 21:41:14 2025
+| Host         : c48a8bf37305 running 64-bit Ubuntu 22.04.5 LTS
 | Command      : report_control_sets -verbose -file Main_Unit_control_sets_placed.rpt
 | Design       : Main_Unit
 | Device       : xc7a35t
@@ -27,7 +27,7 @@ Table of Contents
 |    Minimum number of control sets                        |    48 |
 |    Addition due to synthesis replication                 |     0 |
 |    Addition due to physical synthesis replication        |     0 |
-| Unused register locations in slices containing registers |   238 |
+| Unused register locations in slices containing registers |   234 |
 +----------------------------------------------------------+-------+
 * Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
 ** Run report_qor_suggestions for automated merging and remapping suggestions
@@ -41,11 +41,11 @@ Table of Contents
 +--------------------+-------+
 | Total control sets |    48 |
 | >= 0 to < 4        |    28 |
-| >= 4 to < 6        |     2 |
+| >= 4 to < 6        |     1 |
 | >= 6 to < 8        |     0 |
 | >= 8 to < 10       |     6 |
 | >= 10 to < 12      |     0 |
-| >= 12 to < 14      |     1 |
+| >= 12 to < 14      |     2 |
 | >= 14 to < 16      |     2 |
 | >= 16              |     9 |
 +--------------------+-------+
@@ -58,11 +58,11 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
-| No           | No                    | No                     |              10 |            5 |
-| No           | No                    | Yes                    |             167 |           61 |
-| No           | Yes                   | No                     |             144 |           47 |
+| No           | No                    | No                     |              18 |           11 |
+| No           | No                    | Yes                    |             167 |           58 |
+| No           | Yes                   | No                     |             140 |           43 |
 | Yes          | No                    | No                     |              19 |            4 |
-| Yes          | No                    | Yes                    |              62 |           15 |
+| Yes          | No                    | Yes                    |              62 |           18 |
 | Yes          | Yes                   | No                     |               0 |            0 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
@@ -73,54 +73,54 @@ Table of Contents
 +----------------------------------------------------------+--------------------------------------------------+----------------------------------------------------+------------------+----------------+--------------+
 |                       Clock Signal                       |                   Enable Signal                  |                  Set/Reset Signal                  | Slice Load Count | Bel Load Count | Bels / Slice |
 +----------------------------------------------------------+--------------------------------------------------+----------------------------------------------------+------------------+----------------+--------------+
-|  DECODE/counter_rst__0                                   |                                                  |                                                    |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[0]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[0]_LDC_i_1_n_0          |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[1]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[7]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[7]_LDC_i_1_n_0          |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[6]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  B_GPIO/GPIO/values_out_reg[7]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[7]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[3]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[1]_LDC_i_1_n_0          |                1 |              1 |         1.00 |
 |  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[5]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[1]_LDC_i_1_n_0          |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[3]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[1]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[6]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[7]_LDC_i_1_n_0          |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[7]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[0]_LDC_i_1_n_0          |                1 |              1 |         1.00 |
 |  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[5]_LDC_i_1_n_0          |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[6]_LDC_i_1_n_0          |                1 |              1 |         1.00 |
+|  B_GPIO/GPIO/values_out_reg[1]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[1]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  DECODE/write_en_int00_out                               |                                                  | A_UART/UART/TRANSMITTER/BRSER/full_reg_1           |                1 |              1 |         1.00 |
+|  B_GPIO/GPIO/values_out_reg[6]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[6]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  B_GPIO/GPIO/values_out_reg[7]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[7]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  B_GPIO/GPIO/values_out_reg[0]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[0]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  B_GPIO/GPIO/values_out_reg[5]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[5]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  DECODE/counter_rst__0                                   |                                                  |                                                    |                1 |              1 |         1.00 |
 |  SCHEDULE/rst                                            |                                                  | A_UART/UART/RECEIVER/BRDESER/new_data_received0    |                1 |              1 |         1.00 |
 |  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[3]_LDC_i_1_n_0          |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[6]_LDC_i_1_n_0          |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[4]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[2]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  B_GPIO/GPIO/values_out_reg[2]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[2]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  B_GPIO/GPIO/values_out_reg[4]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[4]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  B_GPIO/GPIO/values_out_reg[6]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[6]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  B_GPIO/GPIO/values_out_reg[3]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[3]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  DECODE/write_en_int00_out                               |                                                  | A_UART/UART/TRANSMITTER/BRSER/full_reg_1           |                1 |              1 |         1.00 |
-|  B_GPIO/GPIO/values_out_reg[5]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[5]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  B_GPIO/GPIO/values_out_reg[1]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[1]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
-|  B_GPIO/GPIO/values_out_reg[0]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[0]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
 |  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[2]_LDC_i_1_n_0          |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[2]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
 |  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[4]_LDC_i_1_n_0          |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[4]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG                                           |                                                  | B_GPIO/GPIO/values_out_reg[0]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  B_GPIO/GPIO/values_out_reg[4]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[4]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  B_GPIO/GPIO/values_out_reg[2]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[2]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  B_GPIO/GPIO/values_out_reg[3]_LDC_i_1_n_0               |                                                  | B_GPIO/GPIO/values_out_reg[3]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
 |  ENCODE/FSM_sequential_state_reg[1]_1                    |                                                  | rst_IBUF                                           |                1 |              2 |         2.00 |
 |  DECODE/unit_number_data__0                              |                                                  |                                                    |                1 |              4 |         4.00 |
-|  clk_IBUF_BUFG                                           |                                                  |                                                    |                3 |              5 |         1.67 |
-|  clk_IBUF_BUFG                                           | A_UART/UART/TRANSMITTER/BRSER/data[7]_i_1__0_n_0 | rst_IBUF                                           |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG                                           | B_GPIO/GPIO/E[0]                                 | rst_IBUF                                           |                1 |              8 |         8.00 |
 |  clk_IBUF_BUFG                                           | DECODE/access_mode_reg[0]_1[0]                   | rst_IBUF                                           |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG                                           | B_GPIO/E[0]                                      | rst_IBUF                                           |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG                                           | UART_HOST/RECEIVER/DESER/data_ready_intern       | rst_IBUF                                           |                2 |              9 |         4.50 |
-|  clk_IBUF_BUFG                                           | A_UART/UART/RECEIVER/DESER/data_ready_intern     | rst_IBUF                                           |                3 |              9 |         3.00 |
-|  clk_IBUF_BUFG                                           | DECODE/access_mode[0]_i_1_n_0                    | rst_IBUF                                           |                2 |             12 |         6.00 |
-|  UART_HOST/TRANSMITTER/PRES/clk_prescaled_intern_reg_0   |                                                  | rst_IBUF                                           |                4 |             15 |         3.75 |
-|  A_UART/UART/TRANSMITTER/PRES/clk_prescaled_intern_reg_0 |                                                  | rst_IBUF                                           |                5 |             15 |         3.00 |
+|  clk_IBUF_BUFG                                           | B_GPIO/E[0]                                      | rst_IBUF                                           |                3 |              8 |         2.67 |
+|  clk_IBUF_BUFG                                           | A_UART/UART/TRANSMITTER/BRSER/data[7]_i_1__0_n_0 | rst_IBUF                                           |                1 |              8 |         8.00 |
+|  clk_IBUF_BUFG                                           | B_GPIO/GPIO/E[0]                                 | rst_IBUF                                           |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG                                           | UART_HOST/RECEIVER/DESER/data_ready_intern       | rst_IBUF                                           |                3 |              9 |         3.00 |
+|  clk_IBUF_BUFG                                           | A_UART/UART/RECEIVER/DESER/data_ready_intern     | rst_IBUF                                           |                4 |              9 |         2.25 |
+|  clk_IBUF_BUFG                                           | DECODE/access_mode[0]_i_1_n_0                    | rst_IBUF                                           |                3 |             12 |         4.00 |
+|  clk_IBUF_BUFG                                           |                                                  |                                                    |                9 |             13 |         1.44 |
+|  UART_HOST/TRANSMITTER/PRES/clk_prescaled_intern_reg_0   |                                                  | rst_IBUF                                           |                3 |             15 |         5.00 |
+|  A_UART/UART/TRANSMITTER/PRES/clk_prescaled_intern_reg_0 |                                                  | rst_IBUF                                           |                3 |             15 |         5.00 |
 |  clk_IBUF_BUFG                                           | DECODE/E[0]                                      |                                                    |                4 |             19 |         4.75 |
 |  A_UART/UART/RECEIVER/PRES/CLK                           |                                                  | rst_IBUF                                           |                3 |             22 |         7.33 |
 |  UART_HOST/RECEIVER/PRES/CLK                             |                                                  | rst_IBUF                                           |                4 |             22 |         5.50 |
-|  clk_IBUF_BUFG                                           |                                                  | UART_HOST/TRANSMITTER/PRES/counter[0]_i_1_n_0      |                8 |             32 |         4.00 |
-|  clk_IBUF_BUFG                                           |                                                  | DECODE/counter_rst                                 |               15 |             32 |         2.13 |
 |  clk_IBUF_BUFG                                           |                                                  | A_UART/UART/TRANSMITTER/PRES/counter[0]_i_1__1_n_0 |                8 |             32 |         4.00 |
 |  clk_IBUF_BUFG                                           |                                                  | A_UART/UART/RECEIVER/PRES/counter[0]_i_1__2_n_0    |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG                                           |                                                  | DECODE/counter_rst                                 |               14 |             32 |         2.29 |
 |  clk_IBUF_BUFG                                           |                                                  | UART_HOST/RECEIVER/PRES/counter[0]_i_1__0_n_0      |                8 |             32 |         4.00 |
-|  clk_IBUF_BUFG                                           |                                                  | rst_IBUF                                           |               18 |             49 |         2.72 |
+|  clk_IBUF_BUFG                                           |                                                  | UART_HOST/TRANSMITTER/PRES/counter[0]_i_1_n_0      |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG                                           |                                                  | rst_IBUF                                           |               15 |             45 |         3.00 |
 +----------------------------------------------------------+--------------------------------------------------+----------------------------------------------------+------------------+----------------+--------------+
 
 

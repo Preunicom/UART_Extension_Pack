@@ -65,7 +65,7 @@ begin
           if (reg(DATA_BITS+STOP_BITS+PARITY_ACTIVE downto DATA_BITS+PARITY_ACTIVE+2) & serial_in) = stop_bits_suffix then
             frame_error <= '0';
           else
-              frame_error <= '1';
+            frame_error <= '1';
           end if;
         end if;
         if PARITY_ACTIVE = 1 then
