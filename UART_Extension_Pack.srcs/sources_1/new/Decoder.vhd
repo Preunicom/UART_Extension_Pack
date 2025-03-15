@@ -5,7 +5,8 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 entity Decoder is
   Generic (
     DATA_BITS : integer := 8;
-    IN_FREQ_HZ : integer := 12000000
+    FPGA_FREQ : integer := 12000000;
+    HOST_BAUD : integer := 1000000
   );
   Port ( 
     clk : in STD_LOGIC;
@@ -15,7 +16,7 @@ entity Decoder is
     uart_error : in std_logic;
     out_en : out std_logic;
     access_mode : out std_logic_vector(1 downto 0);
-    unit_number : out std_logic_vector(2 downto 0); 
+    unit_number : out std_logic_vector(5 downto 0); 
     unit_data : out std_logic_vector(DATA_BITS-1 downto 0)
   );
 end Decoder;
@@ -65,8 +66,8 @@ begin
           uart_error_combined <= '0';
         when S2 => -- Get second data part
           -- set decoded data pair data to outputs
-          access_mode <= unit_number_data(4 downto 3);
-          unit_number <= unit_number_data(2 downto 0);
+          access_mode <= unit_number_data(7 downto 6);
+          unit_number <= unit_number_data(5 downto 0);
           unit_data <= uart_inp_synced;
           -- resets uart errors of other states
           uart_error_S1 <= '0';
@@ -136,14 +137,14 @@ begin
   end process;
 
   TIMER: process(clk, counter_rst)
-    -- timer for 1 ms
+    -- timer for duration of ca. 3 UART package transmissions
   begin
     if counter_rst = '1' then
       counter <= 0;
     elsif rising_edge(clk) then
       counter_ready <= '0';
       counter <= counter + 1;
-      if counter = (IN_FREQ_HZ / 1000) - 1 then
+      if counter = (((3*(DATA_BITS+3))/HOST_BAUD)*FPGA_FREQ) - 1 then
         -- timer ends
         counter <= 0;
         counter_ready <= '1';

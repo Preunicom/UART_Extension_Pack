@@ -1,0 +1,103 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
+| Date         : Sat Mar 15 22:14:02 2025
+| Host         : 83278ddfa942 running 64-bit Ubuntu 22.04.5 LTS
+| Command      : report_control_sets -verbose -file Main_Unit_control_sets_placed.rpt
+| Design       : Main_Unit
+| Device       : xc7a35t
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Histogram
+3. Flip-Flop Distribution
+4. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Total control sets                                       |    25 |
+|    Minimum number of control sets                        |    25 |
+|    Addition due to synthesis replication                 |     0 |
+|    Addition due to physical synthesis replication        |     0 |
+| Unused register locations in slices containing registers |    83 |
++----------------------------------------------------------+-------+
+* Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
+** Run report_qor_suggestions for automated merging and remapping suggestions
+
+
+2. Histogram
+------------
+
++--------------------+-------+
+|       Fanout       | Count |
++--------------------+-------+
+| Total control sets |    25 |
+| >= 0 to < 4        |     8 |
+| >= 4 to < 6        |     0 |
+| >= 6 to < 8        |     1 |
+| >= 8 to < 10       |     3 |
+| >= 10 to < 12      |     0 |
+| >= 12 to < 14      |     2 |
+| >= 14 to < 16      |     3 |
+| >= 16              |     8 |
++--------------------+-------+
+* Control sets can be remapped at either synth_design or opt_design
+
+
+3. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |              21 |            9 |
+| No           | No                    | Yes                    |             156 |           40 |
+| No           | Yes                   | No                     |             133 |           37 |
+| Yes          | No                    | No                     |              12 |            4 |
+| Yes          | No                    | Yes                    |              43 |           12 |
+| Yes          | Yes                   | No                     |               0 |            0 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+4. Detailed Control Set Information
+-----------------------------------
+
++-----------------------------------------------------------+---------------------------------------------------+-----------------------------------------------------+------------------+----------------+--------------+
+|                        Clock Signal                       |                   Enable Signal                   |                   Set/Reset Signal                  | Slice Load Count | Bel Load Count | Bels / Slice |
++-----------------------------------------------------------+---------------------------------------------------+-----------------------------------------------------+------------------+----------------+--------------+
+|  U1_GPIO/GPIO/values_out_reg[0]_LDC_i_1_n_0               |                                                   | U1_GPIO/GPIO/values_out_reg[0]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  DECODE/write_en_int00_out                                |                                                   | DECODE/unit_number_reg[0]_0                         |                1 |              1 |         1.00 |
+|  DECODE/counter_rst__0                                    |                                                   |                                                     |                1 |              1 |         1.00 |
+|  SCHEDULE/rst                                             |                                                   | U0_UART/UART/RECEIVER/BRDESER/scheduler_wanted0     |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG                                            |                                                   | U1_GPIO/GPIO/values_out_reg[0]_LDC_i_1_n_0          |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG                                            |                                                   | U1_GPIO/GPIO/values_out_reg[0]_LDC_i_2_n_0          |                1 |              1 |         1.00 |
+|  ENCODE/scheduler_schedule_next                           |                                                   | rst_IBUF                                            |                2 |              2 |         1.00 |
+|  clk_IBUF_BUFG                                            | U1_GPIO/write_mode_en_reg_0[0]                    | rst_IBUF                                            |                1 |              2 |         2.00 |
+|  DECODE/unit_number_data__0                               |                                                   |                                                     |                2 |              7 |         3.50 |
+|  clk_IBUF_BUFG                                            | U0_UART/UART/TRANSMITTER/BRSER/data[7]_i_1__0_n_0 | rst_IBUF                                            |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG                                            | U0_UART/UART/RECEIVER/DESER/data_ready_intern     | rst_IBUF                                            |                3 |              9 |         3.00 |
+|  clk_IBUF_BUFG                                            | UART_HOST/RECEIVER/DESER/data_ready_intern        | rst_IBUF                                            |                3 |              9 |         3.00 |
+|  clk_IBUF_BUFG                                            | DECODE/E[0]                                       |                                                     |                4 |             12 |         3.00 |
+|  clk_IBUF_BUFG                                            |                                                   |                                                     |                6 |             13 |         2.17 |
+|  clk_IBUF_BUFG                                            | DECODE/access_mode[0]_i_1_n_0                     | rst_IBUF                                            |                3 |             15 |         5.00 |
+|  UART_HOST/TRANSMITTER/PRES/clk_prescaled_intern_reg_0    |                                                   | rst_IBUF                                            |                4 |             15 |         3.75 |
+|  U0_UART/UART/TRANSMITTER/PRES/clk_prescaled_intern_reg_0 |                                                   | rst_IBUF                                            |                3 |             15 |         5.00 |
+|  UART_HOST/RECEIVER/PRES/CLK                              |                                                   | rst_IBUF                                            |                3 |             22 |         7.33 |
+|  U0_UART/UART/RECEIVER/PRES/CLK                           |                                                   | rst_IBUF                                            |                5 |             22 |         4.40 |
+|  clk_IBUF_BUFG                                            |                                                   | DECODE/counter_rst                                  |               11 |             32 |         2.91 |
+|  clk_IBUF_BUFG                                            |                                                   | U0_UART/UART/TRANSMITTER/PRES/counter[0]_i_1__1_n_0 |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG                                            |                                                   | U0_UART/UART/RECEIVER/PRES/counter[0]_i_1__6_n_0    |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG                                            |                                                   | UART_HOST/RECEIVER/PRES/counter[0]_i_1__5_n_0       |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG                                            |                                                   | UART_HOST/TRANSMITTER/PRES/counter[0]_i_1_n_0       |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG                                            |                                                   | rst_IBUF                                            |               12 |             48 |         4.00 |
++-----------------------------------------------------------+---------------------------------------------------+-----------------------------------------------------+------------------+----------------+--------------+
+
+
