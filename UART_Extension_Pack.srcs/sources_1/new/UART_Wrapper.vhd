@@ -3,10 +3,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity UART_Wrapper is
   Generic (
+    HOST_DATA_BITS : integer := 8;
     -- IN_FREQ_HZ has to be minimum 2*BAUD_FREQ_HZ
     IN_FREQ_HZ : integer := 12000000;
     BAUD_FREQ_HZ : integer := 9600;
-    -- DATA_BITS + STOP_BITS <= 15 has to be fullfilled
+    -- DATA_BITS + STOP_BITS + PARITY_ACTIVE <= 15 has to be fullfilled
     DATA_BITS : integer := 8;
     STOP_BITS : integer := 1;
     PARITY_ACTIVE : integer := 0; -- 0: No Parity; 1: Even or Odd Parity
@@ -16,8 +17,8 @@ entity UART_Wrapper is
     clk, rst : in STD_LOGIC;
     write_en : in std_logic;
     access_mode : in std_logic_vector(1 downto 0); -- unused
-    unit_data_in : in std_logic_vector(DATA_BITS-1 downto 0);
-    unit_data_out : out std_logic_vector(DATA_BITS-1 downto 0);
+    unit_data_in : in std_logic_vector(HOST_DATA_BITS-1 downto 0);
+    unit_data_out : out std_logic_vector(HOST_DATA_BITS-1 downto 0);
     scheduler_wanted : out std_logic;
     scheduler_done : in std_logic;
     TX_pin : out std_logic;
@@ -56,9 +57,16 @@ architecture Behavioral of UART_Wrapper is
   signal uart_received_valid : std_logic;
   signal uart_received_valid_last : std_logic;
   signal frame_error, parity_error : std_logic;
-begin
-  UART: UART_Unit generic map(IN_FREQ_HZ, BAUD_FREQ_HZ, DATA_BITS, STOP_BITS, PARITY_ACTIVE, PARITY_MODE) port map(clk, rst, unit_data_in, write_en_int, full_int, TX_pin, unit_data_out, frame_error, parity_error, uart_received_valid, RX_pin);
 
+  -- Not more than 14 data bits possible with UART_Unit
+  signal unit_data_in_buffer : std_logic_vector(13 downto 0) := (others => '0'); -- Extends smaller UART data vector with zeros
+  signal unit_data_out_buffer : std_logic_vector(13 downto 0) := (others => '0'); -- Extends smaller UART data vector with zeros
+begin
+  UART: UART_Unit generic map(IN_FREQ_HZ, BAUD_FREQ_HZ, DATA_BITS, STOP_BITS, PARITY_ACTIVE, PARITY_MODE) port map(clk, rst, unit_data_in_buffer(DATA_BITS-1 downto 0), write_en_int, full_int, TX_pin, unit_data_out_buffer(DATA_BITS-1 downto 0), frame_error, parity_error, uart_received_valid, RX_pin);
+
+  unit_data_in_buffer(HOST_DATA_BITS-1 downto 0)  <= unit_data_in;
+  unit_data_out <= unit_data_out_buffer(HOST_DATA_BITS-1 downto 0);
+  
   TRANSMIT: process(write_en, write_en_last, full_int, rst)
   begin
     if rst = '1' then

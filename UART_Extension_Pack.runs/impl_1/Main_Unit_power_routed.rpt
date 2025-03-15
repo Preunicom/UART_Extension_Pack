@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date             : Sat Mar 15 19:03:48 2025
+| Date             : Sat Mar 15 22:14:21 2025
 | Host             : 83278ddfa942 running 64-bit Ubuntu 22.04.5 LTS
 | Command          : report_power -file Main_Unit_power_routed.rpt -pb Main_Unit_power_summary_routed.pb -rpx Main_Unit_power_routed.rpx
 | Design           : Main_Unit
@@ -30,7 +30,7 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.073        |
+| Total On-Chip Power (W)  | 0.072        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
 | Dynamic (W)              | 0.001        |
@@ -53,15 +53,15 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |    <0.001 |        3 |       --- |             --- |
-| Slice Logic    |    <0.001 |      815 |       --- |             --- |
-|   LUT as Logic |    <0.001 |      219 |     20800 |            1.05 |
-|   Register     |    <0.001 |      406 |     41600 |            0.98 |
+| Slice Logic    |    <0.001 |      751 |       --- |             --- |
+|   LUT as Logic |    <0.001 |      204 |     20800 |            0.98 |
 |   CARRY4       |    <0.001 |       56 |      8150 |            0.69 |
+|   Register     |    <0.001 |      365 |     41600 |            0.88 |
 |   Others       |     0.000 |       35 |       --- |             --- |
-| Signals        |    <0.001 |      569 |       --- |             --- |
-| I/O            |    <0.001 |       22 |       106 |           20.75 |
+| Signals        |    <0.001 |      494 |       --- |             --- |
+| I/O            |    <0.001 |        9 |       106 |            8.49 |
 | Static Power   |     0.072 |          |           |                 |
-| Total          |     0.073 |          |           |                 |
+| Total          |     0.072 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 

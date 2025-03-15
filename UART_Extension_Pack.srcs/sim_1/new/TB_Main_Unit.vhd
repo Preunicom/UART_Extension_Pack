@@ -6,25 +6,38 @@ end TB_Main_Unit;
 
 architecture TESTBENCH of TB_Main_Unit is
   component Main_Unit
-  Generic(
-    HOST_BAUD : integer := 1000000;
-    FPGA_FREQ : integer := 12000000
-  );
-  Port ( 
-    clk : in STD_LOGIC;
-    rst : in STD_LOGIC;
-    tx_pin_host, tx_pin_a : out std_logic;
-    rx_pin_host, rx_pin_a : in std_logic;
-    gpio_pins_in : in STD_LOGIC_VECTOR (7 downto 0);
-    gpio_pins_out : out STD_LOGIC_VECTOR (7 downto 0)
-  );
+    Generic(
+      -- FPGA_FREQ has to be minimum 2*HOST_BAUD
+      FPGA_FREQ : integer := 12000000;
+      HOST_BAUD : integer := 1000000;
+      -- HOST_DATA_BITS + HOST_STOP_BITS + HOST_PARITY_ACTIVE <= 15 has to be fullfilled
+      -- HOST_DATA_BITS >= 8 has to be fullfilled
+      HOST_DATA_BITS : integer := 8;
+      HOST_STOP_BITS : integer := 1;
+      HOST_PARITY_ACTIVE : integer := 0; -- 0: No Parity; 1: Even or Odd Parity
+      HOST_PARITY_MODE : integer := 0 -- 0: Even Parity; 1: Odd Parity
+    );
+    Port ( 
+      clk : in STD_LOGIC;
+      rst : in STD_LOGIC;
+      tx_pin_host : out std_logic;
+      rx_pin_host : in std_logic;
+      ----------------- UNIT PORTS -----------------
+      tx_pin_a : out std_logic;
+      rx_pin_a : in std_logic;
+      gpio_pins_in : in STD_LOGIC_VECTOR (0 downto 0);
+      gpio_pins_out : out STD_LOGIC_VECTOR (1 downto 0)
+      
+      --------------- UNIT PORTS END ---------------
+    );
   end component;
   constant tbase: time := 10 ns;
   signal tb_clk, tb_rst, tb_tx_pin_host, tb_tx_pin_a, tb_rx_pin_host, tb_rx_pin_a : std_logic;
   signal tb_gpio_pins_in, tb_gpio_pins_out : std_logic_vector(7 downto 0);
 begin
-  MU: Main_Unit generic map(50000000, 100000000) port map(tb_clk, tb_rst, tb_tx_pin_host, tb_tx_pin_a, tb_rx_pin_host, tb_rx_pin_a, tb_gpio_pins_in, tb_gpio_pins_out);
-  
+  MU: Main_Unit generic map(50000000, 100000000, 8, 1, 0, 0) port map(tb_clk, tb_rst, tb_tx_pin_host, tb_rx_pin_host, tb_tx_pin_a, tb_rx_pin_a, tb_gpio_pins_in, tb_gpio_pins_out);
+  -- You have to set unit_U01 to 50000000 BAUD in Main_Unit
+
   CLK: process
   begin
     for i in 1000 downto 0 loop
@@ -48,8 +61,8 @@ begin
                     '0' after 340*tbase,  '1' after 350*tbase; --0b11110000
   tb_rx_pin_a <= '1',
                  '0' after 110*tbase, '1' after 120*tbase, '0' after 122*tbase, '1' after 128*tbase; --0b00010000
-  tb_gpio_pins_in <= "01111111", --0x01
-                     "11010011" after 50*tbase, --0xD3
-                     "00001111" after 100*tbase; --0xF0
+  tb_gpio_pins_in <= "0",
+                     "1" after 50*tbase,
+                     "0" after 100*tbase;
 
 end TESTBENCH;

@@ -12,9 +12,9 @@ set_property -dict {PACKAGE_PIN A17 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_o
 set_property -dict {PACKAGE_PIN C16 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_out[0]}]
 
 ## RGB LED
-set_property -dict {PACKAGE_PIN B17 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_out[4]}]
-set_property -dict {PACKAGE_PIN B16 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_out[3]}]
-set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_out[2]}]
+#set_property -dict {PACKAGE_PIN B17 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_out[4]}]
+#set_property -dict {PACKAGE_PIN B16 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_out[3]}]
+#set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_out[2]}]
 
 ## Buttons
 set_property -dict {PACKAGE_PIN A18 IOSTANDARD LVCMOS33} [get_ports rst]
@@ -39,17 +39,17 @@ set_property -dict {PACKAGE_PIN B18 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_i
 
 ## GPIO Pins
 ## Pins 15 and 16 should remain commented if using them as analog inputs
-set_property -dict {PACKAGE_PIN M3 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_out[5]}]
-set_property -dict {PACKAGE_PIN L3 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_out[6]}]
-set_property -dict {PACKAGE_PIN A16 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_out[7]}]
+#set_property -dict {PACKAGE_PIN M3 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_out[5]}]
+#set_property -dict {PACKAGE_PIN L3 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_out[6]}]
+#set_property -dict {PACKAGE_PIN A16 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_out[7]}]
 #set_property -dict { PACKAGE_PIN K3    IOSTANDARD LVCMOS33 } [get_ports { pio4  }]; #IO_L7N_T1_AD6N_35 Sch=pio[04]
-set_property -dict {PACKAGE_PIN C15 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[1]}]
-set_property -dict {PACKAGE_PIN H1 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[2]}]
-set_property -dict {PACKAGE_PIN A15 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[3]}]
-set_property -dict {PACKAGE_PIN B15 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[4]}]
-set_property -dict {PACKAGE_PIN A14 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[5]}]
-set_property -dict {PACKAGE_PIN J3 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[6]}]
-set_property -dict {PACKAGE_PIN J1 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[7]}]
+#set_property -dict {PACKAGE_PIN C15 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[1]}]
+#set_property -dict {PACKAGE_PIN H1 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[2]}]
+#set_property -dict {PACKAGE_PIN A15 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[3]}]
+#set_property -dict {PACKAGE_PIN B15 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[4]}]
+#set_property -dict {PACKAGE_PIN A14 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[5]}]
+#set_property -dict {PACKAGE_PIN J3 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[6]}]
+#set_property -dict {PACKAGE_PIN J1 IOSTANDARD LVCMOS33} [get_ports {gpio_pins_in[7]}]
 #set_property -dict { PACKAGE_PIN K2    IOSTANDARD LVCMOS33 } [get_ports { pio12 }]; #IO_L5P_T0_AD13P_35 Sch=pio[12]
 #set_property -dict { PACKAGE_PIN L1    IOSTANDARD LVCMOS33 } [get_ports { pio13 }]; #IO_L6N_T0_VREF_35 Sch=pio[13]
 #set_property -dict { PACKAGE_PIN L2    IOSTANDARD LVCMOS33 } [get_ports { pio14 }]; #IO_L5N_T0_AD13N_35 Sch=pio[14]

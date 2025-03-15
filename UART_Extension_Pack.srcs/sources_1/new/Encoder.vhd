@@ -11,7 +11,7 @@ entity Encoder is
     rst : in STD_LOGIC;
     write_en : in std_logic;
     uart_is_empty : in std_logic;
-    unit_number : in std_logic_vector(2 downto 0);
+    unit_number : in std_logic_vector(5 downto 0);
     unit_data : in std_logic_vector(DATA_BITS-1 downto 0);
     uart_out : out std_logic_vector(DATA_BITS-1 downto 0);
     uart_out_valid : out std_logic;
@@ -23,7 +23,7 @@ architecture Behavioral of Encoder is
   type statetype is (S0, S1, S2, S3, S4, S5);
   signal state : statetype := S0;
   signal nextstate : statetype;
-  signal zero_prefix_unit_number : std_logic_vector(DATA_BITS-1 downto 3) := (others => '0');
+  signal zero_prefix_unit_number : std_logic_vector(DATA_BITS-1 downto 6) := (others => '0');
 begin
 
   SYNC: process(clk, rst)
