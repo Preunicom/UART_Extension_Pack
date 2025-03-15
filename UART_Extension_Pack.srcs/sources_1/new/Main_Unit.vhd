@@ -55,15 +55,14 @@ architecture Behavioral of Main_Unit is
     );
     Port ( 
       clk, rst : in STD_LOGIC;
-      send_data : in std_logic_vector(DATA_BITS-1 downto 0);
       write_en : in std_logic;
-      full : out std_logic;
+      access_mode : in std_logic_vector(1 downto 0); -- unused
+      unit_data_in : in std_logic_vector(DATA_BITS-1 downto 0);
+      unit_data_out : out std_logic_vector(DATA_BITS-1 downto 0);
+      scheduler_wanted : out std_logic;
+      scheduler_done : in std_logic;
       TX_pin : out std_logic;
-
-      received_data : out std_logic_vector(DATA_BITS-1 downto 0);
-      new_data_received : out std_logic;
-      RX_pin : in std_logic;
-      reset_new_data_received : std_logic
+      RX_pin : in std_logic
     );
   end component;
   component GPIO_Wrapper
@@ -72,12 +71,12 @@ architecture Behavioral of Main_Unit is
     );
     Port ( 
       clk, rst : in STD_LOGIC;
-      enable : in std_logic;
+      write_en : in std_logic;
       access_mode : in std_logic_vector(1 downto 0); --*0: set, *1: get
-      config_in : in STD_LOGIC_VECTOR(IO_PINS-1 downto 0);
+      unit_data_in : in STD_LOGIC_VECTOR(IO_PINS-1 downto 0);
+      unit_data_out : out STD_LOGIC_VECTOR(IO_PINS-1 downto 0);
       scheduler_wanted : out std_logic;
       scheduler_done : in std_logic;
-      values_out : out STD_LOGIC_VECTOR(IO_PINS-1 downto 0);
       gpio_data_in : in STD_LOGIC_VECTOR (IO_PINS-1 downto 0);
       gpio_data_out : out STD_LOGIC_VECTOR (IO_PINS-1 downto 0)
     );
@@ -121,22 +120,8 @@ architecture Behavioral of Main_Unit is
       inp_ressource_ready : in std_logic; --en
       outp_valid : out std_logic;
       control_sig : out std_logic_vector(2 downto 0);
-      inp_a : in STD_LOGIC;
-      inp_b : in STD_LOGIC;
-      inp_c : in STD_LOGIC;
-      inp_d : in STD_LOGIC;
-      inp_e : in STD_LOGIC;
-      inp_f : in STD_LOGIC;
-      inp_g : in STD_LOGIC;
-      inp_h : in STD_LOGIC;
-      outp_a : out STD_LOGIC;
-      outp_b : out STD_LOGIC;
-      outp_c : out STD_LOGIC;
-      outp_d : out STD_LOGIC;
-      outp_e : out STD_LOGIC;
-      outp_f : out STD_LOGIC;
-      outp_g : out STD_LOGIC;
-      outp_h : out STD_LOGIC
+      inp : in std_logic_vector(7 downto 0);
+      outp : out std_logic_vector(7 downto 0)
     );
   end component;
   component MUX
@@ -160,14 +145,7 @@ architecture Behavioral of Main_Unit is
     Port ( 
       control : in STD_LOGIC_VECTOR (2 downto 0);
       inp : in STD_LOGIC;
-      outp_a : out STD_LOGIC;
-      outp_b : out STD_LOGIC;
-      outp_c : out STD_LOGIC;
-      outp_d : out STD_LOGIC;
-      outp_e : out STD_LOGIC;
-      outp_f : out STD_LOGIC;
-      outp_g : out STD_LOGIC;
-      outp_h : out STD_LOGIC
+      outp : out STD_LOGIC_VECTOR(7 downto 0)
     );
   end component;
   
@@ -179,45 +157,61 @@ architecture Behavioral of Main_Unit is
   signal host_received_data : std_logic_vector(7 downto 0);
   signal host_new_data_received : std_logic;
   signal host_frame_error, host_parity_error : std_logic;
+  signal host_any_uart_error : std_logic;
+  signal host_empty : std_logic;
 
   -- decoder
   signal decode_out_en : std_logic;
-  signal decode_access_mode : std_logic_vector(1 downto 0);
-  signal decode_unit_number : std_logic_vector(2 downto 0);
-  signal decode_unit_data : std_logic_vector(7 downto 0);
+  signal decoded_access_mode : std_logic_vector(1 downto 0);
+  signal decoded_unit_number : std_logic_vector(2 downto 0);
+  signal decoded_unit_data : std_logic_vector(7 downto 0);
 
   -- demux
-  signal a_en : std_logic; -- UART
-  signal b_en : std_logic; -- GPIO
+  signal unit_en : std_logic_vector(7 downto 0);
 
+  -- Units
+  signal unit_scheduler_wanted : std_logic_vector(7 downto 0) := (others => '0');
+  signal unit_scheduler_done : std_logic_vector(7 downto 0) := (others => '0');
+  
   -- a (UART)
-  signal a_received_data : std_logic_vector(7 downto 0);
-  signal a_new_data_received : std_logic;
-  signal a_scheduler_done : std_logic;
-    
+  signal unit_data_out_a : std_logic_vector(7 downto 0) := (others => '0');
   -- b (GPIO)
-  signal b_scheduler_wanted : std_logic;
-  signal b_scheduler_done : std_logic;
-  signal b_values_out : std_logic_vector(7 downto 0);
+  signal unit_data_out_b : std_logic_vector(7 downto 0) := (others => '0');
+  -- c (-)
+  signal unit_data_out_c : std_logic_vector(7 downto 0) := (others => '0');
+  -- d (-)
+  signal unit_data_out_d : std_logic_vector(7 downto 0) := (others => '0');
+  -- e (-)
+  signal unit_data_out_e : std_logic_vector(7 downto 0) := (others => '0');
+  -- f (-)
+  signal unit_data_out_f : std_logic_vector(7 downto 0) := (others => '0');
+  -- g (-)
+  signal unit_data_out_g : std_logic_vector(7 downto 0) := (others => '0');
+  -- h (-)
+  signal unit_data_out_h : std_logic_vector(7 downto 0) := (others => '0');
 
   -- scheduler
   signal schedule_control_sig : std_logic_vector(2 downto 0);
-  signal scheduler_write_en : std_logic;
-  signal scheduler_schdule_next: std_logic;
+  signal scheduler_write_en : std_logic := '0';
+  signal scheduler_schedule_next: std_logic;
 
   -- mux
   signal mux_unit_data_out : std_logic_vector(7 downto 0);
   
 begin
   UART_HOST: UART_Unit generic map(FPGA_FREQ, HOST_BAUD, 8, 1, 0, 0) port map(clk, rst, host_send_data, host_write_en, host_full, tx_pin_host, host_received_data, host_frame_error, host_parity_error, host_new_data_received, rx_pin_host);
-  DECODE: Decoder generic map(8, FPGA_FREQ) port map(clk, rst, host_received_data, host_new_data_received, (host_frame_error or host_parity_error), decode_out_en, decode_access_mode, decode_unit_number, decode_unit_data);
-  EN_DEMUX: DEMUX port map(decode_unit_number, decode_out_en, a_en, b_en, open, open, open, open, open, open);
+  DECODE: Decoder generic map(8, FPGA_FREQ) port map(clk, rst, host_received_data, host_new_data_received, host_any_uart_error , decode_out_en, decoded_access_mode, decoded_unit_number, decoded_unit_data);
+  EN_DEMUX: DEMUX port map(decoded_unit_number, decode_out_en, unit_en);
 
-  A_UART: UART_Wrapper generic map(FPGA_FREQ, 250000, 8, 1, 0, 0) port map(clk, rst, decode_unit_data, a_en, open, tx_pin_a, a_received_data, a_new_data_received, rx_pin_a, a_scheduler_done);
-  B_GPIO: GPIO_Wrapper generic map(8) port map(clk, rst, b_en, decode_access_mode, decode_unit_data, b_scheduler_wanted, b_scheduler_done, b_values_out, gpio_pins_in, gpio_pins_out);
+  A_UART: UART_Wrapper generic map(FPGA_FREQ, 250000, 8, 1, 0, 0) port map(clk, rst, unit_en(0), decoded_access_mode, decoded_unit_data, unit_data_out_a, unit_scheduler_wanted(0), unit_scheduler_done(0), tx_pin_a, rx_pin_a);
+  B_GPIO: GPIO_Wrapper generic map(8) port map(clk, rst, unit_en(1), decoded_access_mode, decoded_unit_data, unit_data_out_b, unit_scheduler_wanted(1), unit_scheduler_done(1), gpio_pins_in, gpio_pins_out);
 
-  SCHEDULE: PriorityScheduler port map(clk, rst, scheduler_schdule_next, scheduler_write_en, schedule_control_sig, a_new_data_received, b_scheduler_wanted, '0', '0', '0', '0', '0', '0', a_scheduler_done, b_scheduler_done, open, open, open, open, open, open);
-  SCHED_MUX: MUX generic map(8) port map(schedule_control_sig, a_received_data, b_values_out, (others=>'0'), (others=>'0'), (others=>'0'), (others=>'0'), (others=>'0'), (others=>'0'),  mux_unit_data_out);
+  SCHEDULE: PriorityScheduler port map(clk, rst, scheduler_schedule_next, scheduler_write_en, schedule_control_sig, unit_scheduler_wanted, unit_scheduler_done);
+  SCHED_MUX: MUX generic map(8) port map(schedule_control_sig, unit_data_out_a, unit_data_out_b, unit_data_out_c, unit_data_out_d, unit_data_out_e, unit_data_out_f, unit_data_out_g, unit_data_out_h,  mux_unit_data_out);
 
-  ENCODE: Encoder generic map(8) port map(clk, rst, scheduler_write_en, not host_full, schedule_control_sig, mux_unit_data_out, host_send_data, host_write_en, scheduler_schdule_next);
+  ENCODE: Encoder generic map(8) port map(clk, rst, scheduler_write_en, host_empty, schedule_control_sig, mux_unit_data_out, host_send_data, host_write_en, scheduler_schedule_next);
+
+  host_any_uart_error <= host_frame_error or host_parity_error;
+  host_empty <= not host_full;
+
 end Behavioral;

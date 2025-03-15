@@ -5,14 +5,7 @@ entity DEMUX is
   Port ( 
     control : in STD_LOGIC_VECTOR (2 downto 0);
     inp : in STD_LOGIC;
-    outp_a : out STD_LOGIC;
-    outp_b : out STD_LOGIC;
-    outp_c : out STD_LOGIC;
-    outp_d : out STD_LOGIC;
-    outp_e : out STD_LOGIC;
-    outp_f : out STD_LOGIC;
-    outp_g : out STD_LOGIC;
-    outp_h : out STD_LOGIC
+    outp : out STD_LOGIC_VECTOR(7 downto 0)
   );
 end DEMUX;
 
@@ -20,31 +13,24 @@ architecture Behavioral of DEMUX is
 begin
   MUX: process(control, inp)
   begin
-    outp_a <= '0';
-    outp_b <= '0';
-    outp_c <= '0';
-    outp_d <= '0';
-    outp_e <= '0';
-    outp_f <= '0';
-    outp_g <= '0';
-    outp_h <= '0';
+    outp <= (others => '0');
     case control is
       when "000" =>
-        outp_a <= inp;
+        outp(0) <= inp;
       when "001" =>
-        outp_b <= inp;
+        outp(1) <= inp;
       when "010" => 
-        outp_c <= inp;
+        outp(2) <= inp;
       when "011" => 
-        outp_d <= inp;
+        outp(3) <= inp;
       when "100" =>
-        outp_e <= inp;
+        outp(4) <= inp;
       when "101" =>
-        outp_f <= inp;
+        outp(5) <= inp;
       when "110" => 
-        outp_g <= inp;
+        outp(6) <= inp;
       when "111" => 
-        outp_h <= inp;
+        outp(7) <= inp;
       when others => null;
     end case;
   end process;

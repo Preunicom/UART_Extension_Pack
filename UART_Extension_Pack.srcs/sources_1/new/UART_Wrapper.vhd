@@ -14,15 +14,14 @@ entity UART_Wrapper is
   );
   Port ( 
     clk, rst : in STD_LOGIC;
-    send_data : in std_logic_vector(DATA_BITS-1 downto 0);
     write_en : in std_logic;
-    full : out std_logic;
+    access_mode : in std_logic_vector(1 downto 0); -- unused
+    unit_data_in : in std_logic_vector(DATA_BITS-1 downto 0);
+    unit_data_out : out std_logic_vector(DATA_BITS-1 downto 0);
+    scheduler_wanted : out std_logic;
+    scheduler_done : in std_logic;
     TX_pin : out std_logic;
-
-    received_data : out std_logic_vector(DATA_BITS-1 downto 0);
-    new_data_received : out std_logic;
-    RX_pin : in std_logic;
-    reset_new_data_received : in std_logic
+    RX_pin : in std_logic
   );
 end UART_Wrapper;
 
@@ -58,7 +57,7 @@ architecture Behavioral of UART_Wrapper is
   signal uart_received_valid_last : std_logic;
   signal frame_error, parity_error : std_logic;
 begin
-  UART: UART_Unit generic map(IN_FREQ_HZ, BAUD_FREQ_HZ, DATA_BITS, STOP_BITS, PARITY_ACTIVE, PARITY_MODE) port map(clk, rst, send_data, write_en_int, full_int, TX_pin, received_data, frame_error, parity_error, uart_received_valid, RX_pin);
+  UART: UART_Unit generic map(IN_FREQ_HZ, BAUD_FREQ_HZ, DATA_BITS, STOP_BITS, PARITY_ACTIVE, PARITY_MODE) port map(clk, rst, unit_data_in, write_en_int, full_int, TX_pin, unit_data_out, frame_error, parity_error, uart_received_valid, RX_pin);
 
   TRANSMIT: process(write_en, write_en_last, full_int, rst)
   begin
@@ -85,17 +84,15 @@ begin
       write_en_last <= write_en;
     end if;
   end process;
-
-  full <= full_int;
   
-  RECEIVE: process(uart_received_valid, reset_new_data_received)
+  RECEIVE: process(uart_received_valid, uart_received_valid_last, frame_error, parity_error, scheduler_done, rst)
   begin
     if uart_received_valid = '1' and uart_received_valid_last = '0' and frame_error = '0' and parity_error = '0' then    
       -- new package received with no errors
-      new_data_received <= '1';
-    elsif reset_new_data_received = '1' or rst = '1' then
-      -- reset new_data_received
-      new_data_received <= '0';
+      scheduler_wanted <= '1';
+    elsif scheduler_done = '1' or rst = '1' then
+      -- reset scheduler_wanted
+      scheduler_wanted <= '0';
     end if;
   end process;
 

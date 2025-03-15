@@ -7,12 +7,12 @@ entity GPIO_Wrapper is
   );
   Port ( 
     clk, rst : in STD_LOGIC;
-    enable : in std_logic;
+    write_en : in std_logic;
     access_mode : in std_logic_vector(1 downto 0); --*0: set, *1: get
-    config_in : in STD_LOGIC_VECTOR(IO_PINS-1 downto 0);
+    unit_data_in : in STD_LOGIC_VECTOR(IO_PINS-1 downto 0);
+    unit_data_out : out STD_LOGIC_VECTOR(IO_PINS-1 downto 0);
     scheduler_wanted : out std_logic;
     scheduler_done : in std_logic;
-    values_out : out STD_LOGIC_VECTOR(IO_PINS-1 downto 0);
     gpio_data_in : in STD_LOGIC_VECTOR (IO_PINS-1 downto 0);
     gpio_data_out : out STD_LOGIC_VECTOR (IO_PINS-1 downto 0)
   );
@@ -50,15 +50,15 @@ begin
       write_values <= (others => '0');
       last_enable_write <= '0';
     elsif rising_edge(clk) then
-      last_enable_write <= enable;
-      if enable = '1' and last_enable_write = '0' then
-        -- edge of enable detected
+      last_enable_write <= write_en;
+      if write_en = '1' and last_enable_write = '0' then
+        -- edge of write_en detected
         -- no write/set mode if it won't be overridden
         write_mode_en <= '0';
         if access_mode(0) = '0' then
           -- write/set mode
           write_mode_en <= '1';
-          write_values <= config_in;
+          write_values <= unit_data_in;
         end if;
       end if;
     end if;
@@ -71,20 +71,20 @@ begin
       values_to_scheduler <= (others => '0');
       last_enable_read <= '0';
     elsif rising_edge(clk) then
-      last_enable_read <= enable;
+      last_enable_read <= write_en;
       last_values <= values_read;
       if scheduler_done = '1' then
         -- scheduling finished --> resets demand of scheduler
         scheduler_wanted <= '0';
       end if;
-      if (last_values /= values_read) or ((access_mode(0) = '1') and (enable = '1' and last_enable_read = '0')) then
-        -- Interrrupt or edge detected of enable and read/get mode
+      if (last_values /= values_read) or ((access_mode(0) = '1') and (write_en = '1' and last_enable_read = '0')) then
+        -- Interrrupt or edge detected of write_en and read/get mode
         scheduler_wanted <= '1';
         values_to_scheduler <= values_read;
       end if;
     end if;
   end process;
 
-  values_out <= values_to_scheduler;
+  unit_data_out <= values_to_scheduler;
   
 end Behavioral;
