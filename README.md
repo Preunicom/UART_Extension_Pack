@@ -27,6 +27,48 @@ The specific ports have to be additinally declared in the constraints file and i
 Set the default values of Main_Unit to your specific UART configuration of your host. <br>
 (Note: Make sure you have >= 8 data bits for your host communication as well as a BAUD rate less or equal of half your FPGA frequency)
 
+## Units
+### UART_Unit
+Can be configured with BAUD rate, data bits, stop bits and parity bit. <br>
+Needs two pins (rx and tx) of the FPGA. <br>
+BAUD has to be less or equal than half of the FGGA frequency. (Note: Integer divisor baud rates lead to more stable UART communication) <br>
+Data bits have to be more than 5 and all bits (stop, data and parity) have to be less or equal 15. <br>
+Normally: 
+  - data bits: 5-9
+  - stop bits: 1-2
+  - parity bit: 0-1
+
+UART messages are directly forwarded from unit to the host or from the host to the unit. <br>
+Access mode is ignored. <br>
+Note: UART messages with parity or frame errors are ignorer! <br>
+Note: If there is too much traffic on the ExtPack and UART Unit has to less priority and is receiving too much laod it is posible that UART packages are getting lost because it is scheduled too slow or never because of starvation.
+
+### GPIO_Unit
+Can be configured with in and out pin amount. <br>
+Pin amount has to be at least 1 and maximum the amount of data bits of the host UART communication.
+The access mode controls the type of pins.
+  - "00" or "10": Set output pins
+  - "01" or "11": Request values of input pins
+
+If there is an interrupt on a input pin detected a message with the pin values is sent to the host. <br>
+Note: Debouncing is not prevented. <br>
+Note: The output pins are set to the given values from the host. There is no way to only set **one** specific pin to a value.
+
+## Timer_Unit
+Can be configured via UART (No configuaration in VHDL code neccessary). <br>
+The timer is a x-bit timer with x being the amount of bits of the host UART communication. <br>
+It counts from a given start value (default 0) up to the maximum value of x bit. The overflow triggers an interrupt which is sent to the host. <br>
+The speed of counting (prescaler) can also be set as a divisor of the FPGA frequency. (default: 1) (for exmaple: 2 divides the FPGA frequency by 2) <br>
+The access mode handles all this configurations: 
+ - "00": Enables/disables the timer. 
+    - 0 as value disables the timer.
+    - Any value greater then 0 enables the timer.
+ - "01": Restarts the timer. (value is ignored)
+ - "10": Sets the value as the prescale divisor. (Note: Even values lead to a preciser timer)
+ - "11": Sets the value as the start value of the timer.
+
+ Note: Think of the fact, that scheduling and sending the timer overflow interrupt to the host will need some time.
+
 ## Internal structure
 ### Incoming data from host
 (1) UART_Unit -> (2) Decoder -> (3) MUX -> (4) Unit

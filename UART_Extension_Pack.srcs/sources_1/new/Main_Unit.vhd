@@ -98,6 +98,20 @@ architecture Behavioral of Main_Unit is
       gpio_data_out : out STD_LOGIC_VECTOR (OUT_PINS-1 downto 0)
     );
   end component;
+  component Timer_Wrapper
+    generic (
+      HOST_DATA_BITS : integer := 8
+    );
+    port (
+      clk, rst         : in  STD_LOGIC;
+      write_en         : in  std_logic;
+      access_mode      : in  std_logic_vector(1 downto 0); --00: en, 01: restart, 10: prescale_factor, 11: start_value
+      unit_data_in     : in  STD_LOGIC_VECTOR(HOST_DATA_BITS - 1 downto 0);
+      unit_data_out    : out STD_LOGIC_VECTOR(HOST_DATA_BITS - 1 downto 0);
+      scheduler_wanted : out std_logic;
+      scheduler_done   : in  std_logic
+    );
+  end component;
   component Decoder
     Generic (
       DATA_BITS : integer := 8;
@@ -326,8 +340,9 @@ begin
   EN_DEMUX: DEMUX port map(decoded_unit_number, decode_out_en, unit_en);
 
   ----------------- UNITS -----------------
-  U0_UART: UART_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 250000, 8, 1, 0, 0) port map(clk, rst, unit_en(0), decoded_access_mode, decoded_unit_data, unit_data_out_U00, unit_scheduler_wanted(0), unit_scheduler_done(0), tx_pin_a, rx_pin_a);
-  U1_GPIO: GPIO_Wrapper generic map(HOST_DATA_BITS, 1, 2) port map(clk, rst, unit_en(1), decoded_access_mode, decoded_unit_data, unit_data_out_U01, unit_scheduler_wanted(1), unit_scheduler_done(1), gpio_pins_in, gpio_pins_out);
+  U00_UART: UART_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 250000, 8, 1, 0, 0) port map(clk, rst, unit_en(0), decoded_access_mode, decoded_unit_data, unit_data_out_U00, unit_scheduler_wanted(0), unit_scheduler_done(0), tx_pin_a, rx_pin_a);
+  U01_GPIO: GPIO_Wrapper generic map(HOST_DATA_BITS, 1, 2) port map(clk, rst, unit_en(1), decoded_access_mode, decoded_unit_data, unit_data_out_U01, unit_scheduler_wanted(1), unit_scheduler_done(1), gpio_pins_in, gpio_pins_out);
+  U02_TIME: Timer_Wrapper generic map(HOST_DATA_BITS) port map(clk, rst, unit_en(2), decoded_access_mode, decoded_unit_data, unit_data_out_U02, unit_scheduler_wanted(2), unit_scheduler_done(2));
 
   --------------- UNITS END ---------------
   
