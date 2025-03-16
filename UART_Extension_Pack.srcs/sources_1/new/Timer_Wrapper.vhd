@@ -89,12 +89,12 @@ begin
 
   TIMER_INTERRUPT: process(last_is_timer_end, is_timer_end_int, scheduler_done, rst) 
   begin
-    if is_timer_end_int = '1' and last_is_timer_end = '0' then
-      -- timer ended
-      scheduler_wanted <= '1';
-    elsif scheduler_done = '1' or rst = '1' then
+    if rst = '1' or scheduler_done = '1' then
       -- reset scheduler_wanted
       scheduler_wanted <= '0';
+    elsif is_timer_end_int = '1' and last_is_timer_end = '0' then
+      -- timer ended
+      scheduler_wanted <= '1';
     end if;
   end process;  
 

@@ -95,12 +95,12 @@ begin
   
   RECEIVE: process(uart_received_valid, uart_received_valid_last, frame_error, parity_error, scheduler_done, rst)
   begin
-    if uart_received_valid = '1' and uart_received_valid_last = '0' and frame_error = '0' and parity_error = '0' then    
-      -- new package received with no errors
-      scheduler_wanted <= '1';
-    elsif scheduler_done = '1' or rst = '1' then
+    if rst = '1' or scheduler_done = '1' then
       -- reset scheduler_wanted
       scheduler_wanted <= '0';
+    elsif uart_received_valid = '1' and uart_received_valid_last = '0' and frame_error = '0' and parity_error = '0' then    
+      -- new package received with no errors
+      scheduler_wanted <= '1';
     end if;
   end process;
 

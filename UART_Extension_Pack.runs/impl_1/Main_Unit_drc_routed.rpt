@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date         : Sat Mar 15 22:14:20 2025
-| Host         : 83278ddfa942 running 64-bit Ubuntu 22.04.5 LTS
+| Date         : Sun Mar 16 15:30:42 2025
+| Host         : e16681808f75 running 64-bit Ubuntu 22.04.5 LTS
 | Command      : report_drc -file Main_Unit_drc_routed.rpt -pb Main_Unit_drc_routed.pb -rpx Main_Unit_drc_routed.rpx
 | Design       : Main_Unit
 | Device       : xc7a35tcpg236-1
@@ -24,12 +24,12 @@ Table of Contents
       Design limits: <entire design considered>
            Ruledeck: default
              Max violations: <unlimited>
-             Violations found: 7
+             Violations found: 17
 +----------+----------+-----------------------------------------------------+------------+
 | Rule     | Severity | Description                                         | Violations |
 +----------+----------+-----------------------------------------------------+------------+
 | CFGBVS-1 | Warning  | Missing CFGBVS and CONFIG_VOLTAGE Design Properties | 1          |
-| PDRC-153 | Warning  | Gated clock check                                   | 6          |
+| PDRC-153 | Warning  | Gated clock check                                   | 16         |
 +----------+----------+-----------------------------------------------------+------------+
 
 2. REPORT DETAILS
@@ -54,7 +54,7 @@ Related violations: <none>
 
 PDRC-153#2 Warning
 Gated clock check  
-Net DECODE/unit_number_data__0 is a gated clock net sourced by a combinational pin DECODE/unit_number_data_reg[6]_i_1/O, cell DECODE/unit_number_data_reg[6]_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Net DECODE/unit_number_data__0 is a gated clock net sourced by a combinational pin DECODE/unit_number_data_reg[7]_i_1/O, cell DECODE/unit_number_data_reg[7]_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
 Related violations: <none>
 
 PDRC-153#3 Warning
@@ -64,17 +64,67 @@ Related violations: <none>
 
 PDRC-153#4 Warning
 Gated clock check  
-Net ENCODE/scheduler_schedule_next is a gated clock net sourced by a combinational pin ENCODE/scheduler_done_reg[1]_i_1/O, cell ENCODE/scheduler_done_reg[1]_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Net ENCODE/scheduler_schedule_next is a gated clock net sourced by a combinational pin ENCODE/scheduler_done_reg[2]_i_1/O, cell ENCODE/scheduler_done_reg[2]_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
 Related violations: <none>
 
 PDRC-153#5 Warning
 Gated clock check  
-Net SCHEDULE/rst is a gated clock net sourced by a combinational pin SCHEDULE/scheduler_wanted_reg_i_1/O, cell SCHEDULE/scheduler_wanted_reg_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Net U00_UART/UART/RECEIVER/BRDESER/scheduler_wanted0 is a gated clock net sourced by a combinational pin U00_UART/UART/RECEIVER/BRDESER/scheduler_wanted_reg_i_1__0/O, cell U00_UART/UART/RECEIVER/BRDESER/scheduler_wanted_reg_i_1__0. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
 Related violations: <none>
 
 PDRC-153#6 Warning
 Gated clock check  
-Net U1_GPIO/GPIO/values_out_reg[0]_LDC_i_1_n_0 is a gated clock net sourced by a combinational pin U1_GPIO/GPIO/values_out_reg[0]_LDC_i_1/O, cell U1_GPIO/GPIO/values_out_reg[0]_LDC_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Net U01_GPIO/GPIO/scheduler_wanted01_out is a gated clock net sourced by a combinational pin U01_GPIO/GPIO/scheduler_wanted_reg_i_1/O, cell U01_GPIO/GPIO/scheduler_wanted_reg_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Related violations: <none>
+
+PDRC-153#7 Warning
+Gated clock check  
+Net U01_GPIO/GPIO/values_out_reg[0]_LDC_i_1_n_0 is a gated clock net sourced by a combinational pin U01_GPIO/GPIO/values_out_reg[0]_LDC_i_1/O, cell U01_GPIO/GPIO/values_out_reg[0]_LDC_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Related violations: <none>
+
+PDRC-153#8 Warning
+Gated clock check  
+Net U02_TIME/TIMER/scheduler_wanted0 is a gated clock net sourced by a combinational pin U02_TIME/TIMER/scheduler_wanted_reg_i_1__1/O, cell U02_TIME/TIMER/scheduler_wanted_reg_i_1__1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Related violations: <none>
+
+PDRC-153#9 Warning
+Gated clock check  
+Net U02_TIME/TIMER/timer_counter_non_prescaled_reg[0]_LDC_i_1_n_0 is a gated clock net sourced by a combinational pin U02_TIME/TIMER/timer_counter_non_prescaled_reg[0]_LDC_i_1/O, cell U02_TIME/TIMER/timer_counter_non_prescaled_reg[0]_LDC_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Related violations: <none>
+
+PDRC-153#10 Warning
+Gated clock check  
+Net U02_TIME/TIMER/timer_counter_non_prescaled_reg[1]_LDC_i_1_n_0 is a gated clock net sourced by a combinational pin U02_TIME/TIMER/timer_counter_non_prescaled_reg[1]_LDC_i_1/O, cell U02_TIME/TIMER/timer_counter_non_prescaled_reg[1]_LDC_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Related violations: <none>
+
+PDRC-153#11 Warning
+Gated clock check  
+Net U02_TIME/TIMER/timer_counter_non_prescaled_reg[2]_LDC_i_1_n_0 is a gated clock net sourced by a combinational pin U02_TIME/TIMER/timer_counter_non_prescaled_reg[2]_LDC_i_1/O, cell U02_TIME/TIMER/timer_counter_non_prescaled_reg[2]_LDC_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Related violations: <none>
+
+PDRC-153#12 Warning
+Gated clock check  
+Net U02_TIME/TIMER/timer_counter_non_prescaled_reg[3]_LDC_i_1_n_0 is a gated clock net sourced by a combinational pin U02_TIME/TIMER/timer_counter_non_prescaled_reg[3]_LDC_i_1/O, cell U02_TIME/TIMER/timer_counter_non_prescaled_reg[3]_LDC_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Related violations: <none>
+
+PDRC-153#13 Warning
+Gated clock check  
+Net U02_TIME/TIMER/timer_counter_non_prescaled_reg[4]_LDC_i_1_n_0 is a gated clock net sourced by a combinational pin U02_TIME/TIMER/timer_counter_non_prescaled_reg[4]_LDC_i_1/O, cell U02_TIME/TIMER/timer_counter_non_prescaled_reg[4]_LDC_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Related violations: <none>
+
+PDRC-153#14 Warning
+Gated clock check  
+Net U02_TIME/TIMER/timer_counter_non_prescaled_reg[5]_LDC_i_1_n_0 is a gated clock net sourced by a combinational pin U02_TIME/TIMER/timer_counter_non_prescaled_reg[5]_LDC_i_1/O, cell U02_TIME/TIMER/timer_counter_non_prescaled_reg[5]_LDC_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Related violations: <none>
+
+PDRC-153#15 Warning
+Gated clock check  
+Net U02_TIME/TIMER/timer_counter_non_prescaled_reg[6]_LDC_i_1_n_0 is a gated clock net sourced by a combinational pin U02_TIME/TIMER/timer_counter_non_prescaled_reg[6]_LDC_i_1/O, cell U02_TIME/TIMER/timer_counter_non_prescaled_reg[6]_LDC_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Related violations: <none>
+
+PDRC-153#16 Warning
+Gated clock check  
+Net U02_TIME/TIMER/timer_counter_non_prescaled_reg[7]_LDC_i_1_n_0 is a gated clock net sourced by a combinational pin U02_TIME/TIMER/timer_counter_non_prescaled_reg[7]_LDC_i_1/O, cell U02_TIME/TIMER/timer_counter_non_prescaled_reg[7]_LDC_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
 Related violations: <none>
 
 
