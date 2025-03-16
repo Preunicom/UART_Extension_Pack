@@ -68,26 +68,32 @@ begin
     end if;
   end process;
 
-  INPUTS: process(clk, rst)
+  INPUTS: process(rst, scheduler_done, last_values, values_read, access_mode, write_en, last_enable_read)
   begin
-    if rst = '1' then
+    if rst = '1' or scheduler_done = '1' then
+      -- scheduling finished --> resets request at scheduler
       scheduler_wanted <= '0';
-      values_to_scheduler <= (others => '0');
-      last_enable_read <= '0';
-    elsif rising_edge(clk) then
-      last_enable_read <= write_en;
-      last_values <= values_read;
-      if scheduler_done = '1' then
-        -- scheduling finished --> resets demand of scheduler
-        scheduler_wanted <= '0';
-      end if;
-      if (last_values /= values_read) or ((access_mode(0) = '1') and (write_en = '1' and last_enable_read = '0')) then
-        -- Interrrupt or edge detected of write_en and read/get mode
-        scheduler_wanted <= '1';
-        values_to_scheduler(IN_PINS-1 downto 0) <= values_read;
-      end if;
+    elsif (last_values /= values_read) or ((access_mode(0) = '1') and (write_en = '1' and last_enable_read = '0')) then
+      -- Interrrupt or edge detected of write_en and read/get mode (host requested pin values)
+      scheduler_wanted <= '1';
     end if;
   end process;
+
+  values_to_scheduler(IN_PINS-1 downto 0) <= values_read;
+
+  EDGE_DETECTION_INPUTS: process(clk, rst)
+  begin
+    if rst = '1' then
+      last_values <= (others => '0');
+      last_enable_read <= '0';
+    elsif rising_edge(clk) then
+      -- Check if input pin values have changed
+      last_values <= values_read;
+      -- check if write_en has changed
+      last_enable_read <= write_en;
+    end if;
+  end process;
+
 
   unit_data_out <= values_to_scheduler(HOST_DATA_BITS-1 downto 0);
   

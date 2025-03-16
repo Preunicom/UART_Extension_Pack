@@ -1,21 +1,23 @@
 # compile vhdl design source files
 vhdl xil_defaultlib  \
-"../../../../UART_Extension_Pack.srcs/sources_1/new/Buffer_Register_Deserializer.vhd" \
-"../../../../UART_Extension_Pack.srcs/sources_1/new/Buffer_Register_Serializer.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Buffer_Register_Deserializer.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Buffer_Register_Serializer.vhd" \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/DEMUX.vhd" \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/Decoder.vhd" \
-"../../../../UART_Extension_Pack.srcs/sources_1/new/Deserializer.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Deserializer.vhd" \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/Encoder.vhd" \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/GPIO_Bank_Unit.vhd" \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/GPIO_Wrapper.vhd" \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/MUX.vhd" \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/Main_Unit.vhd" \
-"../../../../UART_Extension_Pack.srcs/sources_1/new/Prescaler.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Prescaler.vhd" \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/PriorityScheduler.vhd" \
-"../../../../UART_Extension_Pack.srcs/sources_1/new/Serializer.vhd" \
-"../../../../UART_Extension_Pack.srcs/sources_1/new/UART_Receiver.vhd" \
-"../../../../UART_Extension_Pack.srcs/sources_1/new/UART_Transmitter.vhd" \
-"../../../../UART_Extension_Pack.srcs/sources_1/new/UART_Unit.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Serializer.vhd" \
+"../../../../UART_Extension_Pack.srcs/sources_1/new/Timer_Unit.vhd" \
+"../../../../UART_Extension_Pack.srcs/sources_1/new/Timer_Wrapper.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/UART_Receiver.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/UART_Transmitter.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/UART_Unit.vhd" \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/UART_Wrapper.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Main_Unit.vhd" \
 
