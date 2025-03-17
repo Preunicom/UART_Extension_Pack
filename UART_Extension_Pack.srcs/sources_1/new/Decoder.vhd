@@ -36,12 +36,16 @@ architecture Behavioral of Decoder is
   signal uart_error_synced : std_logic;
   signal uart_error_S1 : std_logic;
   signal uart_error_combined : std_logic := '0';
+  signal out_en_int : std_logic := '0';
+  signal out_en_int_aysnc : std_logic := '0';
 begin
+
+  out_en <= out_en_int_aysnc and out_en_int;
 
   SYNC_IO: process(clk, rst)
   begin
     if rst = '1' then
-      out_en <= '0';
+      out_en_int <= '0';
       access_mode <= (others => '0');
       unit_number <= (others => '0');
       unit_data <= (others => '0');
@@ -55,12 +59,12 @@ begin
       -- Sync out
       case state is
         when S0 => -- waiting for data
-          out_en <= '0';
+          out_en_int <= '0';
           -- resets uart errors of others states
           uart_error_S1 <= '0';
           uart_error_combined <= '0';
         when S1 => -- Get first data part
-          out_en <= '0';
+          out_en_int <= '0';
           uart_error_S1 <= uart_error_S1 or uart_error_synced;
           -- resets uart errors of other states
           uart_error_combined <= '0';
@@ -74,7 +78,7 @@ begin
           -- Sets uart_error_combined to one if error was present while receiving one of the 2 packages
           uart_error_combined <= uart_error_synced or uart_error_combined or uart_error_S1; 
           -- Enable output if no UART error exists
-          out_en <= not (uart_error_synced or uart_error_combined or uart_error_S1);
+          out_en_int <= not (uart_error_synced or uart_error_combined or uart_error_S1);
         when others => null;
       end case;
     end if;
@@ -96,6 +100,7 @@ begin
     case state is
       when S0 => 
         -- no input to decode given
+        out_en_int_aysnc <= '0';
         if uart_inp_valid_synced = '1' and last_uart_inp_valid = '0' then
           -- edge detected of uart_inp_valid_synced
           --> New data (first half)
@@ -106,6 +111,7 @@ begin
       when S1 =>
         -- get first half of the data
         counter_rst <= '0';
+        out_en_int_aysnc <= '0';
         if uart_inp_valid_synced = '1' and last_uart_inp_valid = '0' then
           -- edge detected of uart_inp_valid_synced
           --> New data (second half)
@@ -120,17 +126,20 @@ begin
         end if;
       when S2 =>
         -- get second half of the data
+        out_en_int_aysnc <= '1';
         counter_rst <= '0';
         nextstate <= S2;
         if uart_inp_valid_synced = '1' and last_uart_inp_valid = '0' then
-          -- edge detected of uart_inp_valid_synced
+          -- rising edge detected of uart_inp_valid_synced
           --> New data (next pair of data)
           nextstate <= S1;
           counter_rst <= '1';
           unit_number_data <= uart_inp_synced;
+          out_en_int_aysnc <= '0';
         elsif counter_ready = '1' then
           -- resets after 1ms if no new data is available during this time
           nextstate <= S0;
+          out_en_int_aysnc <= '0';
         end if;
       when others => null;
     end case;
