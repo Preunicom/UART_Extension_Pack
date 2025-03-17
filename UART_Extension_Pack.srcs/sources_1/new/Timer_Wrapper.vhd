@@ -4,7 +4,9 @@ library IEEE;
 
 entity Timer_Wrapper is
   generic (
-    HOST_DATA_BITS : integer := 8
+    HOST_DATA_BITS : integer := 8;
+    FPGA_FREQ : integer := 12000000;
+    HOST_BAUD : integer := 1000000
   );
   port (
     clk, rst         : in  STD_LOGIC;
@@ -41,9 +43,29 @@ architecture Behavioral of Timer_Wrapper is
   signal restart_timer_int            : std_logic := '0';
   signal is_timer_end_int             : std_logic := '0';
   signal last_is_timer_end            : std_logic := '0';
+  signal clk_prescaled_intern         : std_logic := '0';
+  signal prescale_counter             : integer := 1;
 begin
-  TIMER: Timer_Unit generic map (HOST_DATA_BITS) port map (clk, rst, timer_active_int, prescale_factor_write_en_int, prescaled_factor_int, start_value_write_en, start_value_int, restart_timer_int, is_timer_end_int);
+  TIMER: Timer_Unit generic map (HOST_DATA_BITS) port map (clk_prescaled_intern, rst, timer_active_int, prescale_factor_write_en_int, prescaled_factor_int, start_value_write_en, start_value_int, restart_timer_int, is_timer_end_int);
 
+  -- Prescales the host clock to 1/20 of the host baud rate, as this is the maximum number of interrupts that can be sent via UART in an 8N1 configuration (because 2*10bit (unit number and unit data) per transmission).
+  PRESCALE: process(clk, rst)
+  begin
+    if rst = '1' then
+      clk_prescaled_intern <= '0';
+      prescale_counter <= 1;
+    elsif rising_edge(clk) then
+      prescale_counter <= prescale_counter + 1;
+      clk_prescaled_intern <= clk_prescaled_intern;
+      -- integer gets truncated in VHDL
+      -- Prescales to HOST_BAUD and multiply this value with 20 to get 1/20 of HOST_BAUD as frequency
+      if prescale_counter >= (((FPGA_FREQ + HOST_BAUD) / (2 * HOST_BAUD))*20) then
+        clk_prescaled_intern <= clk_prescaled_intern nand clk_prescaled_intern;
+        prescale_counter <= 1;
+      end if;
+    end if;
+  end process;
+  
   WRITE: process (clk, rst)
   begin
     if rst = '1' then

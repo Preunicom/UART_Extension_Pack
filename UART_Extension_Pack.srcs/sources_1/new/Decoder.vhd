@@ -123,7 +123,7 @@ begin
         counter_rst <= '0';
         nextstate <= S2;
         if uart_inp_valid_synced = '1' and last_uart_inp_valid = '0' then
-          -- edge detected of uart_inp_valid_synced
+          -- rising edge detected of uart_inp_valid_synced
           --> New data (next pair of data)
           nextstate <= S1;
           counter_rst <= '1';

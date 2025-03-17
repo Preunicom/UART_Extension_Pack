@@ -58,7 +58,10 @@ Note: The output pins are set to the given values from the host. There is no way
 Can be configured via UART (No configuaration in VHDL code neccessary). <br>
 The timer is a x-bit timer with x being the amount of bits of the host UART communication. <br>
 It counts from a given start value (default 0) up to the maximum value of x bit. The overflow triggers an interrupt which is sent to the host. <br>
-The speed of counting (prescaler) can also be set as a divisor of the FPGA frequency. (default: 1) (for exmaple: 2 divides the FPGA frequency by 2) <br>
+The timer frequency is at 5% of host baud rate. <br>
+Note: The reason is, that that is the maximum of ExtPack packages (consists of two UART packages: unit number and unit data) that are be able to be transmitted to the host via 8N1 UART, which is the fastest supported host UART mode when looking at packages transmission rate. <br>
+The speed of counting (prescaler) can also be set as a divisor of this 5% of host BAUD frequency. (default: 1) <br>
+For example: With a host baud rate of 1 MHz a prescale divisor of 2 results in 25 KHz. <br>
 The access mode handles all this configurations: 
  - "00": Enables/disables the timer. 
     - 0 as value disables the timer.

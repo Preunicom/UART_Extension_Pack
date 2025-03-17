@@ -100,7 +100,9 @@ architecture Behavioral of Main_Unit is
   end component;
   component Timer_Wrapper
     generic (
-      HOST_DATA_BITS : integer := 8
+      HOST_DATA_BITS : integer := 8;
+      FPGA_FREQ : integer := 12000000;
+      HOST_BAUD : integer := 1000000
     );
     port (
       clk, rst         : in  STD_LOGIC;
@@ -342,7 +344,7 @@ begin
   ----------------- UNITS -----------------
   U00_UART: UART_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 250000, 8, 1, 0, 0) port map(clk, rst, unit_en(0), decoded_access_mode, decoded_unit_data, unit_data_out_U00, unit_scheduler_wanted(0), unit_scheduler_done(0), tx_pin_a, rx_pin_a);
   U01_GPIO: GPIO_Wrapper generic map(HOST_DATA_BITS, 1, 2) port map(clk, rst, unit_en(1), decoded_access_mode, decoded_unit_data, unit_data_out_U01, unit_scheduler_wanted(1), unit_scheduler_done(1), gpio_pins_in, gpio_pins_out);
-  U02_TIME: Timer_Wrapper generic map(HOST_DATA_BITS) port map(clk, rst, unit_en(2), decoded_access_mode, decoded_unit_data, unit_data_out_U02, unit_scheduler_wanted(2), unit_scheduler_done(2));
+  U02_TIME: Timer_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD) port map(clk, rst, unit_en(2), decoded_access_mode, decoded_unit_data, unit_data_out_U02, unit_scheduler_wanted(2), unit_scheduler_done(2));
 
   --------------- UNITS END ---------------
   
