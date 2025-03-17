@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date         : Mon Mar 17 17:05:41 2025
+| Date         : Mon Mar 17 18:08:10 2025
 | Host         : 042d74864355 running 64-bit Ubuntu 22.04.5 LTS
 | Command      : report_methodology -file Main_Unit_methodology_drc_routed.rpt -pb Main_Unit_methodology_drc_routed.pb -rpx Main_Unit_methodology_drc_routed.rpx
 | Design       : Main_Unit
@@ -818,22 +818,22 @@ Related violations: <none>
 
 LUTAR-1#1 Warning
 LUT drives async reset alert  
-LUT cell DECODE/write_en_int_reg_i_2, with 2 or more inputs, drives asynchronous preset/clear pin(s) U00_UART/write_en_int_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+LUT cell SCHEDULE/scheduler_wanted_reg_i_2, with 2 or more inputs, drives asynchronous preset/clear pin(s) U00_UART/scheduler_wanted_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
 
 LUTAR-1#2 Warning
 LUT drives async reset alert  
-LUT cell SCHEDULE/scheduler_wanted_reg_i_2, with 2 or more inputs, drives asynchronous preset/clear pin(s) U00_UART/scheduler_wanted_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+LUT cell SCHEDULE/scheduler_wanted_reg_i_2__0, with 2 or more inputs, drives asynchronous preset/clear pin(s) U01_GPIO/scheduler_wanted_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
 
 LUTAR-1#3 Warning
 LUT drives async reset alert  
-LUT cell SCHEDULE/scheduler_wanted_reg_i_2__0, with 2 or more inputs, drives asynchronous preset/clear pin(s) U01_GPIO/scheduler_wanted_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+LUT cell SCHEDULE/scheduler_wanted_reg_i_2__1, with 2 or more inputs, drives asynchronous preset/clear pin(s) U02_TIME/scheduler_wanted_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
 
 LUTAR-1#4 Warning
 LUT drives async reset alert  
-LUT cell SCHEDULE/scheduler_wanted_reg_i_2__1, with 2 or more inputs, drives asynchronous preset/clear pin(s) U02_TIME/scheduler_wanted_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+LUT cell U00_UART/UART/TRANSMITTER/BRSER/write_en_int_reg_i_2, with 2 or more inputs, drives asynchronous preset/clear pin(s) U00_UART/write_en_int_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
 
 LUTAR-1#5 Warning

@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date         : Mon Mar 17 17:05:40 2025
+| Date         : Mon Mar 17 18:08:09 2025
 | Host         : 042d74864355 running 64-bit Ubuntu 22.04.5 LTS
 | Command      : report_drc -file Main_Unit_drc_routed.rpt -pb Main_Unit_drc_routed.pb -rpx Main_Unit_drc_routed.rpx
 | Design       : Main_Unit
@@ -59,27 +59,27 @@ Related violations: <none>
 
 PDRC-153#3 Warning
 Gated clock check  
-Net DECODE/scheduler_wanted01_out is a gated clock net sourced by a combinational pin DECODE/scheduler_wanted_reg_i_1__1/O, cell DECODE/scheduler_wanted_reg_i_1__1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Net DECODE/unit_number_data__0 is a gated clock net sourced by a combinational pin DECODE/unit_number_data_reg[7]_i_1/O, cell DECODE/unit_number_data_reg[7]_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
 Related violations: <none>
 
 PDRC-153#4 Warning
 Gated clock check  
-Net DECODE/unit_number_data__0 is a gated clock net sourced by a combinational pin DECODE/unit_number_data_reg[7]_i_1/O, cell DECODE/unit_number_data_reg[7]_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Net DECODE/write_en_int00_out is a gated clock net sourced by a combinational pin DECODE/write_en_int_reg_i_1/O, cell DECODE/write_en_int_reg_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
 Related violations: <none>
 
 PDRC-153#5 Warning
 Gated clock check  
-Net DECODE/write_en_int00_out is a gated clock net sourced by a combinational pin DECODE/write_en_int_reg_i_1/O, cell DECODE/write_en_int_reg_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Net ENCODE/scheduler_schedule_next is a gated clock net sourced by a combinational pin ENCODE/scheduler_done_reg[2]_i_1/O, cell ENCODE/scheduler_done_reg[2]_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
 Related violations: <none>
 
 PDRC-153#6 Warning
 Gated clock check  
-Net ENCODE/scheduler_schedule_next is a gated clock net sourced by a combinational pin ENCODE/scheduler_done_reg[2]_i_1/O, cell ENCODE/scheduler_done_reg[2]_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Net U00_UART/UART/RECEIVER/BRDESER/scheduler_wanted0 is a gated clock net sourced by a combinational pin U00_UART/UART/RECEIVER/BRDESER/scheduler_wanted_reg_i_1__0/O, cell U00_UART/UART/RECEIVER/BRDESER/scheduler_wanted_reg_i_1__0. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
 Related violations: <none>
 
 PDRC-153#7 Warning
 Gated clock check  
-Net U00_UART/UART/RECEIVER/BRDESER/scheduler_wanted0 is a gated clock net sourced by a combinational pin U00_UART/UART/RECEIVER/BRDESER/scheduler_wanted_reg_i_1/O, cell U00_UART/UART/RECEIVER/BRDESER/scheduler_wanted_reg_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Net U01_GPIO/GPIO/scheduler_wanted01_out is a gated clock net sourced by a combinational pin U01_GPIO/GPIO/scheduler_wanted_reg_i_1/O, cell U01_GPIO/GPIO/scheduler_wanted_reg_i_1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
 Related violations: <none>
 
 PDRC-153#8 Warning
@@ -89,7 +89,7 @@ Related violations: <none>
 
 PDRC-153#9 Warning
 Gated clock check  
-Net U02_TIME/TIMER/scheduler_wanted0 is a gated clock net sourced by a combinational pin U02_TIME/TIMER/scheduler_wanted_reg_i_1__0/O, cell U02_TIME/TIMER/scheduler_wanted_reg_i_1__0. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+Net U02_TIME/TIMER/scheduler_wanted0 is a gated clock net sourced by a combinational pin U02_TIME/TIMER/scheduler_wanted_reg_i_1__1/O, cell U02_TIME/TIMER/scheduler_wanted_reg_i_1__1. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
 Related violations: <none>
 
 PDRC-153#10 Warning
