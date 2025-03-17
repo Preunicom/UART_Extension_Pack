@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date             : Mon Mar 17 18:08:11 2025
+| Date             : Mon Mar 17 18:55:16 2025
 | Host             : 042d74864355 running 64-bit Ubuntu 22.04.5 LTS
 | Command          : report_power -file Main_Unit_power_routed.rpt -pb Main_Unit_power_summary_routed.pb -rpx Main_Unit_power_routed.rpx
 | Design           : Main_Unit
@@ -53,13 +53,13 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |    <0.001 |        3 |       --- |             --- |
-| Slice Logic    |    <0.001 |     1165 |       --- |             --- |
-|   LUT as Logic |    <0.001 |      385 |     20800 |            1.85 |
+| Slice Logic    |    <0.001 |     1182 |       --- |             --- |
+|   LUT as Logic |    <0.001 |      401 |     20800 |            1.93 |
 |   CARRY4       |    <0.001 |       80 |      8150 |            0.98 |
 |   Register     |    <0.001 |      514 |     41600 |            1.24 |
 |   BUFG         |    <0.001 |        1 |        32 |            3.13 |
 |   Others       |     0.000 |       40 |       --- |             --- |
-| Signals        |    <0.001 |      737 |       --- |             --- |
+| Signals        |    <0.001 |      740 |       --- |             --- |
 | I/O            |    <0.001 |        9 |       106 |            8.49 |
 | Static Power   |     0.072 |          |           |                 |
 | Total          |     0.073 |          |           |                 |
@@ -138,8 +138,10 @@ Table of Contents
 3.1 By Hierarchy
 ----------------
 
-+------+-----------+
-| Name | Power (W) |
-+------+-----------+
++-----------+-----------+
+| Name      | Power (W) |
++-----------+-----------+
+| Main_Unit |     0.001 |
++-----------+-----------+
 
 

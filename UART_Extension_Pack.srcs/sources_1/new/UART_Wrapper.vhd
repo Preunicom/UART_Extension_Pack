@@ -67,11 +67,14 @@ begin
   unit_data_in_buffer(HOST_DATA_BITS-1 downto 0)  <= unit_data_in;
   unit_data_out <= unit_data_out_buffer(HOST_DATA_BITS-1 downto 0);
   
-  TRANSMIT: process(write_en, write_en_last, full_int, rst)
+  TRANSMIT: process(clk, rst)
   begin
     if rst = '1' then
+      write_en_last <= '0';
       write_en_int <= '0';
-    else 
+    elsif rising_edge(clk) then
+      -- set write_en_last to current write_en
+      write_en_last <= write_en;
       if write_en = '1' and write_en_last = '0' then
         -- new write_en for UART_Unit
         write_en_int <= '1';
@@ -80,16 +83,6 @@ begin
         -- current write_en read from UART_Unit
         write_en_int <= '0';
       end if;
-    end if;
-  end process;
-  
-  EDGE_DETECTION_TRANSMIT: process(clk, rst)
-  begin
-    if rst = '1' then
-      write_en_last <= '0';
-    elsif rising_edge(clk) then
-      -- set write_en_last to current write_en
-      write_en_last <= write_en;
     end if;
   end process;
   
