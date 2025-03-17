@@ -38,7 +38,7 @@ architecture Behavioral of Timer_Wrapper is
   signal timer_active_int             : std_logic := '0';
   signal prescale_factor_write_en_int : std_logic := '0';
   signal prescaled_factor_int         : std_logic_vector(HOST_DATA_BITS - 1 downto 0);
-  signal start_value_write_en         : std_logic := '0';
+  signal start_value_write_en_int         : std_logic := '0';
   signal start_value_int              : std_logic_vector(HOST_DATA_BITS - 1 downto 0);
   signal restart_timer_int            : std_logic := '0';
   signal is_timer_end_int             : std_logic := '0';
@@ -46,7 +46,7 @@ architecture Behavioral of Timer_Wrapper is
   signal clk_prescaled_intern         : std_logic := '0';
   signal prescale_counter             : integer := 1;
 begin
-  TIMER: Timer_Unit generic map (HOST_DATA_BITS) port map (clk_prescaled_intern, rst, timer_active_int, prescale_factor_write_en_int, prescaled_factor_int, start_value_write_en, start_value_int, restart_timer_int, is_timer_end_int);
+  TIMER: Timer_Unit generic map (HOST_DATA_BITS) port map (clk_prescaled_intern, rst, timer_active_int, prescale_factor_write_en_int, prescaled_factor_int, start_value_write_en_int, start_value_int, restart_timer_int, is_timer_end_int);
 
   -- Prescales the host clock to 1/20 of the host baud rate, as this is the maximum number of interrupts that can be sent via UART in an 8N1 configuration (because 2*10bit (unit number and unit data) per transmission).
   PRESCALE: process(clk, rst)
@@ -71,16 +71,12 @@ begin
     if rst = '1' then
       restart_timer_int <= '0';
       prescale_factor_write_en_int <= '0';
-      start_value_write_en <= '0';
+      start_value_write_en_int <= '0';
       start_value_int <= (others => '0');
       prescaled_factor_int <= (others => '0');
       timer_active_int <= '0';
     elsif rising_edge(clk) then
       restart_timer_int <= '0';
-      prescale_factor_write_en_int <= '0';
-      start_value_write_en <= '0';
-      start_value_int <= (others => '0');
-      prescaled_factor_int <= (others => '0');
       if write_en = '1' then
         -- Received data from host
         case access_mode is
@@ -101,7 +97,7 @@ begin
             prescaled_factor_int <= unit_data_in;
           when "11" =>
             -- set start value
-            start_value_write_en <= '1';
+            start_value_write_en_int <= '1';
             start_value_int <= unit_data_in;
           when others => null;
         end case;

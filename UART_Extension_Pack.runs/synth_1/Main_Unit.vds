@@ -3,8 +3,8 @@
 # SW Build 4029153 on Fri Oct 13 20:13:54 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Mon Mar 17 17:03:51 2025
-# Process ID: 27575
+# Start of session at: Mon Mar 17 18:53:08 2025
+# Process ID: 68747
 # Current directory: /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.runs/synth_1
 # Command line: vivado -log Main_Unit.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source Main_Unit.tcl
 # Log file: /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.runs/synth_1/Main_Unit.vds
@@ -23,7 +23,7 @@ Resolution: Please contact your board vendor with this message.
 WARNING: [Board 49-55] Pin file /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/production/1.1/part0_pins.xml is not available
 CRITICAL WARNING: [Board 49-56] Problem parsing board file - /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/production/1.1/board.xml.
 Resolution: Please contact your board vendor with this message.
-create_project: Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 1818.012 ; gain = 39.094 ; free physical = 3185 ; free virtual = 8879
+create_project: Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1818.152 ; gain = 94.105 ; free physical = 3092 ; free virtual = 8789
 Command: synth_design -top Main_Unit -part xc7a35tcpg236-1
 Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
@@ -31,9 +31,9 @@ INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t
 INFO: [Device 21-403] Loading part xc7a35tcpg236-1
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 27672
+INFO: [Synth 8-7075] Helper process launched with PID 68858
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 2594.480 ; gain = 405.160 ; free physical = 2296 ; free virtual = 7777
+Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2594.605 ; gain = 405.121 ; free physical = 2314 ; free virtual = 7758
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-9112] actual for formal port 'rst' is neither a static name nor a globally static expression [/home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/UART_Receiver.vhd:75]
 INFO: [Synth 8-638] synthesizing module 'Main_Unit' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Main_Unit.vhd:32]
@@ -255,7 +255,7 @@ INFO: [Synth 8-638] synthesizing module 'Timer_Unit' [/home/user/Data/UART_Exten
 WARNING: [Synth 8-614] signal 'start_value_int' is read in the process but is not in the sensitivity list [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Unit.vhd:83]
 WARNING: [Synth 8-614] signal 'start_value_int' is read in the process but is not in the sensitivity list [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Unit.vhd:103]
 INFO: [Synth 8-256] done synthesizing module 'Timer_Unit' (0#1) [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Unit.vhd:21]
-INFO: [Synth 8-226] default block is never used [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Wrapper.vhd:86]
+INFO: [Synth 8-226] default block is never used [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Wrapper.vhd:82]
 INFO: [Synth 8-256] done synthesizing module 'Timer_Wrapper' (0#1) [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Wrapper.vhd:22]
 INFO: [Synth 8-3491] module 'PriorityScheduler' declared at '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/PriorityScheduler.vhd:4' bound to instance 'SCHEDULE' of component 'PriorityScheduler' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Main_Unit.vhd:351]
 INFO: [Synth 8-638] synthesizing module 'PriorityScheduler' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/PriorityScheduler.vhd:15]
@@ -294,18 +294,18 @@ WARNING: [Synth 8-7129] Port unit_data_in[2] in module GPIO_Wrapper is either un
 WARNING: [Synth 8-7129] Port access_mode[1] in module UART_Wrapper is either unconnected or has no load
 WARNING: [Synth 8-7129] Port access_mode[0] in module UART_Wrapper is either unconnected or has no load
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2684.527 ; gain = 495.207 ; free physical = 1868 ; free virtual = 7554
+Finished RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 2684.699 ; gain = 495.215 ; free physical = 1725 ; free virtual = 7414
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 2699.566 ; gain = 510.246 ; free physical = 1856 ; free virtual = 7542
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 2699.750 ; gain = 510.266 ; free physical = 1713 ; free virtual = 7402
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 2699.566 ; gain = 510.246 ; free physical = 1856 ; free virtual = 7542
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 2699.750 ; gain = 510.266 ; free physical = 1713 ; free virtual = 7402
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00.03 ; elapsed = 00:00:00.04 . Memory (MB): peak = 2700.273 ; gain = 0.066 ; free physical = 1854 ; free virtual = 7541
+Netlist sorting complete. Time (s): cpu = 00:00:00.04 ; elapsed = 00:00:00.04 . Memory (MB): peak = 2700.457 ; gain = 0.066 ; free physical = 1707 ; free virtual = 7397
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
@@ -316,26 +316,26 @@ INFO: [Project 1-236] Implementation specific constraints were found while readi
 Resolution: To avoid this warning, move constraints listed in [.Xil/Main_Unit_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2842.609 ; gain = 0.000 ; free physical = 1757 ; free virtual = 7449
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2843.785 ; gain = 0.000 ; free physical = 1646 ; free virtual = 7342
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2844.832 ; gain = 0.000 ; free physical = 1753 ; free virtual = 7445
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2846.012 ; gain = 0.000 ; free physical = 1644 ; free virtual = 7339
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:14 ; elapsed = 00:00:16 . Memory (MB): peak = 2844.832 ; gain = 655.512 ; free physical = 1749 ; free virtual = 7442
+Finished Constraint Validation : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 2846.012 ; gain = 656.527 ; free physical = 1627 ; free virtual = 7323
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a35tcpg236-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:14 ; elapsed = 00:00:16 . Memory (MB): peak = 2844.832 ; gain = 655.512 ; free physical = 1749 ; free virtual = 7442
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 2846.012 ; gain = 656.527 ; free physical = 1627 ; free virtual = 7323
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:14 ; elapsed = 00:00:16 . Memory (MB): peak = 2844.832 ; gain = 655.512 ; free physical = 1749 ; free virtual = 7442
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 2846.012 ; gain = 656.527 ; free physical = 1627 ; free virtual = 7323
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'Decoder'
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'Encoder'
@@ -350,10 +350,9 @@ INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 
 WARNING: [Synth 8-327] inferring latch for variable 'counter_rst_reg' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Decoder.vhd:108]
 WARNING: [Synth 8-327] inferring latch for variable 'out_en_int_aysnc_reg' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Decoder.vhd:43]
 WARNING: [Synth 8-327] inferring latch for variable 'unit_number_data_reg' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Decoder.vhd:73]
-WARNING: [Synth 8-327] inferring latch for variable 'scheduler_wanted_reg' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Wrapper.vhd:100]
-WARNING: [Synth 8-327] inferring latch for variable 'write_en_int_reg' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Wrapper.vhd:65]
+WARNING: [Synth 8-327] inferring latch for variable 'scheduler_wanted_reg' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Wrapper.vhd:93]
 WARNING: [Synth 8-327] inferring latch for variable 'scheduler_wanted_reg' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/GPIO_Wrapper.vhd:75]
-WARNING: [Synth 8-327] inferring latch for variable 'scheduler_wanted_reg' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Wrapper.vhd:116]
+WARNING: [Synth 8-327] inferring latch for variable 'scheduler_wanted_reg' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Wrapper.vhd:112]
 WARNING: [Synth 8-327] inferring latch for variable 'scheduler_done_reg' [/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/PriorityScheduler.vhd:23]
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
@@ -367,7 +366,7 @@ WARNING: [Synth 8-327] inferring latch for variable 'scheduler_done_reg' [/home/
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'Encoder'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:15 ; elapsed = 00:00:17 . Memory (MB): peak = 2844.832 ; gain = 655.512 ; free physical = 1747 ; free virtual = 7440
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:15 ; elapsed = 00:00:17 . Memory (MB): peak = 2846.012 ; gain = 656.527 ; free physical = 1622 ; free virtual = 7319
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -385,13 +384,12 @@ Detailed RTL Component Info :
 	                6 Bit    Registers := 2     
 	                4 Bit    Registers := 4     
 	                2 Bit    Registers := 3     
-	                1 Bit    Registers := 53    
+	                1 Bit    Registers := 54    
 +---Muxes : 
 	  65 Input   64 Bit        Muxes := 1     
 	   2 Input   32 Bit        Muxes := 1     
 	   2 Input   10 Bit        Muxes := 4     
-	   2 Input    8 Bit        Muxes := 16    
-	   4 Input    8 Bit        Muxes := 2     
+	   2 Input    8 Bit        Muxes := 14    
 	   6 Input    8 Bit        Muxes := 1     
 	   2 Input    4 Bit        Muxes := 10    
 	   6 Input    3 Bit        Muxes := 1     
@@ -483,25 +481,25 @@ WARNING: [Synth 8-3332] Sequential element (SCHEDULE/scheduler_done_reg[5]) is u
 WARNING: [Synth 8-3332] Sequential element (SCHEDULE/scheduler_done_reg[4]) is unused and will be removed from module Main_Unit.
 WARNING: [Synth 8-3332] Sequential element (SCHEDULE/scheduler_done_reg[3]) is unused and will be removed from module Main_Unit.
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:17 ; elapsed = 00:00:19 . Memory (MB): peak = 2844.832 ; gain = 655.512 ; free physical = 1750 ; free virtual = 7445
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 2846.012 ; gain = 656.527 ; free physical = 1614 ; free virtual = 7312
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 2872.773 ; gain = 683.453 ; free physical = 1651 ; free virtual = 7345
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:26 . Memory (MB): peak = 2873.996 ; gain = 684.512 ; free physical = 1521 ; free virtual = 7219
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 2873.066 ; gain = 683.746 ; free physical = 1656 ; free virtual = 7350
+Finished Timing Optimization : Time (s): cpu = 00:00:24 ; elapsed = 00:00:26 . Memory (MB): peak = 2874.285 ; gain = 684.801 ; free physical = 1521 ; free virtual = 7219
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 2873.297 ; gain = 683.977 ; free physical = 1656 ; free virtual = 7351
+Finished Technology Mapping : Time (s): cpu = 00:00:24 ; elapsed = 00:00:27 . Memory (MB): peak = 2874.516 ; gain = 685.031 ; free physical = 1515 ; free virtual = 7213
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -519,37 +517,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:26 ; elapsed = 00:00:29 . Memory (MB): peak = 2873.438 ; gain = 684.117 ; free physical = 1666 ; free virtual = 7361
+Finished IO Insertion : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 2874.664 ; gain = 685.180 ; free physical = 1512 ; free virtual = 7210
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:26 ; elapsed = 00:00:29 . Memory (MB): peak = 2873.453 ; gain = 684.133 ; free physical = 1666 ; free virtual = 7361
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 2874.680 ; gain = 685.195 ; free physical = 1512 ; free virtual = 7210
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 2873.516 ; gain = 684.195 ; free physical = 1666 ; free virtual = 7361
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 2874.738 ; gain = 685.254 ; free physical = 1512 ; free virtual = 7210
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 2873.523 ; gain = 684.203 ; free physical = 1666 ; free virtual = 7361
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 2874.750 ; gain = 685.266 ; free physical = 1512 ; free virtual = 7210
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 2873.547 ; gain = 684.227 ; free physical = 1666 ; free virtual = 7361
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 2874.770 ; gain = 685.285 ; free physical = 1512 ; free virtual = 7210
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 2873.547 ; gain = 684.227 ; free physical = 1666 ; free virtual = 7361
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 2874.773 ; gain = 685.289 ; free physical = 1512 ; free virtual = 7210
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -568,46 +566,46 @@ Report Cell Usage:
 |1     |BUFG   |     2|
 |2     |CARRY4 |    80|
 |3     |LUT1   |     6|
-|4     |LUT2   |   263|
-|5     |LUT3   |    92|
-|6     |LUT4   |    33|
-|7     |LUT5   |    99|
-|8     |LUT6   |    64|
-|9     |FDCE   |   258|
+|4     |LUT2   |   260|
+|5     |LUT3   |    68|
+|6     |LUT4   |    41|
+|7     |LUT5   |    97|
+|8     |LUT6   |    75|
+|9     |FDCE   |   259|
 |10    |FDPE   |    77|
 |11    |FDRE   |   149|
 |12    |FDSE   |     4|
 |13    |LD     |    10|
-|14    |LDC    |    16|
+|14    |LDC    |    15|
 |15    |IBUF   |     5|
 |16    |OBUF   |     4|
 +------+-------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 2873.582 ; gain = 684.262 ; free physical = 1666 ; free virtual = 7361
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:28 ; elapsed = 00:00:31 . Memory (MB): peak = 2874.805 ; gain = 685.320 ; free physical = 1512 ; free virtual = 7210
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 72 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:24 ; elapsed = 00:00:26 . Memory (MB): peak = 2873.621 ; gain = 539.035 ; free physical = 1665 ; free virtual = 7360
-Synthesis Optimization Complete : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 2873.633 ; gain = 684.301 ; free physical = 1665 ; free virtual = 7360
+Synthesis finished with 0 errors, 0 critical warnings and 71 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:25 ; elapsed = 00:00:27 . Memory (MB): peak = 2874.848 ; gain = 539.098 ; free physical = 1512 ; free virtual = 7210
+Synthesis Optimization Complete : Time (s): cpu = 00:00:28 ; elapsed = 00:00:31 . Memory (MB): peak = 2874.859 ; gain = 685.363 ; free physical = 1512 ; free virtual = 7210
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:05 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2873.785 ; gain = 0.008 ; free physical = 1982 ; free virtual = 7682
-INFO: [Netlist 29-17] Analyzing 106 Unisim elements for replacement
-INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.02 . Memory (MB): peak = 2874.992 ; gain = 0.000 ; free physical = 1809 ; free virtual = 7512
+INFO: [Netlist 29-17] Analyzing 105 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 7 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2906.492 ; gain = 0.000 ; free physical = 2081 ; free virtual = 7781
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2907.688 ; gain = 0.000 ; free physical = 1847 ; free virtual = 7550
 INFO: [Project 1-111] Unisim Transformation Summary:
-  A total of 26 instances were transformed.
+  A total of 25 instances were transformed.
   LD => LDCE: 10 instances
-  LDC => LDCE: 16 instances
+  LDC => LDCE: 15 instances
 
-Synth Design complete | Checksum: 7c85707a
+Synth Design complete | Checksum: fdc06b99
 INFO: [Common 17-83] Releasing license: Synthesis
-96 Infos, 102 Warnings, 3 Critical Warnings and 0 Errors encountered.
+96 Infos, 101 Warnings, 3 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:37 ; elapsed = 00:00:36 . Memory (MB): peak = 2906.492 ; gain = 1088.285 ; free physical = 2068 ; free virtual = 7768
-INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 2389.676; main = 1815.616; forked = 585.066
-INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 5324.051; main = 2842.801; forked = 2481.250
-Write ShapeDB Complete: Time (s): cpu = 00:00:00.04 ; elapsed = 00:00:00.06 . Memory (MB): peak = 2906.492 ; gain = 0.000 ; free physical = 2077 ; free virtual = 7777
+synth_design: Time (s): cpu = 00:00:39 ; elapsed = 00:00:38 . Memory (MB): peak = 2907.688 ; gain = 1089.340 ; free physical = 1838 ; free virtual = 7541
+INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 2356.732; main = 1873.153; forked = 584.690
+INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 5326.102; main = 2875.227; forked = 2482.125
+Write ShapeDB Complete: Time (s): cpu = 00:00:00.04 ; elapsed = 00:00:00.05 . Memory (MB): peak = 2907.688 ; gain = 0.000 ; free physical = 1843 ; free virtual = 7546
 INFO: [Common 17-1381] The checkpoint '/home/user/Data/UART_Extension_Pack/UART_Extension_Pack.runs/synth_1/Main_Unit.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file Main_Unit_utilization_synth.rpt -pb Main_Unit_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Mon Mar 17 17:04:41 2025...
+INFO: [Common 17-206] Exiting Vivado at Mon Mar 17 18:54:02 2025...

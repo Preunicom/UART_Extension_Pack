@@ -1,7 +1,7 @@
 # UART Extension Pack (ExtPack)
 
 ## Features
-The ExtPack is able to add units (like GPIO or UART) to a UART capable device.
+The ExtPack is able to add units (like GPIO, Timer or UART) to a UART capable device.
 
 ## Communication with Host
 The ExtPack communicates with the host over UART. <br>
@@ -41,7 +41,8 @@ Normally:
 UART messages are directly forwarded from unit to the host or from the host to the unit. <br>
 Access mode is ignored. <br>
 Note: UART messages with parity or frame errors are ignorer! <br>
-Note: If there is too much traffic on the ExtPack and UART Unit has to less priority and is receiving too much laod it is posible that UART packages are getting lost because it is scheduled too slow or never because of starvation.
+Note: If there is too much traffic on the ExtPack and UART Unit has to less priority and is receiving too much load it is possible that UART packages are getting lost because it is scheduled too slow or never because of starvation.
+The system operates on a Best-Effort Delivery basis, meaning it strives to transmit data as efficiently as possible but does not guarantee delivery.
 
 ### GPIO_Unit
 Can be configured with in and out pin amount. <br>
