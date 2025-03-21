@@ -44,6 +44,7 @@ architecture Behavioral of GPIO_Wrapper is
   signal values_to_scheduler : std_logic_vector(HOST_DATA_BITS downto 0) := (others => '0'); -- Extends with zeros if IO_Pins < HOST_DATA_BITS
   signal last_enable_write : std_logic := '0';
   signal last_enable_read : std_logic := '0';
+  signal last_scheduler_done : std_logic := '0';
 begin
   GPIO: GPIO_Bank_Unit generic map(IN_PINS, OUT_PINS) port map(clk, rst, write_mode_en, write_values, values_read, gpio_data_in, gpio_data_out);
 
@@ -68,9 +69,9 @@ begin
     end if;
   end process;
 
-  INPUTS: process(rst, scheduler_done, last_values, values_read, access_mode, write_en, last_enable_read)
+  INPUTS: process(rst, last_scheduler_done, scheduler_done, last_values, values_read, access_mode, write_en, last_enable_read)
   begin
-    if rst = '1' or scheduler_done = '1' then
+    if rst = '1' or (last_scheduler_done = '0' and scheduler_done = '1') then
       -- scheduling finished --> resets request at scheduler
       scheduler_wanted <= '0';
     elsif (last_values /= values_read) or ((access_mode(0) = '1') and (write_en = '1' and last_enable_read = '0')) then
@@ -91,6 +92,8 @@ begin
       last_values <= values_read;
       -- check if write_en has changed
       last_enable_read <= write_en;
+      -- Reset et rising edge of scheduler done
+      last_scheduler_done <= scheduler_done;
     end if;
   end process;
 

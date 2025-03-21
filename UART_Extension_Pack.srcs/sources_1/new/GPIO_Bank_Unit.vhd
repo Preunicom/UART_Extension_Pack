@@ -19,7 +19,7 @@ end GPIO_Bank_Unit;
 architecture Behavioral of GPIO_Bank_Unit is
   signal port_register : std_logic_vector(OUTPUTS-1 downto 0) := (others => '0');
 begin
-  REG: process(clk, rst)
+  REG_OUTP: process(clk, rst)
   begin
     if rst = '1' then
       port_register <= (others => '0');
@@ -33,7 +33,7 @@ begin
 
   gpio_data_out <= port_register;
     
-  SYNC: process(clk, rst)
+  SYNC_INP: process(clk, rst)
   begin
     if rst = '1' then
       values_out <= gpio_data_in;

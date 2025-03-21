@@ -1,0 +1,1 @@
+--incr --debug "typical" --relax --mt "8" -L "xil_defaultlib" -L "secureip" --snapshot "TB_GPIO_Wrapper_behav" "xil_defaultlib.TB_GPIO_Wrapper" -log "elaborate.log" 
