@@ -54,6 +54,7 @@ architecture Behavioral of UART_Wrapper is
   signal write_en_int : std_logic := '0';
   signal write_en_last : std_logic := '0';
   signal full_int : std_logic;
+  signal full_int_last : std_logic;
   signal uart_received_valid : std_logic;
   signal uart_received_valid_last : std_logic;
   signal frame_error, parity_error : std_logic;
@@ -64,23 +65,26 @@ architecture Behavioral of UART_Wrapper is
 begin
   UART: UART_Unit generic map(IN_FREQ_HZ, BAUD_FREQ_HZ, DATA_BITS, STOP_BITS, PARITY_ACTIVE, PARITY_MODE) port map(clk, rst, unit_data_in_buffer(DATA_BITS-1 downto 0), write_en_int, full_int, TX_pin, unit_data_out_buffer(DATA_BITS-1 downto 0), frame_error, parity_error, uart_received_valid, RX_pin);
 
-  unit_data_in_buffer(HOST_DATA_BITS-1 downto 0)  <= unit_data_in;
-  unit_data_out <= unit_data_out_buffer(HOST_DATA_BITS-1 downto 0);
-  
+  -- TODO: TEST - - DOES NOT WORK CURRENTLY (NEARLY NOTHING CHANGED -> ONLY SYNC BUFFER + WRITE DISABLE CONDITION)
   TRANSMIT: process(clk, rst)
   begin
     if rst = '1' then
       write_en_last <= '0';
+      full_int_last <= '0';
+      unit_data_in_buffer <= (others => '0');
       write_en_int <= '0';
     elsif rising_edge(clk) then
       -- set write_en_last to current write_en
       write_en_last <= write_en;
+      full_int_last <= full_int;
+      -- Sync unit_data_in_buffer to match write_en_int
+      unit_data_in_buffer(HOST_DATA_BITS-1 downto 0)  <= unit_data_in;
       if write_en = '1' and write_en_last = '0' then
         -- new write_en for UART_Unit
         write_en_int <= '1';
       end if;
-      if full_int = '1' and write_en = '1' and write_en_last = '1' then
-        -- current write_en read from UART_Unit
+      if (full_int = '1' and full_int_last = '0') or write_en = '0' then
+        -- current write_en read from UART_Unit or data invalid
         write_en_int <= '0';
       end if;
     end if;
@@ -89,13 +93,17 @@ begin
   RECEIVE: process(uart_received_valid, uart_received_valid_last, frame_error, parity_error, scheduler_done, rst)
   begin
     if rst = '1' or scheduler_done = '1' then
+      -- Ignoring uart_received_valid in if because there are only valid values from UART Deserializer Buffer if there was once one.
       -- reset scheduler_wanted
       scheduler_wanted <= '0';
-    elsif uart_received_valid = '1' and uart_received_valid_last = '0' and frame_error = '0' and parity_error = '0' then    
+    elsif uart_received_valid = '1' and uart_received_valid_last = '0' and frame_error = '0' and parity_error = '0' then  
+      -- Must be a edge in if because Deserializer is prescaled and so write_en in buffer (and so uart_received_valid) is longer active than 1 clock cyle.  
       -- new package received with no errors
       scheduler_wanted <= '1';
     end if;
   end process;
+
+  unit_data_out <= unit_data_out_buffer(HOST_DATA_BITS-1 downto 0);
 
   EDGE_DETECTION_RECEIVE: process(clk, rst)
   begin
