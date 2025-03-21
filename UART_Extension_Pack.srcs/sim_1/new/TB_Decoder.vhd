@@ -38,7 +38,7 @@ architecture Behavioral of TB_Decoder is
 begin
   COMP: Decoder generic map(8, 10000000, 1000000) port map(tb_clk, tb_rst, tb_uart_inp, tb_uart_inp_valid, tb_uart_error, tb_out_en, tb_access_mode, tb_unit_number, tb_unit_data);
 
-  -- 100 MHz
+  -- 10 MHz
   CLOCK: process
   begin
     for i in 1000 downto 0 loop

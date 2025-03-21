@@ -20,80 +20,74 @@ entity Encoder is
 end Encoder;
 
 architecture Behavioral of Encoder is
-  type statetype is (S0, S1, S2, S3, S4, S5);
+  type statetype is (S0, S1, S2);
   signal state : statetype := S0;
-  signal nextstate : statetype;
   signal zero_prefix_unit_number : std_logic_vector(DATA_BITS-1 downto 6) := (others => '0');
+  -- edges
+  signal last_write_en : std_logic := '0';
+  signal last_uart_is_empty : std_logic := '0';
 begin
 
-  SYNC: process(clk, rst)
+  PROC1: process(clk, rst)
   begin
     if rst = '1' then
       state <= S0;
+      uart_out_valid <= '0';
+      uart_out <= (others => '0');
+      schedule_next <= '1';
     elsif rising_edge(clk) then
-      state <= nextstate;
+      uart_out_valid <= '0';
+      schedule_next <= '0';
+      case state is 
+        when S0 => -- Waiting for data from scheduler and units
+          if last_write_en = '0' and write_en = '1' then
+            -- new data given
+            --> Wait for UART ready
+            state <= S1;
+          else
+            -- Wait for new data
+            state <= S0;
+            schedule_next <= '1';
+          end if;
+        when S1 => -- Waiting for UART unit to be ready for new data to send unit number
+          if uart_is_empty = '1' then
+            -- UART unit ready
+            --> Send zero extended unit number
+            uart_out_valid <= '1';
+            uart_out <= zero_prefix_unit_number & unit_number;
+            state <= S2;
+          else
+            -- Wait for UART unit ready
+            state <= S1;
+          end if;
+        when S2 => -- Waiting for UART unit to be ready for new data to send unit data
+          if last_uart_is_empty = '0' and uart_is_empty = '1' then
+            -- UART unit ready
+            --> Send unit data
+            uart_out_valid <= '1';
+            uart_out <= unit_data;
+            -- Get next data to schedule
+            schedule_next <= '1';
+            state <= S0;
+          else
+            -- Wait for UART unit ready
+            state <= S2;
+          end if;
+        when others => null;
+      end case;
     end if;
   end process;
 
-  ASYNC: process(state, write_en, uart_is_empty)
+  EDGE_DETECTION: process(clk, rst)
   begin
-    nextstate <= S0;
-    schedule_next <= '0';
-    case state is
-      when S0 =>
-        -- waiting for data
-        uart_out_valid <= '0';
-        uart_out <= (others => '0');
-        schedule_next <= '1';
-        if write_en = '1' then
-          -- got new data
-          schedule_next <= '0';
-          nextstate <= S1;
-        end if;
-      when S1 =>
-        -- waiting for uart slot
-        uart_out_valid <= '0';
-        uart_out <= zero_prefix_unit_number & unit_number;
-        nextstate <= S1;
-        if uart_is_empty = '1' then
-          -- slot free
-          nextstate <= S2;
-        end if;
-      when S2 =>
-        -- uart slot free and giving data to uart in progress
-        uart_out_valid <= '1';
-        uart_out <= zero_prefix_unit_number & unit_number;
-        nextstate <= S2;
-        if uart_is_empty = '0' then
-          -- slot taken
-          nextstate <= S3;
-        end if;
-      when S3 =>
-        -- waiting for uart slot
-        uart_out_valid <= '0';
-        uart_out <= unit_data;
-        nextstate <= S3;
-        if uart_is_empty = '1' then
-          -- slot free
-          nextstate <= S4;
-        end if;
-      when S4 => 
-        -- uart slot free and giving data to uart in progress
-        uart_out_valid <= '1';
-        uart_out <= unit_data; 
-        nextstate <= S4;
-        if uart_is_empty = '0' then
-          -- slot taken
-          schedule_next <= '1';
-          nextstate <= S5;
-        end if;
-      when S5 =>
-        -- one clock cyle delay to meet scheduler timing for scheduling next data
-        uart_out_valid <= '0';
-        uart_out <= (others => '0');
-        schedule_next <= '1';
-        nextstate <= S0;
-    end case;
+    if rst = '1' then
+      last_write_en <= '0';
+      last_uart_is_empty <= '0';
+    elsif rising_edge(clk) then
+      -- Set last_uart_inp_valid to synced current one
+      last_write_en <= write_en;
+      last_uart_is_empty <= uart_is_empty;
+    end if;
   end process;
   
 end Behavioral;
