@@ -5,7 +5,7 @@ entity TB_GPIO_Wrapper is
 end TB_GPIO_Wrapper;
 
 architecture Behavioral of TB_GPIO_Wrapper is
-component GPIO_Wrapper
+  component GPIO_Wrapper
     Generic (
       HOST_DATA_BITS : integer := 8;
       -- IN/OUT_PINS <= HOST_DATA_BITS has to be fullfilled
