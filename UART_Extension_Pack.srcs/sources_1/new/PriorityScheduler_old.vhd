@@ -15,28 +15,15 @@ end PriorityScheduler;
 architecture Behavioral of PriorityScheduler is
   -- outputs signalizes the unit that their scheduled data was sent
   signal next_outputs : std_logic_vector(63 downto 0);
-  signal last_schedule_next : std_logic := '0';
 begin
 
-  process(schedule_next, last_schedule_next, next_outputs, rst)
+  process(schedule_next, next_outputs, rst)
   begin
     if rst = '1' then
       scheduler_done <= (others => '0');
-    elsif last_schedule_next = '0' and schedule_next = '1' then
+    elsif schedule_next = '1' then
       -- set outputs async to next_output if scheduling is pending to save a clock cycle
       scheduler_done <= next_outputs;
-    elsif last_schedule_next = '1' and schedule_next = '0' then
-      -- reset outputs to 0 (was on 1 for at least one cycle because schedule next was 1 for one cycle)
-      scheduler_done <= (others => '0');
-    end if;
-  end process;
-
-  EDGE_DETECTION: process(clk, rst)
-  begin
-    if rst = '1' then
-      last_schedule_next <= '0';
-    elsif rising_edge(clk) then
-      last_schedule_next <= schedule_next;
     end if;
   end process;
   
@@ -44,8 +31,6 @@ begin
   begin
     if rst = '1' then
       next_outputs <= (others => '0');
-      outp_valid <= '0';
-      control_sig <= (others => '0');
     elsif rising_edge(clk) then
       if schedule_next = '1' then
         -- scheduling next data (lower unit number is higher prio)
@@ -247,8 +232,6 @@ begin
           outp_valid <= '0';
           control_sig <= "000000";
         end if;
-      else
-        outp_valid <= '0';
       end if;
     end if;
   end process;
