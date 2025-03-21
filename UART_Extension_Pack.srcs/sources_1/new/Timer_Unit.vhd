@@ -29,6 +29,8 @@ architecture Behavioral of Timer_Unit is
   signal prescale_counter : integer := 1;
   signal clk_prescaled_intern : std_logic := '0';
   signal timer_rst : std_logic := '0';
+
+  signal en_int : std_logic := '0';
 begin
 
   -- Resets timer if unit is reseted or timer is reseted
@@ -51,9 +53,20 @@ begin
     end if;
   end process;
 
-  TIMER_END: process(en, is_timer_end_non_prescaled, is_timer_end_prescaled)
+  -- As the 0xFF start value makes problems because it does not have edges in the interrupt output we make them with the enable
+  --> We force the signal to 0 for the second half of the clk cycle of the currently used clock
+  ENABLE: process(en, clk, clk_prescaled_intern, prescale_factor_int)
   begin
-    if en = '1' then
+    if (to_integer(unsigned(prescale_factor_int)) <= 1) then 
+      en_int <= (en and clk);
+    else
+      en_int <= (en and clk_prescaled_intern);
+    end if;
+  end process;
+
+  TIMER_END: process(en_int, is_timer_end_non_prescaled, is_timer_end_prescaled)
+  begin
+    if en_int = '1' then
       -- Triggers timer end if timer is enabled
       -- Only one of the two timer types is enabled
       is_timer_end <= is_timer_end_prescaled or is_timer_end_non_prescaled;

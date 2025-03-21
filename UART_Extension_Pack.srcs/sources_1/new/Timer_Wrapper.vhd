@@ -45,6 +45,7 @@ architecture Behavioral of Timer_Wrapper is
   signal last_is_timer_end            : std_logic := '0';
   signal clk_prescaled_intern         : std_logic := '0';
   signal prescale_counter             : integer := 1;
+  signal last_scheduler_done          : std_logic := '0';
 begin
   TIMER: Timer_Unit generic map (HOST_DATA_BITS) port map (clk_prescaled_intern, rst, timer_active_int, prescale_factor_write_en_int, prescaled_factor_int, start_value_write_en_int, start_value_int, restart_timer_int, is_timer_end_int);
 
@@ -107,7 +108,7 @@ begin
 
   TIMER_INTERRUPT: process(last_is_timer_end, is_timer_end_int, scheduler_done, rst) 
   begin
-    if rst = '1' or scheduler_done = '1' then
+    if rst = '1' or (last_scheduler_done = '0' and scheduler_done = '1') then
       -- reset scheduler_wanted
       scheduler_wanted <= '0';
     elsif is_timer_end_int = '1' and last_is_timer_end = '0' then
@@ -118,12 +119,14 @@ begin
 
   unit_data_out <= (others => '1');
   
-  TIMER_END_EDGE_DETECTION: process(clk, rst)
+  EDGE_DETECTION: process(clk, rst)
   begin
     if rst = '1' then
       last_is_timer_end <= '0';
+      last_scheduler_done <= '0';
     elsif rising_edge(clk) then
       last_is_timer_end <= is_timer_end_int;
+      last_scheduler_done <= scheduler_done;
     end if;
   end process;
   
