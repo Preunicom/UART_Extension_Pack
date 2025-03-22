@@ -18,7 +18,7 @@ entity UART_Wrapper is
     write_en : in std_logic;
     access_mode : in std_logic_vector(1 downto 0); -- unused
     unit_data_in : in std_logic_vector(HOST_DATA_BITS-1 downto 0);
-    unit_data_out : out std_logic_vector(HOST_DATA_BITS-1 downto 0);
+    unit_data_out : out std_logic_vector(13 downto 0);
     scheduler_wanted : out std_logic;
     scheduler_done : in std_logic;
     TX_pin : out std_logic;
@@ -98,7 +98,7 @@ begin
     end if;
   end process;
 
-  unit_data_out <= unit_data_out_buffer(HOST_DATA_BITS-1 downto 0);
+  unit_data_out <= unit_data_out_buffer;
 
   EDGE_DETECTION: process(clk, rst)
   begin

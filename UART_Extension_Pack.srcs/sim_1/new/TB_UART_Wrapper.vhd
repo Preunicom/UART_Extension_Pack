@@ -25,7 +25,7 @@ architecture Behavioral of TB_UART_Wrapper is
       write_en : in std_logic;
       access_mode : in std_logic_vector(1 downto 0); -- unused
       unit_data_in : in std_logic_vector(HOST_DATA_BITS-1 downto 0);
-      unit_data_out : out std_logic_vector(HOST_DATA_BITS-1 downto 0);
+      unit_data_out : out std_logic_vector(13 downto 0);
       scheduler_wanted : out std_logic;
       scheduler_done : in std_logic;
       TX_pin : out std_logic;
@@ -38,7 +38,7 @@ architecture Behavioral of TB_UART_Wrapper is
   signal tb_write_en : std_logic;
   signal tb_access_mode : std_logic_vector(1 downto 0); --*0: set, *1: get
   signal tb_unit_data_in : STD_LOGIC_VECTOR(7 downto 0);
-  signal tb_unit_data_out, tb_exp_unit_data_out : STD_LOGIC_VECTOR(7 downto 0);
+  signal tb_unit_data_out, tb_exp_unit_data_out : STD_LOGIC_VECTOR(13 downto 0);
   signal tb_scheduler_wanted, tb_exp_scheduler_wanted : std_logic;
   signal tb_scheduler_done : std_logic;
   signal tb_TX_pin, tb_exp_TX_pin : std_logic;
@@ -86,10 +86,10 @@ begin
     '0' after 300*tbase,
     '1' after 400*tbase; -- END FRAME ERROR
 
-  tb_exp_unit_data_out <= "00000000", 
-    "10000111" after 101*tbase,
-    "11111111" after 246*tbase,
-    "00000000" after 396*tbase;
+  tb_exp_unit_data_out <= "00000000000000", 
+    "00000010000111" after 101*tbase,
+    "00000011111111" after 246*tbase,
+    "0000000000000" after 396*tbase;
 
   tb_exp_scheduler_wanted <= '0',
     '1' after 101*tbase, '0' after 120.5*tbase,

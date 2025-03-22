@@ -70,8 +70,6 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
-set_param chipscope.maxJobs 2
-set_param xicom.use_bs_reader 1
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a35tcpg236-1
 
@@ -92,12 +90,10 @@ read_vhdl -library xil_defaultlib {
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/DEMUX.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Decoder.vhd
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Deserializer.vhd
-  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Encoder.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/GPIO_Bank_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/GPIO_Wrapper.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/MUX.vhd
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Prescaler.vhd
-  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/PriorityScheduler.vhd
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Serializer.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Wrapper.vhd
@@ -106,6 +102,9 @@ read_vhdl -library xil_defaultlib {
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/UART_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Wrapper.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Main_Unit.vhd
+  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Encoder.vhd
+  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/PriorityScheduler.vhd
+  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UnitDataArray_Type_PKG.vhd
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being

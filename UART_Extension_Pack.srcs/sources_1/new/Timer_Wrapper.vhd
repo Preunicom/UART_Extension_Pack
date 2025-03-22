@@ -13,7 +13,7 @@ entity Timer_Wrapper is
     write_en         : in  std_logic;
     access_mode      : in  std_logic_vector(1 downto 0); --00: en, 01: restart, 10: prescale_factor, 11: start_value
     unit_data_in     : in  STD_LOGIC_VECTOR(HOST_DATA_BITS - 1 downto 0);
-    unit_data_out    : out STD_LOGIC_VECTOR(HOST_DATA_BITS - 1 downto 0);
+    unit_data_out    : out STD_LOGIC_VECTOR(13 downto 0);
     scheduler_wanted : out std_logic;
     scheduler_done   : in  std_logic
   );

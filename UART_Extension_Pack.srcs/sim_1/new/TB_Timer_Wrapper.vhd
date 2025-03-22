@@ -19,7 +19,7 @@ architecture Behavioral of TB_Timer_Wrapper is
       write_en         : in  std_logic;
       access_mode      : in  std_logic_vector(1 downto 0); --00: en, 01: restart, 10: prescale_factor, 11: start_value
       unit_data_in     : in  STD_LOGIC_VECTOR(HOST_DATA_BITS - 1 downto 0);
-      unit_data_out    : out STD_LOGIC_VECTOR(HOST_DATA_BITS - 1 downto 0);
+      unit_data_out    : out STD_LOGIC_VECTOR(13 downto 0);
       scheduler_wanted : out std_logic;
       scheduler_done   : in  std_logic
     );
@@ -30,7 +30,7 @@ architecture Behavioral of TB_Timer_Wrapper is
   signal tb_write_en                                  : std_logic;
   signal tb_access_mode                               : std_logic_vector(1 downto 0); --00: en, 01: restart, 10: prescale_factor, 11: start_value
   signal tb_unit_data_in                              : STD_LOGIC_VECTOR(7 downto 0);
-  signal tb_unit_data_out, tb_exp_unit_data_out       : STD_LOGIC_VECTOR(7 downto 0);
+  signal tb_unit_data_out, tb_exp_unit_data_out       : STD_LOGIC_VECTOR(13 downto 0);
   signal tb_scheduler_wanted, tb_exp_scheduler_wanted : std_logic;
   signal tb_scheduler_done                            : std_logic;
 
@@ -91,7 +91,7 @@ begin
     '1' after 3790.5*tbase, '0' after 3792*tbase;
 
   -- value not used in Timer unit
-  tb_exp_unit_data_out <= "11111111";
+  tb_exp_unit_data_out <= "11111111111111";
 
   tb_exp_scheduler_wanted <= '0',
     '1' after 300*tbase, '0' after 320.5*tbase,

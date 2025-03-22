@@ -14,7 +14,7 @@ entity GPIO_Wrapper is
     write_en : in std_logic;
     access_mode : in std_logic_vector(1 downto 0); --*0: set, *1: get
     unit_data_in : in STD_LOGIC_VECTOR(HOST_DATA_BITS-1 downto 0);
-    unit_data_out : out STD_LOGIC_VECTOR(HOST_DATA_BITS-1 downto 0);
+    unit_data_out : out STD_LOGIC_VECTOR(13 downto 0);
     scheduler_wanted : out std_logic;
     scheduler_done : in std_logic;
     gpio_data_in : in STD_LOGIC_VECTOR (IN_PINS-1 downto 0);
@@ -41,7 +41,7 @@ architecture Behavioral of GPIO_Wrapper is
   signal write_values : std_logic_vector(OUT_PINS-1 downto 0);
   signal values_read : std_logic_vector(IN_PINS-1 downto 0);
   signal last_values : std_logic_vector(IN_PINS-1 downto 0);
-  signal values_to_scheduler : std_logic_vector(HOST_DATA_BITS downto 0) := (others => '0'); -- Extends with zeros if IO_Pins < HOST_DATA_BITS
+  signal values_to_scheduler : std_logic_vector(13 downto 0) := (others => '0'); -- Extends with zeros if IO_Pins < HOST_DATA_BITS
   signal last_enable_write : std_logic := '0';
   signal last_enable_read : std_logic := '0';
   signal last_scheduler_done : std_logic := '0';
@@ -98,6 +98,6 @@ begin
   end process;
 
 
-  unit_data_out <= values_to_scheduler(HOST_DATA_BITS-1 downto 0);
+  unit_data_out <= values_to_scheduler;
   
 end Behavioral;
