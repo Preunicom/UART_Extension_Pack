@@ -98,7 +98,4 @@ begin
     and (tb_exp_scheduler_wanted = tb_scheduler_wanted)
     and (tb_exp_gpio_data_out = tb_gpio_data_out) else '1';
 
-
-
-
 end Behavioral;
