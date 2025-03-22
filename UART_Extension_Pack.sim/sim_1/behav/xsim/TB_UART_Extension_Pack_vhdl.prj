@@ -28,6 +28,13 @@ vhdl xil_defaultlib  \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Timer_Wrapper.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_UART_Wrapper.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_UART_Extension_Pack.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sim_1/new/TB_Serializer.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sim_1/new/TB_Deserializer.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sim_1/new/TB_Prescaler.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sim_1/new/TB_UARTUnit.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sim_1/new/TB_UART_Module.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sim_1/new/TB_Buffer_Register_Deserializer.vhd" \
+"../../../../src_ext/FPGA_UART_Module/UART_Module.srcs/sim_1/new/TB_Buffer_Register_Serializer.vhd" \
 
 # Do not sort compile order
 nosort

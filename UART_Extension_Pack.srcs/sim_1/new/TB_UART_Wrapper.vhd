@@ -72,6 +72,16 @@ begin
     "11000011" after 10*tbase, -- 0xC3
     "11001111" after 100*tbase; -- 0xCF
 
+  tb_exp_TX_pin <= '1',
+    '0' after 25*tbase,
+    '1' after 35*tbase,
+    '0' after 55*tbase,
+    '1' after 95*tbase, -- END 0xC3
+    '0' after 125*tbase,
+    '1' after 135*tbase,
+    '0' after 175*tbase,
+    '1' after 195*tbase; -- END 0xCF
+
   tb_scheduler_done <= '0',
     '1' after 120.5*tbase, '0' after 122*tbase,
     '1' after 300.5*tbase, '0' after 302*tbase;
@@ -94,16 +104,6 @@ begin
   tb_exp_scheduler_wanted <= '0',
     '1' after 101*tbase, '0' after 120.5*tbase,
     '1' after 246*tbase, '0' after 300.5*tbase;
-
-  tb_exp_TX_pin <= '1',
-    '0' after 105*tbase,
-    '1' after 115*tbase,
-    '0' after 135*tbase,
-    '1' after 175*tbase, -- END 0xC3
-    '0' after 205*tbase,
-    '1' after 215*tbase,
-    '0' after 255*tbase,
-    '1' after 275*tbase; -- END 0xCF
  
   tb_error <= '0' when 
     (tb_exp_unit_data_out = tb_unit_data_out)
