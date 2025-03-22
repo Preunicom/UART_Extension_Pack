@@ -3,6 +3,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.std_logic_unsigned.all;
 
 entity TB_Decoder is
+  Port(
+    signal tb_error : out std_logic
+  );
 end TB_Decoder;
 
 architecture Behavioral of TB_Decoder is
@@ -34,7 +37,6 @@ architecture Behavioral of TB_Decoder is
   signal tb_unit_number, tb_exp_unit_number : std_logic_vector(5 downto 0); 
   signal tb_unit_data, tb_exp_unit_data : std_logic_vector(7 downto 0);
   constant tbase : time := 100 ns;
-  signal tb_error : std_logic;
 begin
   COMP: Decoder generic map(8, 10000000, 1000000) port map(tb_clk, tb_rst, tb_uart_inp, tb_uart_inp_valid, tb_uart_error, tb_out_en, tb_access_mode, tb_unit_number, tb_unit_data);
 

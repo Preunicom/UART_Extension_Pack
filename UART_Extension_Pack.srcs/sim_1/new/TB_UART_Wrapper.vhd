@@ -2,6 +2,9 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_UART_Wrapper is
+  Port(
+    signal tb_error : out std_logic
+  );
 end TB_UART_Wrapper;
 
 architecture Behavioral of TB_UART_Wrapper is
@@ -42,7 +45,6 @@ architecture Behavioral of TB_UART_Wrapper is
   signal tb_RX_pin : std_logic;
 
   constant tbase : time := 100 ns;
-  signal tb_error : std_logic;
 begin
   COMP: UART_Wrapper generic map(8, 10000000, 1000000, 8, 1, 0, 0) port map(tb_clk, tb_rst, tb_write_en, tb_access_mode, tb_unit_data_in, tb_unit_data_out, tb_scheduler_wanted, tb_scheduler_done, tb_TX_pin, tb_RX_pin);
 

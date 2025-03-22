@@ -26,6 +26,7 @@ vhdl xil_defaultlib  \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_GPIO_Wrapper.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Timer_Wrapper.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_UART_Wrapper.vhd" \
+"../../../../UART_Extension_Pack.srcs/sim_1/new/TB_UART_Extension_Pack.vhd" \
 
 # Do not sort compile order
 nosort

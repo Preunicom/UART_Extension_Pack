@@ -2,6 +2,9 @@ library IEEE;
   use IEEE.STD_LOGIC_1164.all;
 
 entity TB_Timer_Wrapper is
+  Port(
+    signal tb_error : out std_logic
+  );
 end entity;
 
 architecture Behavioral of TB_Timer_Wrapper is
@@ -32,7 +35,6 @@ architecture Behavioral of TB_Timer_Wrapper is
   signal tb_scheduler_done                            : std_logic;
 
   constant tbase : time := 100 ns;
-  signal tb_error : std_logic;
 begin
   COMP: Timer_Wrapper generic map(8, 10000000, 1000000) port map(tb_clk, tb_rst, tb_write_en, tb_access_mode, tb_unit_data_in, tb_unit_data_out, tb_scheduler_wanted, tb_scheduler_done);
 

@@ -67,9 +67,9 @@ IKI_DLLESPEC extern void execute_30(char*, char *);
 IKI_DLLESPEC extern void execute_18(char*, char *);
 IKI_DLLESPEC extern void execute_19(char*, char *);
 IKI_DLLESPEC extern void execute_20(char*, char *);
-IKI_DLLESPEC extern void transaction_0(char*, char*, unsigned, unsigned, unsigned);
 IKI_DLLESPEC extern void vhdl_transfunc_eventcallback(char*, char*, unsigned, unsigned, unsigned, char *);
-funcp funcTab[15] = {(funcp)execute_21, (funcp)execute_22, (funcp)execute_23, (funcp)execute_24, (funcp)execute_25, (funcp)execute_26, (funcp)execute_27, (funcp)execute_28, (funcp)execute_29, (funcp)execute_30, (funcp)execute_18, (funcp)execute_19, (funcp)execute_20, (funcp)transaction_0, (funcp)vhdl_transfunc_eventcallback};
+IKI_DLLESPEC extern void transaction_1(char*, char*, unsigned, unsigned, unsigned);
+funcp funcTab[15] = {(funcp)execute_21, (funcp)execute_22, (funcp)execute_23, (funcp)execute_24, (funcp)execute_25, (funcp)execute_26, (funcp)execute_27, (funcp)execute_28, (funcp)execute_29, (funcp)execute_30, (funcp)execute_18, (funcp)execute_19, (funcp)execute_20, (funcp)vhdl_transfunc_eventcallback, (funcp)transaction_1};
 const int NumRelocateId= 15;
 
 void relocate(char *dp)

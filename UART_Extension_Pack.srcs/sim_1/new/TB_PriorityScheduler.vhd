@@ -3,6 +3,9 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_PriorityScheduler is
+  Port(
+    signal tb_error : out std_logic
+  );
 end TB_PriorityScheduler;
 
 architecture Behavioral of TB_PriorityScheduler is
@@ -26,7 +29,6 @@ architecture Behavioral of TB_PriorityScheduler is
   signal tb_scheduler_done, tb_exp_scheduler_done : std_logic_vector(63 downto 0) := (others => '0');
 
   constant tbase : time := 100 ns;
-  signal tb_error : std_logic;
 begin
   COMP: PriorityScheduler port map(tb_clk, tb_rst, tb_schedule_next, tb_outp_valid, tb_control_sig, tb_scheduler_wanted, tb_scheduler_done);
 

@@ -2,6 +2,9 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_Main_Unit is
+  Port(
+    signal tb_error : out std_logic
+  );
 end TB_Main_Unit;
 
 architecture TESTBENCH of TB_Main_Unit is
@@ -42,7 +45,6 @@ architecture TESTBENCH of TB_Main_Unit is
   signal tb_gpio_pins_out, tb_exp_gpio_pins_out : std_logic_vector(1 downto 0);
 
   constant tbase : time := 100 ns;
-  signal tb_error : std_logic;
 begin
   MU: Main_Unit generic map(10000000, 1000000, 8, 1, 1, 0) port map(tb_clk, tb_rst, tb_tx_pin_host, tb_rx_pin_host, tb_tx_pin_a, tb_rx_pin_a, tb_gpio_pins_in, tb_gpio_pins_out);
   

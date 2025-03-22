@@ -3,6 +3,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.std_logic_unsigned.all;
 
 entity TB_Encoder is
+  Port(
+    signal tb_error : out std_logic
+  );
 end TB_Encoder;
 
 architecture Behavioral of TB_Encoder is
@@ -34,7 +37,6 @@ architecture Behavioral of TB_Encoder is
   signal tb_schedule_next, tb_exp_schedule_next : std_logic;
   
   constant tbase : time := 100 ns;
-  signal tb_error : std_logic;
 begin
   COMP: Encoder generic map(8) port map(tb_clk, tb_rst, tb_write_en, tb_uart_is_empty, tb_unit_number, tb_unit_data, tb_uart_out, tb_uart_out_valid, tb_schedule_next);
   
