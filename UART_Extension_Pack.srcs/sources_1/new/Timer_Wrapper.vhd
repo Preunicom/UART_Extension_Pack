@@ -38,11 +38,11 @@ architecture Behavioral of Timer_Wrapper is
   signal timer_active_int             : std_logic := '0';
   signal prescale_factor_write_en_int : std_logic := '0';
   signal prescaled_factor_int         : std_logic_vector(HOST_DATA_BITS - 1 downto 0);
-  signal start_value_write_en_int         : std_logic := '0';
+  signal start_value_write_en_int     : std_logic := '0';
   signal start_value_int              : std_logic_vector(HOST_DATA_BITS - 1 downto 0);
   signal restart_timer_int            : std_logic := '0';
   signal is_timer_end_int             : std_logic := '0';
-  signal last_is_timer_end            : std_logic := '0';
+  signal last_is_timer_end_int        : std_logic := '0';
   signal clk_prescaled_intern         : std_logic := '0';
   signal prescale_counter             : integer := 1;
   signal last_scheduler_done          : std_logic := '0';
@@ -122,7 +122,7 @@ begin
           scheduler_wanted <= '0';
           unit_data_out <= (others => '0');
         end if;
-        if last_is_timer_end = '0' and is_timer_end_int = '1' then
+        if last_is_timer_end_int = '0' and is_timer_end_int = '1' then
           -- Schedule current interrupt
           scheduler_wanted <= '1';
           unit_data_out <= (others => '1');
@@ -135,10 +135,10 @@ begin
   begin
     if rising_edge(clk) then
       if rst = '1' then
-        last_is_timer_end <= '0';
+        last_is_timer_end_int <= '0';
         last_scheduler_done <= '0';
       else
-        last_is_timer_end <= is_timer_end_int;
+        last_is_timer_end_int <= is_timer_end_int;
         last_scheduler_done <= scheduler_done;
       end if;
     end if;

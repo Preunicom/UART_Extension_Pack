@@ -85,10 +85,9 @@ begin
       prescale_counter <= 1;
     elsif rising_edge(clk) then
       prescale_counter <= prescale_counter + 1;
-      clk_prescaled_intern <= clk_prescaled_intern;
       -- Half of factor because process is only with rising edge triggered
       if prescale_counter >= (to_integer(unsigned(prescale_factor_int)) / 2) then
-        clk_prescaled_intern <= clk_prescaled_intern nand clk_prescaled_intern;
+        clk_prescaled_intern <= not clk_prescaled_intern;
         prescale_counter <= 1;
       end if;
     end if;
@@ -99,17 +98,27 @@ begin
   begin
     -- Async reset because of double prescaled clock and rst only for one cylce in non prescaled clock set
     if timer_rst = '1' then
-      timer_counter_prescaled <= unsigned(start_value_int);
+      timer_counter_prescaled <= (others => '0');
       is_timer_end_prescaled <= '0';
     elsif rising_edge(clk_prescaled_intern) then
       is_timer_end_prescaled <= '0';
       if (to_integer(unsigned(prescale_factor_int)) > 1) then
         -- prescaled timer is choosen
-        timer_counter_prescaled <= timer_counter_prescaled + 1;
-        if timer_counter_prescaled = is_timer_end_value then
-          -- timer overflow --> Interrupt
+        if timer_counter_prescaled = 0 then
+          -- Overflow or rst happended last clock cycle
+          --> jump to start_value (+1)
+          timer_counter_prescaled <= unsigned(start_value_int) + 1;
+        else
+          -- Normal counting
+          timer_counter_prescaled <= timer_counter_prescaled + 1;
+        end if;
+        -- Timer end OR start value is end value (what means every clock cycle is timer end)
+        -- The end value case would be not catched if it would not be an extra condition
+        if (timer_counter_prescaled = is_timer_end_value) or (unsigned(start_value_int) = is_timer_end_value) then
+          -- timer overflow 
+          --> Interrupt + Reset counter to 0
           is_timer_end_prescaled <= '1';
-          timer_counter_prescaled <= unsigned(start_value_int);
+          timer_counter_prescaled <= (others => '0');
         end if;
       end if;
     end if;
@@ -120,17 +129,27 @@ begin
   begin
     -- Async reset because of prescaled clock and rst only for one cylce in non prescaled clock set
     if timer_rst = '1' then
-      timer_counter_non_prescaled <= unsigned(start_value_int);
+      timer_counter_non_prescaled <= (others => '0');
       is_timer_end_non_prescaled <= '0';
     elsif rising_edge(clk) then
       is_timer_end_non_prescaled <= '0';
       if (to_integer(unsigned(prescale_factor_int)) <= 1) then
         -- non prescaled timer is choosen
-        timer_counter_non_prescaled <= timer_counter_non_prescaled + 1;
-        if timer_counter_non_prescaled = is_timer_end_value then         
-          -- timer overflow --> Interrupt
+        if timer_counter_non_prescaled = 0 then
+          -- Overflow or rst happended last clock cycle
+          --> jump to start_value (+1)
+          timer_counter_non_prescaled <= unsigned(start_value_int) + 1;
+        else
+          -- Normal counting
+          timer_counter_non_prescaled <= timer_counter_non_prescaled + 1;
+        end if;
+        -- Timer end OR start value is end value (what means every clock cycle is timer end)
+        -- The end value case would be not catched if it would not be an extra condition
+        if (timer_counter_non_prescaled = is_timer_end_value) or (unsigned(start_value_int) = is_timer_end_value) then         
+          -- timer overflow 
+          --> Interrupt + Reset counter to 0
           is_timer_end_non_prescaled <= '1';
-          timer_counter_non_prescaled <= unsigned(start_value_int);
+          timer_counter_non_prescaled <= (others => '0');
         end if;
       end if;
     end if;
