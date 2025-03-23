@@ -56,7 +56,7 @@ begin
     wait;
   end process;
 
-  tb_rst <= '1', '0' after 1*tbase;
+  tb_rst <= '1', '0' after 2*tbase;
 
   tb_write_en <= '0',
     '1' after 2*tbase, '0' after 3*tbase,
@@ -74,24 +74,24 @@ begin
     "00000000" after 22*tbase;
 
   tb_scheduler_done <= '0',
-    '1' after 9.5*tbase, '0' after 11*tbase,
-    '1' after 33.5*tbase, '0' after 35*tbase;
+    '1' after 10*tbase, '0' after 11*tbase,
+    '1' after 34*tbase, '0' after 35*tbase;
 
   tb_gpio_data_in <= "0",
     "1" after 5.5*tbase;
 
   -- one clock cycle delayed because of GPIO Bank Unit register (only for interrupts)
-  tb_exp_unit_data_out <= "00000000000000",
-    "00000000000001" after 6*tbase,
-    "00000000000001" after 22*tbase;
+  tb_exp_unit_data_out <= (others => 'U'), (others => '0') after 1*tbase,
+    "00000000000001" after 7*tbase, "00000000000000" after 10*tbase, -- Interrupt
+    "00000000000001" after 22*tbase, "00000000000000" after 34*tbase; -- Request from host
 
   -- one clock cycle delayed because of GPIO Bank Unit input sync register
-  tb_exp_scheduler_wanted <= '0',
-    '1' after 6*tbase, '0' after 9.5*tbase,
-    '1' after 22*tbase, '0' after 33.5*tbase;
+  tb_exp_scheduler_wanted <= 'U', '0' after 1*tbase,
+    '1' after 7*tbase, '0' after 10*tbase,
+    '1' after 22*tbase, '0' after 34*tbase;
 
   -- one clock cycle delayed because of GPIO Bank Unit register (only for interrupts)
-  tb_exp_gpio_data_out <= "0",
+  tb_exp_gpio_data_out <= "U", "0" after 1*tbase,
     "1" after 3*tbase,
     "0" after 13*tbase;
  

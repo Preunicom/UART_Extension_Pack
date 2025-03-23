@@ -52,7 +52,8 @@ begin
     wait;
   end process;
 
-  tb_rst <= '1', '0' after 1*tbase;
+  tb_rst <= '1', '0' after 2*tbase;
+
   tb_uart_inp_valid <= '0', 
     '1' after 2*tbase, '0' after 3*tbase,
     '1' after 10*tbase, '0' after 11*tbase,
@@ -63,6 +64,7 @@ begin
     '1' after 70*tbase, '0' after 71*tbase,
     '1' after 450*tbase, '0' after 451*tbase,
     '1' after 458*tbase, '0' after 459*tbase;
+
   tb_uart_inp <= 
     "01000001" after 2*tbase,
     "00000010" after 10*tbase,
@@ -73,24 +75,28 @@ begin
     "00000111" after 70*tbase,
     "11001001" after 450*tbase,
     "00001010" after 458*tbase;
+
   tb_uart_error <= '0', '1' after 44*tbase, '0' after 52*tbase;
 
-  tb_exp_out_en <= '0', 
+  tb_exp_out_en <= 'U', '0' after 1*tbase, 
     '1' after 10*tbase, '0' after 11*tbase,
     '1' after 36*tbase, '0' after 37*tbase,
     '0' after 52*tbase, '0' after 53*tbase,
     '1' after 458*tbase, '0' after 459*tbase;
-  tb_exp_unit_number <= "000000",
+
+  tb_exp_unit_number <= "UUUUUU", "000000" after 1*tbase,
     "000001" after 10*tbase,
     "000011" after 36*tbase,
     "000101" after 52*tbase,
     "001001" after 458*tbase;
-  tb_exp_access_mode <= "00",
+
+  tb_exp_access_mode <= "UU", "00" after 1*tbase,
     "01" after 10*tbase,
     "10" after 36*tbase,
     "00" after 52*tbase,
     "11" after 458*tbase;
-  tb_exp_unit_data <= "00000000",
+
+  tb_exp_unit_data <= "UUUUUUUU", "00000000" after 1*tbase,
     "00000010" after 10*tbase,
     "00000100" after 36*tbase,
     "00000110" after 52*tbase,
@@ -98,7 +104,7 @@ begin
 
   tb_error <= '0' when
     (tb_exp_out_en = tb_out_en) 
-    and (tb_exp_unit_number = tb_exp_unit_number)
+    and (tb_exp_unit_number = tb_unit_number)
     and (tb_exp_access_mode = tb_access_mode)
     and (tb_exp_unit_data = tb_unit_data) else '1';
 

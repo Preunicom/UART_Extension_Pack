@@ -60,7 +60,7 @@ begin
     wait;
   end process;
 
-  tb_rst <= '1', '0' after 1*tbase;
+  tb_rst <= '1', '0' after 2*tbase;
 
   tb_rx_pin_host <= '1',
     '0' after 10*tbase, '1' after 20*tbase, '0' after 30*tbase, '0' after 40*tbase, '0' after 50*tbase, '0' after 60*tbase, '0' after 70*tbase, '1' after 80*tbase, '0' after 90*tbase, '0' after 100*tbase, '1' after 110*tbase, --0b01000001 (get GPIO data) (0x41)
@@ -88,22 +88,22 @@ begin
     "0" after 1100*tbase;
 
   tb_exp_tx_pin_host <= '1',
-    '0' after 335*tbase, '1' after 345*tbase, '0' after 355*tbase, '0' after 365*tbase, '0' after 375*tbase, '0' after 385*tbase, '0' after 395*tbase, '0' after 405*tbase, '0' after 415*tbase, '1' after 425*tbase, '1' after 435*tbase, --0b00000001 (get GPIO data - unit) (0x01)
-    '0' after 445*tbase, '0' after 455*tbase, '0' after 465*tbase, '0' after 475*tbase, '0' after 485*tbase, '0' after 495*tbase, '0' after 505*tbase, '0' after 515*tbase, '0' after 525*tbase, '0' after 535*tbase, '1' after 545*tbase, --0b00000000 (get GPIO data - data) (0x00)
-    '0' after 555*tbase, '0' after 565*tbase, '0' after 575*tbase, '0' after 585*tbase, '0' after 595*tbase, '0' after 605*tbase, '0' after 615*tbase, '0' after 625*tbase, '0' after 635*tbase, '0' after 645*tbase, '1' after 655*tbase, --0b00000000 (UART in - unit) (0x00)
-    '0' after 665*tbase, '0' after 675*tbase, '0' after 685*tbase, '0' after 695*tbase, '0' after 705*tbase, '1' after 715*tbase, '0' after 725*tbase, '0' after 735*tbase, '0' after 745*tbase, '1' after 755*tbase, '1' after 765*tbase, --0b00010000 (UART in - data) (0x10)
-    '0' after 775*tbase, '1' after 785*tbase, '0' after 795*tbase, '0' after 805*tbase, '0' after 815*tbase, '0' after 825*tbase, '0' after 835*tbase, '0' after 845*tbase, '0' after 855*tbase, '1' after 865*tbase, '1' after 875*tbase, --0b00000001 (GPIO interrupt - unit) (0x01)
-    '0' after 885*tbase, '1' after 895*tbase, '0' after 905*tbase, '0' after 915*tbase, '0' after 925*tbase, '0' after 935*tbase, '0' after 945*tbase, '0' after 955*tbase, '0' after 965*tbase, '1' after 975*tbase, '1' after 985*tbase, --0b00000000 (GPIO interrupt - data) (0x01)
-    '0' after 1115*tbase, '1' after 1125*tbase, '0' after 1135*tbase, '0' after 1145*tbase, '0' after 1155*tbase, '0' after 1165*tbase, '0' after 1175*tbase, '0' after 1185*tbase, '0' after 1195*tbase, '1' after 1205*tbase, '1' after 1215*tbase, --0b00000001 (GPIO interrupt - unit) (0x01)
-    '0' after 1225*tbase, '0' after 1235*tbase, '0' after 1245*tbase, '0' after 1255*tbase, '0' after 1265*tbase, '0' after 1275*tbase, '0' after 1285*tbase, '0' after 1295*tbase, '0' after 1305*tbase, '0' after 1315*tbase, '1' after 1325*tbase, --0b00000000 (GPIO interrupt - data) (0x00)
-    '0' after 3115*tbase, '0' after 3125*tbase, '1' after 3135*tbase, '0' after 3145*tbase, '0' after 3155*tbase, '0' after 3165*tbase, '0' after 3175*tbase, '0' after 3185*tbase, '0' after 3195*tbase, '1' after 3205*tbase, '1' after 3215*tbase, --0b00000010 (Timer interrupt - unit) (0x02)
-    '0' after 3225*tbase, '1' after 3235*tbase, '1' after 3245*tbase, '1' after 3255*tbase, '1' after 3265*tbase, '1' after 3275*tbase, '1' after 3285*tbase, '1' after 3295*tbase, '1' after 3305*tbase, '0' after 3315*tbase, '1' after 3325*tbase; --0b11111111 (Timer interrupt - data) (0xFF)
+    '0' after 336*tbase, '1' after 346*tbase, '0' after 356*tbase, '0' after 366*tbase, '0' after 376*tbase, '0' after 386*tbase, '0' after 396*tbase, '0' after 406*tbase, '0' after 416*tbase, '1' after 426*tbase, '1' after 436*tbase, --0b00000001 (get GPIO data - unit) (0x01)
+    '0' after 446*tbase, '0' after 456*tbase, '0' after 466*tbase, '0' after 476*tbase, '0' after 486*tbase, '0' after 496*tbase, '0' after 506*tbase, '0' after 516*tbase, '0' after 526*tbase, '0' after 536*tbase, '1' after 546*tbase, --0b00000000 (get GPIO data - data) (0x00)
+    '0' after 556*tbase, '0' after 566*tbase, '0' after 576*tbase, '0' after 586*tbase, '0' after 596*tbase, '0' after 606*tbase, '0' after 616*tbase, '0' after 626*tbase, '0' after 636*tbase, '0' after 646*tbase, '1' after 656*tbase, --0b00000000 (UART in - unit) (0x00)
+    '0' after 666*tbase, '0' after 676*tbase, '0' after 686*tbase, '0' after 696*tbase, '0' after 706*tbase, '1' after 716*tbase, '0' after 726*tbase, '0' after 736*tbase, '0' after 746*tbase, '1' after 756*tbase, '1' after 766*tbase, --0b00010000 (UART in - data) (0x10)
+    '0' after 776*tbase, '1' after 786*tbase, '0' after 796*tbase, '0' after 806*tbase, '0' after 816*tbase, '0' after 826*tbase, '0' after 836*tbase, '0' after 846*tbase, '0' after 856*tbase, '1' after 866*tbase, '1' after 876*tbase, --0b00000001 (GPIO interrupt - unit) (0x01)
+    '0' after 886*tbase, '1' after 896*tbase, '0' after 906*tbase, '0' after 916*tbase, '0' after 926*tbase, '0' after 936*tbase, '0' after 946*tbase, '0' after 956*tbase, '0' after 966*tbase, '1' after 976*tbase, '1' after 986*tbase, --0b00000000 (GPIO interrupt - data) (0x01)
+    '0' after 1116*tbase, '1' after 1126*tbase, '0' after 1136*tbase, '0' after 1146*tbase, '0' after 1156*tbase, '0' after 1166*tbase, '0' after 1176*tbase, '0' after 1186*tbase, '0' after 1196*tbase, '1' after 1206*tbase, '1' after 1216*tbase, --0b00000001 (GPIO interrupt - unit) (0x01)
+    '0' after 1226*tbase, '0' after 1236*tbase, '0' after 1246*tbase, '0' after 1256*tbase, '0' after 1266*tbase, '0' after 1276*tbase, '0' after 1286*tbase, '0' after 1296*tbase, '0' after 1306*tbase, '0' after 1316*tbase, '1' after 1326*tbase, --0b00000000 (GPIO interrupt - data) (0x00)
+    '0' after 3116*tbase, '0' after 3126*tbase, '1' after 3136*tbase, '0' after 3146*tbase, '0' after 3156*tbase, '0' after 3166*tbase, '0' after 3176*tbase, '0' after 3186*tbase, '0' after 3196*tbase, '1' after 3206*tbase, '1' after 3216*tbase, --0b00000010 (Timer interrupt - unit) (0x02)
+    '0' after 3226*tbase, '1' after 3236*tbase, '1' after 3246*tbase, '1' after 3256*tbase, '1' after 3266*tbase, '1' after 3276*tbase, '1' after 3286*tbase, '1' after 3296*tbase, '1' after 3306*tbase, '0' after 3316*tbase, '1' after 3326*tbase; --0b11111111 (Timer interrupt - data) (0xFF)
 
   tb_exp_tx_pin_a <= '1',
-    '0' after 1180*tbase, '1' after 1220*tbase, '0' after 1260*tbase, '1' after 1300*tbase, '1' after 1340*tbase, '1' after 1380*tbase, '1' after 1420*tbase, '1' after 1460*tbase, '0' after 1500*tbase, '1' after 1540*tbase, --0b01111101 (0x7D)
-    '0' after 1580*tbase, '1' after 1620*tbase, '0' after 1660*tbase, '0' after 1700*tbase, '0' after 1740*tbase, '1' after 1780*tbase, '0' after 1820*tbase, '1' after 1860*tbase, '0' after 1900*tbase, '1' after 1940*tbase; --0b01010001 (0x51)
+    '0' after 1181*tbase, '1' after 1221*tbase, '0' after 1261*tbase, '1' after 1301*tbase, '1' after 1341*tbase, '1' after 1381*tbase, '1' after 1421*tbase, '1' after 1461*tbase, '0' after 1501*tbase, '1' after 1541*tbase, --0b01111101 (0x7D)
+    '0' after 1581*tbase, '1' after 1621*tbase, '0' after 1661*tbase, '0' after 1701*tbase, '0' after 1741*tbase, '1' after 1781*tbase, '0' after 1821*tbase, '1' after 1861*tbase, '0' after 1901*tbase, '1' after 1941*tbase; --0b01010001 (0x51)
 
-  tb_exp_gpio_pins_out <= "00",
+  tb_exp_gpio_pins_out <= "UU", "00" after 1*tbase,
     "10" after 719*tbase;
 
     tb_error <= '0' when 

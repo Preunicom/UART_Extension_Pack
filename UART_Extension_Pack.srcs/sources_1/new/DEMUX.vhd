@@ -15,6 +15,7 @@ begin
   MUX: process(control, inp)
   begin
     outp <= (others => '0');
+    -- Set the control bit of outp to the inp value
     outp(to_integer(unsigned(control))) <= inp;
   end process;
 end Behavioral;

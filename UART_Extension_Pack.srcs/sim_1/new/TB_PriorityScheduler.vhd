@@ -26,7 +26,7 @@ architecture Behavioral of TB_PriorityScheduler is
   signal tb_outp_valid, tb_exp_outp_valid : std_logic;
   signal tb_control_sig, tb_exp_control_sig : std_logic_vector(5 downto 0);
   signal tb_scheduler_wanted : std_logic_vector(63 downto 0) := (others => '0');
-  signal tb_scheduler_done, tb_exp_scheduler_done : std_logic_vector(63 downto 0) := (others => '0');
+  signal tb_scheduler_done, tb_exp_scheduler_done : std_logic_vector(63 downto 0);
 
   constant tbase : time := 100 ns;
 begin
@@ -44,45 +44,44 @@ begin
     wait;
   end process;
 
-  tb_rst <= '1', '0' after 1*tbase;
+  tb_rst <= '1', '0' after 2*tbase;
 
-  -- these updates async --> half a clock cycle earlies than the schedule sync process works with it
-  tb_schedule_next <= '0',
-    '1' after 9.5*tbase, '0' after 11*tbase,
-    '1' after 19.5*tbase, '0' after 21*tbase,
-    '1' after 29.5*tbase, '0' after 31*tbase,
-    '1' after 39.5*tbase, '0' after 41*tbase,
-    '1' after 49.5*tbase, '0' after 101*tbase,
-    '1' after 109.5*tbase;
+  tb_schedule_next <= '1', '0' after 11*tbase,
+    '1' after 20*tbase, '0' after 22*tbase,
+    '1' after 30*tbase, '0' after 32*tbase,
+    '1' after 40*tbase, '0' after 42*tbase,
+    '1' after 50*tbase, '0' after 102*tbase,
+    '1' after 110*tbase;
 
-  --These signals updates async to 0 right after schedule next --> half a clock cycle before schedule next
-  tb_scheduler_wanted(4) <= '1' after 100*tbase, '0' after 109.5*tbase;
-  tb_scheduler_wanted(3) <= '1' after 5*tbase, '0' after 19.5*tbase;
-  tb_scheduler_wanted(2) <= '1' after 11*tbase, '0' after 49.5*tbase;
-  tb_scheduler_wanted(1) <= '1' after 19*tbase, '0' after 29.5*tbase;
-  tb_scheduler_wanted(0) <= '1' after 25*tbase, '0' after 39.5*tbase;
+  tb_scheduler_wanted(4) <= '1' after 101*tbase, '0' after 111*tbase; -- fifth (0x10)
+  tb_scheduler_wanted(3) <= '1' after 5*tbase, '0' after 21*tbase; -- first (0x08)
+  tb_scheduler_wanted(2) <= '1' after 11*tbase, '0' after 51*tbase; -- forth (0x04)
+  tb_scheduler_wanted(1) <= '1' after 19*tbase, '0' after 31*tbase; -- second (0x02)
+  tb_scheduler_wanted(0) <= '1' after 25*tbase, '0' after 41*tbase; -- third (0x01)
 
-  tb_exp_control_sig <= "000000",
-    "000011" after 10*tbase,
-    "000001" after 20*tbase,
-    "000000" after 30*tbase,
-    "000010" after 40*tbase,
-    "000000" after 50*tbase,
-    "000100" after 100*tbase,
-    "000000" after 110*tbase;
+  tb_exp_control_sig <= "UUUUUU", "000000" after 1*tbase,
+    "000011" after 5*tbase,
+    "000001" after 21*tbase,
+    "000000" after 31*tbase,
+    "000010" after 41*tbase,
+    "000000" after 51*tbase,
+    "000100" after 101*tbase,
+    "000000" after 111*tbase;
 
-  tb_exp_outp_valid <= '0',
-    '1' after 10*tbase, '0' after 11*tbase,
-    '1' after 20*tbase, '0' after 21*tbase,
-    '1' after 30*tbase, '0' after 31*tbase,
-    '1' after 40*tbase, '0' after 41*tbase,
-    '1' after 100*tbase, '0' after 101*tbase;
+  tb_exp_outp_valid <= 'U', '0' after 1*tbase,
+    '1' after 5*tbase, '0' after 11*tbase,
+    '1' after 21*tbase, '0' after 22*tbase,
+    '1' after 31*tbase, '0' after 32*tbase,
+    '1' after 41*tbase, '0' after 42*tbase,
+    '1' after 101*tbase, '0' after 102*tbase;
 
-  tb_exp_scheduler_done(4) <= '1' after 109.5*tbase;
-  tb_exp_scheduler_done(3) <= '1' after 19.5*tbase, '0' after 21*tbase;
-  tb_exp_scheduler_done(2) <= '1' after 49.5*tbase, '0' after 101*tbase;
-  tb_exp_scheduler_done(1) <= '1' after 29.5*tbase, '0' after 31*tbase;
-  tb_exp_scheduler_done(0) <= '1' after 39.5*tbase, '0' after 41*tbase;
+  tb_exp_scheduler_done(63 downto 5) <= (others => 'U'), (others => '0') after 1*tbase;
+
+  tb_exp_scheduler_done(4) <= 'U', '0' after 1*tbase, '1' after 102*tbase, '0' after 103*tbase;
+  tb_exp_scheduler_done(3) <= 'U', '0' after 1*tbase, '1' after 11*tbase, '0' after 12*tbase;
+  tb_exp_scheduler_done(2) <= 'U', '0' after 1*tbase, '1' after 42*tbase, '0' after 43*tbase;
+  tb_exp_scheduler_done(1) <= 'U', '0' after 1*tbase, '1' after 22*tbase, '0' after 23*tbase;
+  tb_exp_scheduler_done(0) <= 'U', '0' after 1*tbase, '1' after 32*tbase, '0' after 33*tbase;
   
   tb_error <= '0' when 
     (tb_exp_control_sig = tb_control_sig)

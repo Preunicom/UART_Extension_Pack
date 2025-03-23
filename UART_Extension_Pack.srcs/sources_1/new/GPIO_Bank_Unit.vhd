@@ -17,29 +17,30 @@ entity GPIO_Bank_Unit is
 end GPIO_Bank_Unit;
 
 architecture Behavioral of GPIO_Bank_Unit is
-  signal port_register : std_logic_vector(OUTPUTS-1 downto 0) := (others => '0');
 begin
-  REG_OUTP: process(clk, rst)
+  REG_OUTP: process(clk)
   begin
-    if rst = '1' then
-      port_register <= (others => '0');
-    elsif rising_edge(clk) then   
-      if write_en = '1' then
-        -- set new output config
-        port_register <= config_in;
+    if rising_edge(clk) then   
+      if rst = '1' then
+        gpio_data_out <= (others => '0');
+      else
+        if write_en = '1' then
+          -- set new output config
+          gpio_data_out <= config_in;
+        end if;
       end if;
     end if;
   end process;
-
-  gpio_data_out <= port_register;
     
-  SYNC_INP: process(clk, rst)
+  SYNC_INP: process(clk)
   begin
-    if rst = '1' then
-      values_out <= gpio_data_in;
-    elsif rising_edge(clk) then
-      -- sync input pins
-      values_out <= gpio_data_in;
+    if rising_edge(clk) then
+      if rst = '1' then
+        values_out <= gpio_data_in;
+      else
+        -- sync input pins
+        values_out <= gpio_data_in;
+      end if;
     end if;
   end process;
     

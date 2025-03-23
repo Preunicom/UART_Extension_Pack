@@ -60,7 +60,7 @@ begin
     wait;
   end process;
 
-  tb_rst <= '1', '0' after 1*tbase;
+  tb_rst <= '1', '0' after 2*tbase;
 
   tb_write_en <= '0',
     '1' after 10*tbase, '0' after 11*tbase,
@@ -73,14 +73,14 @@ begin
     "11001111" after 100*tbase; -- 0xCF
 
   tb_exp_TX_pin <= '1',
-    '0' after 25*tbase,
-    '1' after 35*tbase,
-    '0' after 55*tbase,
-    '1' after 95*tbase, -- END 0xC3
-    '0' after 125*tbase,
-    '1' after 135*tbase,
-    '0' after 175*tbase,
-    '1' after 195*tbase; -- END 0xCF
+    '0' after 26*tbase,
+    '1' after 36*tbase,
+    '0' after 56*tbase,
+    '1' after 96*tbase, -- END 0xC3
+    '0' after 126*tbase,
+    '1' after 136*tbase,
+    '0' after 176*tbase,
+    '1' after 196*tbase; -- END 0xCF
 
   tb_scheduler_done <= '0',
     '1' after 120.5*tbase, '0' after 122*tbase,
@@ -96,21 +96,17 @@ begin
     '0' after 300*tbase,
     '1' after 400*tbase; -- END FRAME ERROR
 
-  tb_exp_unit_data_out <= "00000000000000", 
-    "00000010000111" after 101*tbase,
-    "00000011111111" after 246*tbase,
-    "0000000000000" after 396*tbase;
+  tb_exp_unit_data_out <= (others => 'U'), "00000000000000" after 1*tbase, 
+    "00000010000111" after 102*tbase, (others => '0') after 121*tbase,
+    "00000011111111" after 247*tbase, (others => '0') after 301*tbase;
 
-  tb_exp_scheduler_wanted <= '0',
-    '1' after 101*tbase, '0' after 120.5*tbase,
-    '1' after 246*tbase, '0' after 300.5*tbase;
+  tb_exp_scheduler_wanted <= 'U', '0' after 1*tbase,
+    '1' after 102*tbase, '0' after 121*tbase,
+    '1' after 247*tbase, '0' after 301*tbase;
  
   tb_error <= '0' when 
     (tb_exp_unit_data_out = tb_unit_data_out)
     and (tb_exp_scheduler_wanted = tb_scheduler_wanted)
     and (tb_exp_TX_pin = tb_TX_pin) else '1';
-
-
-
 
 end Behavioral;

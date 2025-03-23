@@ -50,7 +50,7 @@ begin
     wait;
   end process;
 
-  tb_rst <= '1', '0' after 1 * tbase;
+  tb_rst <= '1', '0' after 2*tbase;
 
   tb_write_en <= '0',
     '1' after 2*tbase, '0' after 3*tbase, -- set start_value (0xFF)
@@ -90,19 +90,27 @@ begin
     '1' after 3390.5*tbase, '0' after 3392*tbase,
     '1' after 3790.5*tbase, '0' after 3792*tbase;
 
-  -- value not used in Timer unit
-  tb_exp_unit_data_out <= "11111111111111";
+  tb_exp_unit_data_out <= (others => 'U'), (others => '0') after 1*tbase,
+    (others => '1') after 302*tbase, (others => '0') after 321*tbase,
+    (others => '1') after 502*tbase, (others => '0') after 531*tbase,
+    (others => '1') after 902*tbase, (others => '0') after 931*tbase,
+    (others => '1') after 1302*tbase, (others => '0') after 1391*tbase,
+    (others => '1') after 1702*tbase, (others => '0') after 1791*tbase,
+    (others => '1') after 2502*tbase, (others => '0') after 2591*tbase,
+    (others => '1') after 2902*tbase, (others => '0') after 2991*tbase,
+    (others => '1') after 3302*tbase, (others => '0') after 3391*tbase,
+    (others => '1') after 3702*tbase, (others => '0') after 3791*tbase;
 
-  tb_exp_scheduler_wanted <= '0',
-    '1' after 300*tbase, '0' after 320.5*tbase,
-    '1' after 500*tbase, '0' after 530.5*tbase,
-    '1' after 900*tbase, '0' after 930.5*tbase,
-    '1' after 1300*tbase, '0' after 1390.5*tbase,
-    '1' after 1700*tbase, '0' after 1790.5*tbase,
-    '1' after 2500*tbase, '0' after 2590.5*tbase,
-    '1' after 2900*tbase, '0' after 2990.5*tbase,
-    '1' after 3300*tbase, '0' after 3390.5*tbase,
-    '1' after 3700*tbase, '0' after 3790.5*tbase;
+  tb_exp_scheduler_wanted <= 'U', '0' after 1*tbase,
+    '1' after 302*tbase, '0' after 321*tbase,
+    '1' after 502*tbase, '0' after 531*tbase,
+    '1' after 902*tbase, '0' after 931*tbase,
+    '1' after 1302*tbase, '0' after 1391*tbase,
+    '1' after 1702*tbase, '0' after 1791*tbase,
+    '1' after 2502*tbase, '0' after 2591*tbase,
+    '1' after 2902*tbase, '0' after 2991*tbase,
+    '1' after 3302*tbase, '0' after 3391*tbase,
+    '1' after 3702*tbase, '0' after 3791*tbase;
  
   tb_error <= '0' when 
     (tb_exp_unit_data_out = tb_unit_data_out)

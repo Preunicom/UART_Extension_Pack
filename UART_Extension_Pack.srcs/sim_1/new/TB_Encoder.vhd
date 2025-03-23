@@ -52,7 +52,7 @@ begin
     wait;
   end process;
 
-  tb_rst <= '1', '0' after 1*tbase;
+  tb_rst <= '1', '0' after 2*tbase;
 
   tb_write_en <= '0',
     '1' after 2*tbase, '0' after 3*tbase,
@@ -73,17 +73,17 @@ begin
     "11110001",
     "00000011" after 30*tbase;
 
-  tb_exp_schedule_next <= '1',
+  tb_exp_schedule_next <= 'U', '1' after 1*tbase,
     '0' after 2*tbase, '1' after 12*tbase,
     '0' after 30*tbase, '1' after 40*tbase;
 
-  tb_exp_uart_out_valid <= '0',
+  tb_exp_uart_out_valid <= 'U' , '0' after 1*tbase,
     '1' after 3*tbase, '0' after 4*tbase,
     '1' after 12*tbase, '0' after 13*tbase,
     '1' after 31*tbase, '0' after 32*tbase,
     '1' after 40*tbase, '0' after 41*tbase;
 
-  tb_exp_uart_out <= "00000000",
+  tb_exp_uart_out <= "UUUUUUUU", "00000000" after 1*tbase,
     "00000001" after 3*tbase, -- unit number
     "11110001" after 12*tbase, -- unit data
     "00000010" after 31*tbase, -- unit number

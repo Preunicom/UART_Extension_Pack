@@ -50,83 +50,97 @@ begin
   TIMER: Timer_Unit generic map (HOST_DATA_BITS) port map (clk_prescaled_intern, rst, timer_active_int, prescale_factor_write_en_int, prescaled_factor_int, start_value_write_en_int, start_value_int, restart_timer_int, is_timer_end_int);
 
   -- Prescales the host clock to 1/20 of the host baud rate, as this is the maximum number of interrupts that can be sent via UART in an 8N1 configuration (because 2*10bit (unit number and unit data) per transmission).
-  PRESCALE: process(clk, rst)
+  PRESCALE: process(clk)
   begin
-    if rst = '1' then
-      clk_prescaled_intern <= '0';
-      prescale_counter <= 1;
-    elsif rising_edge(clk) then
-      prescale_counter <= prescale_counter + 1;
-      clk_prescaled_intern <= clk_prescaled_intern;
-      -- integer gets truncated in VHDL
-      -- Prescales to HOST_BAUD and multiply this value with 20 to get 1/20 of HOST_BAUD as frequency
-      if prescale_counter >= (((FPGA_FREQ + HOST_BAUD) / (2 * HOST_BAUD))*20) then
-        clk_prescaled_intern <= clk_prescaled_intern nand clk_prescaled_intern;
+    if rising_edge(clk) then
+      if rst = '1' then
+        clk_prescaled_intern <= '0';
         prescale_counter <= 1;
+      else
+        prescale_counter <= prescale_counter + 1;
+        clk_prescaled_intern <= clk_prescaled_intern;
+        -- integer gets truncated in VHDL
+        -- Prescales to HOST_BAUD and multiply this value with 20 to get 1/20 of HOST_BAUD as frequency
+        if prescale_counter >= (((FPGA_FREQ + HOST_BAUD) / (2 * HOST_BAUD))*20) then
+          clk_prescaled_intern <= clk_prescaled_intern nand clk_prescaled_intern;
+          prescale_counter <= 1;
+        end if;
       end if;
     end if;
   end process;
   
-  WRITE: process (clk, rst)
+  WRITE: process (clk)
   begin
-    if rst = '1' then
-      restart_timer_int <= '0';
-      prescale_factor_write_en_int <= '0';
-      start_value_write_en_int <= '0';
-      start_value_int <= (others => '0');
-      prescaled_factor_int <= (others => '0');
-      timer_active_int <= '0';
-    elsif rising_edge(clk) then
-      restart_timer_int <= '0';
-      if write_en = '1' then
-        -- Received data from host
-        case access_mode is
-          when "00" =>
-            if unit_data_in > 0 then
-              -- enable timer
-              timer_active_int <= '1';
-            else
-              -- disable timer
-              timer_active_int <= '0';
-            end if;
-          when "01" =>
-            -- restart timer
-            restart_timer_int <= '1';
-          when "10" =>
-            -- set prescale factor
-            prescale_factor_write_en_int <= '1';
-            prescaled_factor_int <= unit_data_in;
-          when "11" =>
-            -- set start value
-            start_value_write_en_int <= '1';
-            start_value_int <= unit_data_in;
-          when others => null;
-        end case;
+    if rising_edge(clk) then
+      if rst = '1' then
+        restart_timer_int <= '0';
+        prescale_factor_write_en_int <= '0';
+        start_value_write_en_int <= '0';
+        start_value_int <= (others => '0');
+        prescaled_factor_int <= (others => '0');
+        timer_active_int <= '0';
+      else
+        restart_timer_int <= '0';
+        if write_en = '1' then
+          -- Received data from host
+          case access_mode is
+            when "00" =>
+              if unit_data_in > 0 then
+                -- enable timer
+                timer_active_int <= '1';
+              else
+                -- disable timer
+                timer_active_int <= '0';
+              end if;
+            when "01" =>
+              -- restart timer
+              restart_timer_int <= '1';
+            when "10" =>
+              -- set prescale factor
+              prescale_factor_write_en_int <= '1';
+              prescaled_factor_int <= unit_data_in;
+            when "11" =>
+              -- set start value
+              start_value_write_en_int <= '1';
+              start_value_int <= unit_data_in;
+            when others => null;
+          end case;
+        end if;
       end if;
     end if;
   end process;
 
-  TIMER_INTERRUPT: process(last_is_timer_end, is_timer_end_int, scheduler_done, rst) 
+  TIMER_INTERRUPT: process(clk)
   begin
-    if rst = '1' or (last_scheduler_done = '0' and scheduler_done = '1') then
-      -- reset scheduler_wanted
-      scheduler_wanted <= '0';
-    elsif is_timer_end_int = '1' and last_is_timer_end = '0' then
-      -- timer ended
-      scheduler_wanted <= '1';
+    if rising_edge(clk) then
+      if rst = '1' then
+        scheduler_wanted <= '0';
+        unit_data_out <= (others => '0');
+      else
+        if last_scheduler_done = '0' and scheduler_done = '1' then
+          -- scheduling finished --> resets request at scheduler
+          scheduler_wanted <= '0';
+          unit_data_out <= (others => '0');
+        end if;
+        if last_is_timer_end = '0' and is_timer_end_int = '1' then
+          -- Schedule current interrupt
+          scheduler_wanted <= '1';
+          unit_data_out <= (others => '1');
+        end if;
+      end if;
     end if;
-  end process;  
-
-  unit_data_out <= (others => '1');
+  end process;
   
-  EDGE_DETECTION: process(clk, rst)
+  EDGE_DETECTION: process(clk)
   begin
-    if rst = '1' then
-      last_is_timer_end <= '0';
-      last_scheduler_done <= '0';
-    elsif rising_edge(clk) then
-      last_is_timer_end <= is_timer_end_int;
-      last_scheduler_done <= scheduler_done;
+    if rising_edge(clk) then
+      if rst = '1' then
+        last_is_timer_end <= '0';
+        last_scheduler_done <= '0';
+      else
+        last_is_timer_end <= is_timer_end_int;
+        last_scheduler_done <= scheduler_done;
+      end if;
     end if;
   end process;
   

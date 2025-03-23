@@ -38,6 +38,7 @@ begin
 
   REG: process(clk, rst)
   begin
+    -- Async reset because Timer Unit is used prescaled
     if rst = '1' then
       prescale_factor_int <= (others => '0');
       start_value_int <= (others => '0');
@@ -78,6 +79,7 @@ begin
 
   PRESCALER: process (clk, rst)
   begin
+    -- Async reset because Timer Unit is used prescaled
     if rst = '1' then
       clk_prescaled_intern <= '0';
       prescale_counter <= 1;
@@ -95,6 +97,7 @@ begin
   -- Counts on prescaled clock if prescale_factor is greater then 1
   TIMER_PRESCALED: process(clk_prescaled_intern, timer_rst)
   begin
+    -- Async reset because of double prescaled clock and rst only for one cylce in non prescaled clock set
     if timer_rst = '1' then
       timer_counter_prescaled <= unsigned(start_value_int);
       is_timer_end_prescaled <= '0';
@@ -115,6 +118,7 @@ begin
   -- Counts on prescaled clock if prescale_factor is 0 or 1
   TIMER_NON_PRESCALED: process(clk, timer_rst)
   begin
+    -- Async reset because of prescaled clock and rst only for one cylce in non prescaled clock set
     if timer_rst = '1' then
       timer_counter_non_prescaled <= unsigned(start_value_int);
       is_timer_end_non_prescaled <= '0';
