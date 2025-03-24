@@ -14,7 +14,7 @@ entity GPIO_Wrapper is
     write_en : in std_logic;
     access_mode : in std_logic_vector(1 downto 0); --*0: set, *1: get
     unit_data_in : in STD_LOGIC_VECTOR(HOST_DATA_BITS-1 downto 0);
-    unit_data_out : out STD_LOGIC_VECTOR(HOST_DATA_BITS-1 downto 0);
+    unit_data_out : out STD_LOGIC_VECTOR(13 downto 0);
     scheduler_wanted : out std_logic;
     scheduler_done : in std_logic;
     gpio_data_in : in STD_LOGIC_VECTOR (IN_PINS-1 downto 0);
@@ -39,62 +39,70 @@ architecture Behavioral of GPIO_Wrapper is
   end component;
   signal write_mode_en : std_logic := '0';
   signal write_values : std_logic_vector(OUT_PINS-1 downto 0);
-  signal values_read : std_logic_vector(IN_PINS-1 downto 0);
-  signal last_values : std_logic_vector(IN_PINS-1 downto 0);
-  signal values_to_scheduler : std_logic_vector(HOST_DATA_BITS downto 0) := (others => '0'); -- Extends with zeros if IO_Pins < HOST_DATA_BITS
-  signal last_enable_write : std_logic := '0';
-  signal last_enable_read : std_logic := '0';
+  signal last_values_read : std_logic_vector(13 downto 0);
+  signal values_read : std_logic_vector(13 downto 0) := (others => '0'); -- Extends with zeros if IO_Pins < HOST_DATA_BITS
+  signal last_write_enable : std_logic := '0';
+  signal last_scheduler_done : std_logic := '0';
 begin
-  GPIO: GPIO_Bank_Unit generic map(IN_PINS, OUT_PINS) port map(clk, rst, write_mode_en, write_values, values_read, gpio_data_in, gpio_data_out);
+  GPIO: GPIO_Bank_Unit generic map(IN_PINS, OUT_PINS) port map(clk, rst, write_mode_en, write_values, values_read(IN_PINS-1 downto 0), gpio_data_in, gpio_data_out);
 
-  OUTPUTS: process(clk, rst)
+  OUTPUTS: process(clk)
   begin
-    if rst = '1' then
-      write_mode_en <= '0';
-      write_values <= (others => '0');
-      last_enable_write <= '0';
-    elsif rising_edge(clk) then
-      last_enable_write <= write_en;
-      if write_en = '1' and last_enable_write = '0' then
-        -- edge of write_en detected
-        -- no write/set mode if it won't be overridden
+    if rising_edge(clk) then
+      if rst = '1' then
         write_mode_en <= '0';
-        if access_mode(0) = '0' then
-          -- write/set mode
-          write_mode_en <= '1';
-          write_values <= unit_data_in(OUT_PINS-1 downto 0);
+        write_values <= (others => '0');
+      else      
+        if last_write_enable = '0' and write_en = '1' then
+          -- edge of write_en detected
+          -- no write/set mode if it won't be overridden
+          write_mode_en <= '0';
+          if access_mode(0) = '0' then
+            -- write/set mode
+            write_mode_en <= '1';
+            write_values <= unit_data_in(OUT_PINS-1 downto 0);
+          end if;
         end if;
       end if;
     end if;
   end process;
 
-  INPUTS: process(rst, scheduler_done, last_values, values_read, access_mode, write_en, last_enable_read)
+  INPUTS: process(clk)
   begin
-    if rst = '1' or scheduler_done = '1' then
-      -- scheduling finished --> resets request at scheduler
-      scheduler_wanted <= '0';
-    elsif (last_values /= values_read) or ((access_mode(0) = '1') and (write_en = '1' and last_enable_read = '0')) then
-      -- Interrrupt or edge detected of write_en and read/get mode (host requested pin values)
-      scheduler_wanted <= '1';
+    if rising_edge(clk) then
+      if rst ='1' then
+        scheduler_wanted <= '0';
+        unit_data_out <= (others => '0');
+      else
+        if (last_scheduler_done = '0' and scheduler_done = '1') then
+          -- scheduling finished --> resets request at scheduler
+          scheduler_wanted <= '0';
+          unit_data_out <= (others => '0');
+        elsif (last_values_read /= values_read) -- Interrupt
+          or ((access_mode(0) = '1') and (last_write_enable = '0' and write_en = '1')) then -- new request from host: Get input pin values
+            -- Schedule current values
+            scheduler_wanted <= '1';
+            unit_data_out <= values_read;
+          end if;
+      end if;
     end if;
   end process;
 
-  values_to_scheduler(IN_PINS-1 downto 0) <= values_read;
-
-  EDGE_DETECTION_INPUTS: process(clk, rst)
+  EDGE_DETECTION_INPUTS: process(clk)
   begin
-    if rst = '1' then
-      last_values <= (others => '0');
-      last_enable_read <= '0';
-    elsif rising_edge(clk) then
-      -- Check if input pin values have changed
-      last_values <= values_read;
-      -- check if write_en has changed
-      last_enable_read <= write_en;
+    if rising_edge(clk) then
+      if rst = '1' then
+        last_values_read <= (others => '0');
+        last_write_enable <= '0';
+      else
+        -- Check if input pin values have changed
+        last_values_read <= values_read;
+        -- check if write_en has changed
+        last_write_enable <= write_en;
+        -- Reset et rising edge of scheduler done
+        last_scheduler_done <= scheduler_done;
+      end if;
     end if;
   end process;
-
-
-  unit_data_out <= values_to_scheduler(HOST_DATA_BITS-1 downto 0);
   
 end Behavioral;

@@ -18,7 +18,7 @@ entity UART_Wrapper is
     write_en : in std_logic;
     access_mode : in std_logic_vector(1 downto 0); -- unused
     unit_data_in : in std_logic_vector(HOST_DATA_BITS-1 downto 0);
-    unit_data_out : out std_logic_vector(HOST_DATA_BITS-1 downto 0);
+    unit_data_out : out std_logic_vector(13 downto 0);
     scheduler_wanted : out std_logic;
     scheduler_done : in std_logic;
     TX_pin : out std_logic;
@@ -54,9 +54,11 @@ architecture Behavioral of UART_Wrapper is
   signal write_en_int : std_logic := '0';
   signal write_en_last : std_logic := '0';
   signal full_int : std_logic;
+  signal full_int_last : std_logic;
   signal uart_received_valid : std_logic;
-  signal uart_received_valid_last : std_logic;
+  signal last_uart_received_valid : std_logic;
   signal frame_error, parity_error : std_logic;
+  signal last_scheduler_done : std_logic := '0';
 
   -- Not more than 14 data bits possible with UART_Unit
   signal unit_data_in_buffer : std_logic_vector(13 downto 0) := (others => '0'); -- Extends smaller UART data vector with zeros
@@ -64,46 +66,63 @@ architecture Behavioral of UART_Wrapper is
 begin
   UART: UART_Unit generic map(IN_FREQ_HZ, BAUD_FREQ_HZ, DATA_BITS, STOP_BITS, PARITY_ACTIVE, PARITY_MODE) port map(clk, rst, unit_data_in_buffer(DATA_BITS-1 downto 0), write_en_int, full_int, TX_pin, unit_data_out_buffer(DATA_BITS-1 downto 0), frame_error, parity_error, uart_received_valid, RX_pin);
 
-  unit_data_in_buffer(HOST_DATA_BITS-1 downto 0)  <= unit_data_in;
-  unit_data_out <= unit_data_out_buffer(HOST_DATA_BITS-1 downto 0);
-  
-  TRANSMIT: process(clk, rst)
+  TRANSMIT: process(clk)
   begin
-    if rst = '1' then
-      write_en_last <= '0';
-      write_en_int <= '0';
-    elsif rising_edge(clk) then
-      -- set write_en_last to current write_en
-      write_en_last <= write_en;
-      if write_en = '1' and write_en_last = '0' then
-        -- new write_en for UART_Unit
-        write_en_int <= '1';
-      end if;
-      if full_int = '1' and write_en = '1' and write_en_last = '1' then
-        -- current write_en read from UART_Unit
+    if rising_edge(clk) then
+      if rst = '1' then
+        unit_data_in_buffer <= (others => '0');
         write_en_int <= '0';
+      else
+        if write_en = '1' and write_en_last = '0' then
+          -- new data for UART_Unit
+          write_en_int <= '1';
+          -- Sync unit_data_in_buffer to match write_en_int
+          unit_data_in_buffer(HOST_DATA_BITS-1 downto 0)  <= unit_data_in;
+        end if;
+        if (full_int = '1' and full_int_last = '0') or write_en = '0' then
+          -- current data read from UART_Unit or current data is invalid
+          write_en_int <= '0';
+        end if;
       end if;
-    end if;
-  end process;
-  
-  RECEIVE: process(uart_received_valid, uart_received_valid_last, frame_error, parity_error, scheduler_done, rst)
-  begin
-    if rst = '1' or scheduler_done = '1' then
-      -- reset scheduler_wanted
-      scheduler_wanted <= '0';
-    elsif uart_received_valid = '1' and uart_received_valid_last = '0' and frame_error = '0' and parity_error = '0' then    
-      -- new package received with no errors
-      scheduler_wanted <= '1';
     end if;
   end process;
 
-  EDGE_DETECTION_RECEIVE: process(clk, rst)
+  RECEIVE: process(clk)
   begin
-    if rst = '1' then
-      uart_received_valid_last <= '0';
-    elsif rising_edge(clk) then
-      -- set uart_received_valid_last to current uart_received_valid
-      uart_received_valid_last <= uart_received_valid;
+    if rising_edge(clk) then
+      if rst = '1' then 
+        scheduler_wanted <= '0';
+        unit_data_out <= (others => '0');
+      else
+        if last_scheduler_done = '0' and scheduler_done = '1' then
+          -- scheduling finished --> resets request at scheduler
+          -- Ignoring uart_received_valid in if because there are only valid values from UART Deserializer Buffer if there was once one.
+          -- reset scheduler_wanted
+          scheduler_wanted <= '0';
+          unit_data_out <= (others => '0');
+        elsif last_uart_received_valid = '0' and uart_received_valid = '1' and frame_error = '0' and parity_error = '0' then  
+          -- Schedule current UART package
+          scheduler_wanted <= '1';
+          unit_data_out <= unit_data_out_buffer;
+        end if;
+      end if;
+    end if;
+  end process;
+
+  EDGE_DETECTION: process(clk)
+  begin
+    if rising_edge(clk) then
+      if rst = '1' then
+        last_scheduler_done <= '0';
+        last_uart_received_valid <= '0';
+        write_en_last <= '0';
+        full_int_last <= '0';
+      else
+        last_uart_received_valid <= uart_received_valid;
+        last_scheduler_done <= scheduler_done;
+        write_en_last <= write_en;
+        full_int_last <= full_int;
+      end if;
     end if;
   end process;
 

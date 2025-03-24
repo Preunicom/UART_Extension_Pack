@@ -73,6 +73,17 @@ OPTRACE "synth_1" START { ROLLUP_AUTO }
 set_param chipscope.maxJobs 2
 set_param xicom.use_bs_reader 1
 set_msg_config -id {Common 17-41} -limit 10000000
+set_msg_config  -id {Board 49-56}  -string {{CRITICAL WARNING: [Board 49-56] Problem parsing board file - /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/production/1.1/board.xml.
+Resolution: Please contact your board vendor with this message.}}  -suppress 
+set_msg_config  -id {Board 49-56}  -string {{CRITICAL WARNING: [Board 49-56] Problem parsing board file - /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.0/board.xml.
+Resolution: Please contact your board vendor with this message.}}  -suppress 
+set_msg_config  -id {Board 49-56}  -string {{CRITICAL WARNING: [Board 49-56] Problem parsing board file - /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/production/1.1/board.xml.
+Resolution: Please contact your board vendor with this message.}}  -suppress 
+set_msg_config  -id {Board 49-55}  -string {{WARNING: [Board 49-55] Pin file /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/production/1.1/part0_pins.xml is not available}}  -suppress 
+set_msg_config  -id {Board 49-62}  -string {{WARNING: [Board 49-62] Preset file /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/sp701/1.0/preset.xml is not available}}  -suppress 
+set_msg_config  -id {Board 49-55}  -string {{WARNING: [Board 49-55] Pin file /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/k26i/1.4/part0_pins.xml is not available}}  -suppress 
+set_msg_config  -id {Board 49-55}  -string {{WARNING: [Board 49-55] Pin file /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.0/part0_pins.xml is not available}}  -suppress 
+set_msg_config  -id {Board 49-55}  -string {{WARNING: [Board 49-55] Pin file /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/production/1.1/part0_pins.xml is not available}}  -suppress 
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a35tcpg236-1
 
@@ -88,17 +99,16 @@ set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_vhdl -library xil_defaultlib {
+  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UnitDataArray_Type_PKG.vhd
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Buffer_Register_Deserializer.vhd
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Buffer_Register_Serializer.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/DEMUX.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Decoder.vhd
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Deserializer.vhd
-  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Encoder.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/GPIO_Bank_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/GPIO_Wrapper.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/MUX.vhd
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Prescaler.vhd
-  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/PriorityScheduler.vhd
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Serializer.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Wrapper.vhd
@@ -107,6 +117,8 @@ read_vhdl -library xil_defaultlib {
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/UART_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Wrapper.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Main_Unit.vhd
+  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Encoder.vhd
+  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/PriorityScheduler.vhd
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
