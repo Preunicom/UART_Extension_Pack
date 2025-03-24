@@ -51,7 +51,7 @@ begin
   -- 10 MHz
   CLOCK: process
   begin
-    for i in 5000 downto 0 loop
+    for i in 10000 downto 0 loop
       tb_clk <= '1';
       wait for tbase/2;
       tb_clk <= '0';
@@ -78,7 +78,37 @@ begin
     '0' after 2410*tbase, '0' after 2420*tbase, '1' after 2430*tbase, '0' after 2440*tbase, '0' after 2450*tbase, '0' after 2460*tbase, '0' after 2470*tbase, '0' after 2480*tbase, '0' after 6490*tbase, '1' after 2500*tbase, '1' after 2510*tbase, --00000010 (enable Timer) (0x02)
     '0' after 2610*tbase, '1' after 2620*tbase, '1' after 2630*tbase, '1' after 2640*tbase, '1' after 2650*tbase, '1' after 2660*tbase, '1' after 2670*tbase, '1' after 2680*tbase, '1' after 2690*tbase, '0' after 2700*tbase, '1' after 2710*tbase, --0b11111111 (0xFF)  
     '0' after 3200*tbase, '0' after 3210*tbase, '1' after 3220*tbase, '0' after 3230*tbase, '0' after 3240*tbase, '0' after 3250*tbase, '0' after 3260*tbase, '0' after 3270*tbase, '0' after 3280*tbase, '1' after 3290*tbase, '1' after 3300*tbase, --00000010 (disable Timer) (0x02)
-    '0' after 3400*tbase, '0' after 3410*tbase, '0' after 3420*tbase, '0' after 3430*tbase, '0' after 3440*tbase, '0' after 3450*tbase, '0' after 3460*tbase, '0' after 3470*tbase, '0' after 3480*tbase, '0' after 3490*tbase, '1' after 3500*tbase; --0b00000000 (0x00)
+    '0' after 3400*tbase, '0' after 3410*tbase, '0' after 3420*tbase, '0' after 3430*tbase, '0' after 3440*tbase, '0' after 3450*tbase, '0' after 3460*tbase, '0' after 3470*tbase, '0' after 3480*tbase, '0' after 3490*tbase, '1' after 3500*tbase, --0b00000000 (0x00)
+    -- Hello World UART stress test
+    '0' after 3600*tbase, '0' after 3610*tbase, '0' after 3620*tbase, '0' after 3630*tbase, '0' after 3640*tbase, '0' after 3650*tbase, '0' after 3660*tbase, '0' after 3670*tbase, '0' after 3680*tbase, '0' after 3690*tbase, '1' after 3700*tbase, -- 0x00 (0b00000000)
+    '0' after 3710*tbase, '0' after 3720*tbase, '0' after 3730*tbase, '0' after 3740*tbase, '1' after 3750*tbase, '0' after 3760*tbase, '0' after 3770*tbase, '1' after 3780*tbase, '0' after 3790*tbase, '0' after 3800*tbase, '1' after 3810*tbase, -- 'H' (0x48 = 0b01001000)
+    -- 180*tbase idle
+    '0' after 4000*tbase, '0' after 4010*tbase, '0' after 4020*tbase, '0' after 4030*tbase, '0' after 4040*tbase, '0' after 4050*tbase, '0' after 4060*tbase, '0' after 4070*tbase, '0' after 4080*tbase, '0' after 4090*tbase, '1' after 4100*tbase, -- 0x00 (0b00000000)
+    '0' after 4110*tbase, '1' after 4120*tbase, '0' after 4130*tbase, '0' after 4140*tbase, '0' after 4150*tbase, '0' after 4160*tbase, '1' after 4170*tbase, '1' after 4180*tbase, '0' after 4190*tbase, '1' after 4200*tbase, '1' after 4210*tbase, -- 'a' (0x61 = 0b01100001)
+    -- 180*tbase idle
+    '0' after 4400*tbase, '0' after 4410*tbase, '0' after 4420*tbase, '0' after 4430*tbase, '0' after 4440*tbase, '0' after 4450*tbase, '0' after 4460*tbase, '0' after 4470*tbase, '0' after 4480*tbase, '0' after 4490*tbase, '1' after 4500*tbase, -- 0x00 (0b00000000)
+    '0' after 4510*tbase, '0' after 4520*tbase, '0' after 4530*tbase, '1' after 4540*tbase, '1' after 4550*tbase, '0' after 4560*tbase, '1' after 4570*tbase, '1' after 4580*tbase, '0' after 4590*tbase, '0' after 4600*tbase, '1' after 4610*tbase, -- 'l' (0x6C = 0b01101100)
+    -- 180*tbase idle
+    '0' after 4800*tbase, '0' after 4810*tbase, '0' after 4820*tbase, '0' after 4830*tbase, '0' after 4840*tbase, '0' after 4850*tbase, '0' after 4860*tbase, '0' after 4870*tbase, '0' after 4880*tbase, '0' after 4890*tbase, '1' after 4900*tbase, -- 0x00 (0b00000000)
+    '0' after 4910*tbase, '0' after 4920*tbase, '0' after 4930*tbase, '1' after 4940*tbase, '1' after 4950*tbase, '0' after 4960*tbase, '1' after 4970*tbase, '1' after 4980*tbase, '0' after 4990*tbase, '0' after 5000*tbase, '1' after 5010*tbase, -- 'l' (0x6C = 0b01101100)
+    -- 180*tbase idle
+    '0' after 5200*tbase, '0' after 5210*tbase, '0' after 5220*tbase, '0' after 5230*tbase, '0' after 5240*tbase, '0' after 5250*tbase, '0' after 5260*tbase, '0' after 5270*tbase, '0' after 5280*tbase, '0' after 5290*tbase, '1' after 5300*tbase, -- 0x00 (0b00000000)
+    '0' after 5310*tbase, '1' after 5320*tbase, '1' after 5330*tbase, '1' after 5340*tbase, '1' after 5350*tbase, '0' after 5360*tbase, '1' after 5370*tbase, '1' after 5380*tbase, '0' after 5390*tbase, '0' after 5400*tbase, '1' after 5410*tbase, -- 'o' (0x6F = 0b01101111)
+    -- 180*tbase idle
+    '0' after 5600*tbase, '0' after 5610*tbase, '0' after 5620*tbase, '0' after 5630*tbase, '0' after 5640*tbase, '0' after 5650*tbase, '0' after 5660*tbase, '0' after 5670*tbase, '0' after 5680*tbase, '0' after 5690*tbase, '1' after 5700*tbase, -- 0x00 (0b00000000)
+    '0' after 5710*tbase, '0' after 5720*tbase, '0' after 5730*tbase, '0' after 5740*tbase, '0' after 5750*tbase, '0' after 5760*tbase, '1' after 5770*tbase, '0' after 5780*tbase, '0' after 5790*tbase, '1' after 5800*tbase, '1' after 5810*tbase, -- ' ' (0x20 = 0b00100000)
+    -- 180*tbase idle
+    '0' after 6000*tbase, '0' after 6010*tbase, '0' after 6020*tbase, '0' after 6030*tbase, '0' after 6040*tbase, '0' after 6050*tbase, '0' after 6060*tbase, '0' after 6070*tbase, '0' after 6080*tbase, '0' after 6090*tbase, '1' after 6100*tbase, -- 0x00 (0b00000000)
+    '0' after 6110*tbase, '1' after 6120*tbase, '1' after 6130*tbase, '1' after 6140*tbase, '0' after 6150*tbase, '1' after 6160*tbase, '0' after 6170*tbase, '1' after 6180*tbase, '0' after 6190*tbase, '1' after 6200*tbase, '1' after 6210*tbase, -- 'W' (0x57 = 0b01010111)
+    -- 180*tbase idle
+    '0' after 6400*tbase, '0' after 6410*tbase, '0' after 6420*tbase, '0' after 6430*tbase, '0' after 6440*tbase, '0' after 6450*tbase, '0' after 6460*tbase, '0' after 6470*tbase, '0' after 6480*tbase, '0' after 6490*tbase, '1' after 6500*tbase, -- 0x00 (0b00000000)
+    '0' after 6510*tbase, '1' after 6520*tbase, '0' after 6530*tbase, '1' after 6540*tbase, '0' after 6550*tbase, '0' after 6560*tbase, '1' after 6570*tbase, '1' after 6580*tbase, '0' after 6590*tbase, '0' after 6600*tbase, '1' after 6610*tbase, -- 'e' (0x65 = 0b01100101)
+    -- 180*tbase idle
+    '0' after 6800*tbase, '0' after 6810*tbase, '0' after 6820*tbase, '0' after 6830*tbase, '0' after 6840*tbase, '0' after 6850*tbase, '0' after 6860*tbase, '0' after 6870*tbase, '0' after 6880*tbase, '0' after 6890*tbase, '1' after 6900*tbase, -- 0x00 (0b00000000)
+    '0' after 6910*tbase, '0' after 6920*tbase, '0' after 6930*tbase, '1' after 6940*tbase, '1' after 6950*tbase, '0' after 6960*tbase, '1' after 6970*tbase, '1' after 6980*tbase, '0' after 6990*tbase, '0' after 7000*tbase, '1' after 7010*tbase, -- 'l' (0x6C = 0b01101100)
+    -- 180*tbase idle
+    '0' after 7100*tbase, '0' after 7110*tbase, '0' after 7120*tbase, '0' after 7130*tbase, '0' after 7140*tbase, '0' after 7150*tbase, '0' after 7160*tbase, '0' after 7170*tbase, '0' after 7180*tbase, '0' after 7190*tbase, '1' after 7200*tbase, -- 0x00 (0b00000000)
+    '0' after 7210*tbase, '0' after 7220*tbase, '0' after 7230*tbase, '1' after 7240*tbase, '0' after 7250*tbase, '1' after 7260*tbase, '1' after 7270*tbase, '1' after 7280*tbase, '0' after 7290*tbase, '0' after 7300*tbase, '1' after 7310*tbase; -- 't' (0x74 = 0b01110100)
   
   tb_rx_pin_a <= '1',
     '0' after 100*tbase, '0' after 140*tbase, '0' after 180*tbase, '0' after 220*tbase, '0' after 260*tbase, '1' after 300*tbase, '0' after 340*tbase, '0' after 380*tbase, '0' after 420*tbase, '1' after 460*tbase; --0b00010000
@@ -96,15 +126,26 @@ begin
     '0' after 886*tbase, '1' after 896*tbase, '0' after 906*tbase, '0' after 916*tbase, '0' after 926*tbase, '0' after 936*tbase, '0' after 946*tbase, '0' after 956*tbase, '0' after 966*tbase, '1' after 976*tbase, '1' after 986*tbase, --0b00000000 (GPIO interrupt - data) (0x01)
     '0' after 1116*tbase, '1' after 1126*tbase, '0' after 1136*tbase, '0' after 1146*tbase, '0' after 1156*tbase, '0' after 1166*tbase, '0' after 1176*tbase, '0' after 1186*tbase, '0' after 1196*tbase, '1' after 1206*tbase, '1' after 1216*tbase, --0b00000001 (GPIO interrupt - unit) (0x01)
     '0' after 1226*tbase, '0' after 1236*tbase, '0' after 1246*tbase, '0' after 1256*tbase, '0' after 1266*tbase, '0' after 1276*tbase, '0' after 1286*tbase, '0' after 1296*tbase, '0' after 1306*tbase, '0' after 1316*tbase, '1' after 1326*tbase, --0b00000000 (GPIO interrupt - data) (0x00)
-    '0' after 3116*tbase, '0' after 3126*tbase, '1' after 3136*tbase, '0' after 3146*tbase, '0' after 3156*tbase, '0' after 3166*tbase, '0' after 3176*tbase, '0' after 3186*tbase, '0' after 3196*tbase, '1' after 3206*tbase, '1' after 3216*tbase, --0b00000010 (Timer interrupt - unit) (0x02)
-    '0' after 3226*tbase, '1' after 3236*tbase, '1' after 3246*tbase, '1' after 3256*tbase, '1' after 3266*tbase, '1' after 3276*tbase, '1' after 3286*tbase, '1' after 3296*tbase, '1' after 3306*tbase, '0' after 3316*tbase, '1' after 3326*tbase; --0b11111111 (Timer interrupt - data) (0xFF)
+    '0' after 3126*tbase, '0' after 3136*tbase, '1' after 3146*tbase, '0' after 3156*tbase, '0' after 3166*tbase, '0' after 3176*tbase, '0' after 3186*tbase, '0' after 3186*tbase, '0' after 3206*tbase, '1' after 3216*tbase, '1' after 3226*tbase, --0b00000010 (Timer interrupt - unit) (0x02)
+    '0' after 3236*tbase, '1' after 3246*tbase, '1' after 3256*tbase, '1' after 3266*tbase, '1' after 3276*tbase, '1' after 3286*tbase, '1' after 3296*tbase, '1' after 3306*tbase, '1' after 3316*tbase, '0' after 3326*tbase, '1' after 3336*tbase; --0b11111111 (Timer interrupt - data) (0xFF)
 
   tb_exp_tx_pin_a <= '1',
     '0' after 1181*tbase, '1' after 1221*tbase, '0' after 1261*tbase, '1' after 1301*tbase, '1' after 1341*tbase, '1' after 1381*tbase, '1' after 1421*tbase, '1' after 1461*tbase, '0' after 1501*tbase, '1' after 1541*tbase, --0b01111101 (0x7D)
-    '0' after 1581*tbase, '1' after 1621*tbase, '0' after 1661*tbase, '0' after 1701*tbase, '0' after 1741*tbase, '1' after 1781*tbase, '0' after 1821*tbase, '1' after 1861*tbase, '0' after 1901*tbase, '1' after 1941*tbase; --0b01010001 (0x51)
+    '0' after 1581*tbase, '1' after 1621*tbase, '0' after 1661*tbase, '0' after 1701*tbase, '0' after 1741*tbase, '1' after 1781*tbase, '0' after 1821*tbase, '1' after 1861*tbase, '0' after 1901*tbase, '1' after 1941*tbase, --0b01010001 (0x51)
+    -- Hello World UART stress test
+    '0' after 3861*tbase, '0' after 3901*tbase, '0' after 3941*tbase, '0' after 3981*tbase, '1' after 4021*tbase, '0' after 4061*tbase, '0' after 4101*tbase, '1' after 4141*tbase, '0' after 4181*tbase, '1' after 4221*tbase, -- 'H' (0x48 = 0b01001000)
+    '0' after 4261*tbase, '1' after 4301*tbase, '0' after 4341*tbase, '0' after 4381*tbase, '0' after 4421*tbase, '0' after 4461*tbase, '1' after 4501*tbase, '1' after 4541*tbase, '0' after 4581*tbase, '1' after 4621*tbase, -- 'a' (0x61 = 0b01100001)  
+    '0' after 4661*tbase, '0' after 4701*tbase, '0' after 4741*tbase, '1' after 4781*tbase, '1' after 4821*tbase, '0' after 4861*tbase, '1' after 4901*tbase, '1' after 4941*tbase, '0' after 4981*tbase, '1' after 5021*tbase, -- 'l' (0x6C = 0b01101100)
+    '0' after 5061*tbase, '0' after 5101*tbase, '0' after 5141*tbase, '1' after 5181*tbase, '1' after 5221*tbase, '0' after 5261*tbase, '1' after 5301*tbase, '1' after 5341*tbase, '0' after 5381*tbase, '1' after 5421*tbase, -- 'l' (0x6C = 0b01101100) 
+    '0' after 5461*tbase, '1' after 5501*tbase, '1' after 5541*tbase, '1' after 5581*tbase, '1' after 5621*tbase, '0' after 5661*tbase, '1' after 5701*tbase, '1' after 5741*tbase, '0' after 5781*tbase, '1' after 5821*tbase, -- 'o' (0x6F = 0b01101111) 
+    '0' after 5861*tbase, '0' after 5901*tbase, '0' after 5941*tbase, '0' after 5981*tbase, '0' after 6021*tbase, '0' after 6061*tbase, '1' after 6101*tbase, '0' after 6141*tbase, '0' after 6181*tbase, '1' after 6221*tbase, -- ' ' (0x20 = 0b00100000)  
+    '0' after 6261*tbase, '1' after 6301*tbase, '1' after 6341*tbase, '1' after 6381*tbase, '0' after 6421*tbase, '1' after 6461*tbase, '0' after 6501*tbase, '1' after 6541*tbase, '0' after 6581*tbase, '1' after 6621*tbase, -- 'W' (0x57 = 0b01010111)
+    '0' after 6661*tbase, '1' after 6701*tbase, '0' after 6741*tbase, '1' after 6781*tbase, '0' after 6821*tbase, '0' after 6861*tbase, '1' after 6901*tbase, '1' after 6941*tbase, '0' after 6981*tbase, '1' after 7021*tbase, -- 'e' (0x65 = 0b01100101)
+    '0' after 7061*tbase, '0' after 7101*tbase, '0' after 7141*tbase, '1' after 7181*tbase, '1' after 7221*tbase, '0' after 7261*tbase, '1' after 7301*tbase, '1' after 7341*tbase, '0' after 7381*tbase, '1' after 7421*tbase, -- 'l' (0x6C = 0b01101100)  
+    '0' after 7461*tbase, '0' after 7501*tbase, '0' after 7541*tbase, '1' after 7581*tbase, '0' after 7621*tbase, '1' after 7661*tbase, '1' after 7701*tbase, '1' after 7741*tbase, '0' after 7781*tbase, '1' after 7821*tbase; -- 't' (0x74 = 0b01110100) 
 
   tb_exp_gpio_pins_out <= "UU", "00" after 1*tbase,
-    "10" after 719*tbase;
+    "10" after 720*tbase;
 
     tb_error <= '0' when 
     (tb_exp_tx_pin_host = tb_tx_pin_host)

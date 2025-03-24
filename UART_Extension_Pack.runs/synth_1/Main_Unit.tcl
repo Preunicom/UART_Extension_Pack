@@ -70,6 +70,9 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
+set_param chipscope.maxJobs 2
+set_param xicom.use_bs_reader 1
+set_msg_config -id {Common 17-41} -limit 10000000
 set_msg_config  -id {Board 49-56}  -string {{CRITICAL WARNING: [Board 49-56] Problem parsing board file - /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/production/1.1/board.xml.
 Resolution: Please contact your board vendor with this message.}}  -suppress 
 set_msg_config  -id {Board 49-56}  -string {{CRITICAL WARNING: [Board 49-56] Problem parsing board file - /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.0/board.xml.

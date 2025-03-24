@@ -164,16 +164,26 @@ architecture Behavioral of Main_Unit is
       WIDTH : integer := 8
     );
     port (
-      control : in  STD_LOGIC_VECTOR(5 downto 0);
-      inp     : in unit_data_array;
-      outp    : out STD_LOGIC_VECTOR(WIDTH - 1 downto 0)
+      clk, rst      : in std_logic;
+      control       : in  STD_LOGIC_VECTOR(5 downto 0);
+      control_valid : in std_logic;
+      inp           : in unit_data_array;
+      outp          : out STD_LOGIC_VECTOR(WIDTH - 1 downto 0);
+      mux_unit_number_out : out std_logic_vector(5 downto 0);
+      outp_valid    : out std_logic
     );
   end component;
   component DEMUX
+    Generic(
+      DATA_BITS : integer := 8
+    );
     Port ( 
+      clk, rst : in std_logic;
       control : in STD_LOGIC_VECTOR (5 downto 0);
-      inp : in STD_LOGIC;
-      outp : out STD_LOGIC_VECTOR(63 downto 0)
+      inp_en : in STD_LOGIC;
+      inp_data : in std_logic_vector(DATA_BITS-1 downto 0);
+      outp_en : out STD_LOGIC_VECTOR(63 downto 0);
+      outp_data : out std_logic_vector(DATA_BITS-1 downto 0)
     );
   end component;
   
@@ -196,6 +206,7 @@ architecture Behavioral of Main_Unit is
 
   -- demux
   signal unit_en : std_logic_vector(63 downto 0);
+  signal unit_data_in : std_logic_vector(HOST_DATA_BITS-1 downto 0);
 
   -- Units
   signal unit_scheduler_wanted : std_logic_vector(63 downto 0) := (others => '0');
@@ -209,22 +220,24 @@ architecture Behavioral of Main_Unit is
 
   -- mux
   signal mux_unit_data_out : std_logic_vector(HOST_DATA_BITS-1 downto 0);
+  signal mux_unit_number_out : std_logic_vector(5 downto 0);
+  signal mux_write_en : std_logic;
   
 begin
   UART_HOST: UART_Unit generic map(FPGA_FREQ, HOST_BAUD, HOST_DATA_BITS, HOST_STOP_BITS, HOST_PARITY_ACTIVE, HOST_PARITY_MODE) port map(clk, rst, host_send_data, host_write_en, host_full, tx_pin_host, host_received_data, host_frame_error, host_parity_error, host_new_data_received, rx_pin_host);
   DECODE: Decoder generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD) port map(clk, rst, host_received_data, host_new_data_received, host_any_uart_error, decode_out_en, decoded_access_mode, decoded_unit_number, decoded_unit_data);
-  EN_DEMUX: DEMUX port map(decoded_unit_number, decode_out_en, unit_en);
+  EN_DEMUX: DEMUX port map(clk, rst, decoded_unit_number, decode_out_en, decoded_unit_data, unit_en, unit_data_in);
 
   ----------------- UNITS -----------------
-  U00_UART: UART_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 250000, 8, 1, 0, 0) port map(clk, rst, unit_en(0), decoded_access_mode, decoded_unit_data, unit_data_out(0), unit_scheduler_wanted(0), unit_scheduler_done(0), tx_pin_a, rx_pin_a);
-  U01_GPIO: GPIO_Wrapper generic map(HOST_DATA_BITS, 1, 2) port map(clk, rst, unit_en(1), decoded_access_mode, decoded_unit_data, unit_data_out(1), unit_scheduler_wanted(1), unit_scheduler_done(1), gpio_pins_in, gpio_pins_out);
-  U02_TIME: Timer_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD) port map(clk, rst, unit_en(2), decoded_access_mode, decoded_unit_data, unit_data_out(2), unit_scheduler_wanted(2), unit_scheduler_done(2));
+  U00_UART: UART_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 250000, 8, 1, 0, 0) port map(clk, rst, unit_en(0), decoded_access_mode, unit_data_in, unit_data_out(0), unit_scheduler_wanted(0), unit_scheduler_done(0), tx_pin_a, rx_pin_a);
+  U01_GPIO: GPIO_Wrapper generic map(HOST_DATA_BITS, 1, 2) port map(clk, rst, unit_en(1), decoded_access_mode, unit_data_in, unit_data_out(1), unit_scheduler_wanted(1), unit_scheduler_done(1), gpio_pins_in, gpio_pins_out);
+  U02_TIME: Timer_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD) port map(clk, rst, unit_en(2), decoded_access_mode, unit_data_in, unit_data_out(2), unit_scheduler_wanted(2), unit_scheduler_done(2));
 
   --------------- UNITS END ---------------
   
   SCHEDULE: PriorityScheduler port map(clk, rst, scheduler_schedule_next, scheduler_write_en, schedule_control_sig, unit_scheduler_wanted, unit_scheduler_done);
-  SCHED_MUX: MUX generic map(HOST_DATA_BITS) port map(schedule_control_sig, unit_data_out, mux_unit_data_out);
-  ENCODE: Encoder generic map(HOST_DATA_BITS) port map(clk, rst, scheduler_write_en, host_empty, schedule_control_sig, mux_unit_data_out, host_send_data, host_write_en, scheduler_schedule_next);
+  SCHED_MUX: MUX generic map(HOST_DATA_BITS) port map(clk, rst, schedule_control_sig, scheduler_write_en, unit_data_out, mux_unit_data_out, mux_unit_number_out, mux_write_en);
+  ENCODE: Encoder generic map(HOST_DATA_BITS) port map(clk, rst, mux_write_en, host_empty, mux_unit_number_out, mux_unit_data_out, host_send_data, host_write_en, scheduler_schedule_next);
 
   host_any_uart_error <= host_frame_error or host_parity_error;
   host_empty <= not host_full;

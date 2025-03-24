@@ -8,17 +8,33 @@ entity MUX is
     WIDTH : integer := 8
   );
   port (
-    control : in  STD_LOGIC_VECTOR(5 downto 0);
-    inp     : in unit_data_array;
-    outp    : out STD_LOGIC_VECTOR(WIDTH - 1 downto 0)
+    clk, rst      : in std_logic;
+    control       : in  STD_LOGIC_VECTOR(5 downto 0);
+    control_valid : in std_logic;
+    inp           : in unit_data_array;
+    outp          : out STD_LOGIC_VECTOR(WIDTH - 1 downto 0);
+    mux_unit_number_out : out std_logic_vector(5 downto 0);
+    outp_valid    : out std_logic
   );
 end entity;
 
 architecture Behavioral of MUX is
 begin
-  MUX: process (control, inp)
+  
+  MUX: process (clk)
   begin
-    outp <= (others => '0');
-    outp <= inp(to_integer(unsigned(control)))(WIDTH-1 downto 0);
+    if rising_edge(clk) then
+      if rst = '1' then
+        -- Clear outputs
+        outp <= (others => '0');
+        mux_unit_number_out <= (others => '0');
+        outp_valid <= '0';
+      else  
+        outp <= (others => '0');
+        outp <= inp(to_integer(unsigned(control)))(WIDTH-1 downto 0);
+        mux_unit_number_out <= control;
+        outp_valid <= control_valid;
+      end if;
+    end if;
   end process;
 end architecture;
