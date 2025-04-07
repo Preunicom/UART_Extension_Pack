@@ -88,7 +88,7 @@ begin
     end if;
   end process;
 
-  EDGE_DETECTION_INPUTS: process(clk)
+  EDGE_DETECTION: process(clk)
   begin
     if rising_edge(clk) then
       if rst = '1' then

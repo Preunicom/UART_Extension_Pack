@@ -17,17 +17,22 @@ In the other direction from ExtPack to host the protocol is nearly the same with
 
 ## Usage
 ### Declare and define units
-Units are declared in the Main_Unit between "UNITS" and "UNITS END".
+Units are declared in the Main_Unit between "CUSTOM UNITS" and "UNITS END".
 the first generic and the first 8 ports are the same for all units.
 Following generics and ports are unit specific.  
-The specific ports have to be additinally declared in the constraints file and in the entity of Main_Unit between "UNIT PORTS" and "UNIT PORTS END". 
+The specific ports have to be additionally declared in the constraints file and in the entity of Main_Unit between "UNIT PORTS" and "UNIT PORTS END". 
 **Note:** The last line before "UNIT PORTS END" must not have a semicolon at the end!
 
 ### Define host communication
 Set the default values of Main_Unit to your specific UART configuration of your host.  
 **Note:** Make sure you have >= 8 data bits for your host communication as well as a BAUD rate less or equal of half your FPGA frequency
 
-## Units
+## Special Units
+### Reset Unit
+The unit zero is the reset unit. This unit tells the host if the ExtPack got reset with the highest possible unit data value.  
+Additionally, it is possible to reset the ExtPack by sending the highest possible unit data value to unit zero.
+
+## Custom Units
 ### UART_Unit
 Can be configured with BAUD rate, data bits, stop bits and parity bit.  
 Needs two pins (rx and tx) of the FPGA.  
