@@ -28,6 +28,8 @@ architecture Behavioral of TB_UART_Wrapper is
       unit_data_out : out std_logic_vector(13 downto 0);
       scheduler_wanted : out std_logic;
       scheduler_done : in std_logic;
+      error_to_host : out std_logic := '0';
+      error_from_host : out std_logic := '0'; 
       TX_pin : out std_logic;
       RX_pin : in std_logic
     );
@@ -41,12 +43,14 @@ architecture Behavioral of TB_UART_Wrapper is
   signal tb_unit_data_out, tb_exp_unit_data_out : STD_LOGIC_VECTOR(13 downto 0);
   signal tb_scheduler_wanted, tb_exp_scheduler_wanted : std_logic;
   signal tb_scheduler_done : std_logic;
+  signal tb_error_to_host, tb_exp_error_to_host : std_logic := '0';
+  signal tb_error_from_host, tb_exp_error_from_host : std_logic := '0'; 
   signal tb_TX_pin, tb_exp_TX_pin : std_logic;
   signal tb_RX_pin : std_logic;
 
   constant tbase : time := 100 ns;
 begin
-  COMP: UART_Wrapper generic map(8, 10000000, 1000000, 8, 1, 0, 0) port map(tb_clk, tb_rst, tb_write_en, tb_access_mode, tb_unit_data_in, tb_unit_data_out, tb_scheduler_wanted, tb_scheduler_done, tb_TX_pin, tb_RX_pin);
+  COMP: UART_Wrapper generic map(8, 10000000, 1000000, 8, 1, 0, 0) port map(tb_clk, tb_rst, tb_write_en, tb_access_mode, tb_unit_data_in, tb_unit_data_out, tb_scheduler_wanted, tb_scheduler_done, tb_error_to_host, tb_error_from_host, tb_TX_pin, tb_RX_pin);
 
   -- 10 MHz
   CLOCK: process
@@ -64,13 +68,17 @@ begin
 
   tb_write_en <= '0',
     '1' after 10*tbase, '0' after 11*tbase,
-    '1' after 100*tbase, '0' after 101*tbase;
+    '1' after 100*tbase, '0' after 101*tbase,
+    '1' after 200*tbase, '0' after 201*tbase,
+    '1' after 210*tbase, '0' after 211*tbase;
 
   tb_access_mode <= "00";
 
   tb_unit_data_in <= "00000000",
     "11000011" after 10*tbase, -- 0xC3
-    "11001111" after 100*tbase; -- 0xCF
+    "11001111" after 100*tbase, -- 0xCF
+    "00001111" after 200*tbase, --0x0F
+    "11000011" after 210*tbase; --0xC3
 
   tb_exp_TX_pin <= '1',
     '0' after 26*tbase,
@@ -80,7 +88,11 @@ begin
     '0' after 126*tbase,
     '1' after 136*tbase,
     '0' after 176*tbase,
-    '1' after 196*tbase; -- END 0xCF
+    '1' after 196*tbase, -- END 0xCF
+    '0' after 226*tbase,
+    '1' after 236*tbase,
+    '0' after 276*tbase,
+    '1' after 316*tbase; -- END 0x0F
 
   tb_scheduler_done <= '0',
     '1' after 120.5*tbase, '0' after 122*tbase,
@@ -103,10 +115,18 @@ begin
   tb_exp_scheduler_wanted <= 'U', '0' after 1*tbase,
     '1' after 102*tbase, '0' after 121*tbase,
     '1' after 247*tbase, '0' after 301*tbase;
+
+  tb_exp_error_to_host <= '0',
+    '1' after 397*tbase, '0' after 398*tbase;
+
+  tb_exp_error_from_host <= '0',
+    '1' after 212*tbase, '0' after 213*tbase;
  
   tb_error <= '0' when 
     (tb_exp_unit_data_out = tb_unit_data_out)
     and (tb_exp_scheduler_wanted = tb_scheduler_wanted)
-    and (tb_exp_TX_pin = tb_TX_pin) else '1';
+    and (tb_exp_TX_pin = tb_TX_pin) 
+    and (tb_exp_error_to_host = tb_error_to_host)
+    and (tb_exp_error_from_host = tb_error_from_host) else '1';
 
 end Behavioral;

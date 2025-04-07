@@ -17,6 +17,8 @@ entity GPIO_Wrapper is
     unit_data_out : out STD_LOGIC_VECTOR(13 downto 0);
     scheduler_wanted : out std_logic;
     scheduler_done : in std_logic;
+    error_to_host : out std_logic := '0'; -- unused
+    error_from_host : out std_logic := '0'; -- unused
     gpio_data_in : in STD_LOGIC_VECTOR (IN_PINS-1 downto 0);
     gpio_data_out : out STD_LOGIC_VECTOR (OUT_PINS-1 downto 0)
   );
@@ -88,7 +90,7 @@ begin
     end if;
   end process;
 
-  EDGE_DETECTION_INPUTS: process(clk)
+  EDGE_DETECTION: process(clk)
   begin
     if rising_edge(clk) then
       if rst = '1' then

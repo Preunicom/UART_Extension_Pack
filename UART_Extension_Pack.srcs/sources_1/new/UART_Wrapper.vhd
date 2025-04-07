@@ -21,6 +21,8 @@ entity UART_Wrapper is
     unit_data_out : out std_logic_vector(13 downto 0);
     scheduler_wanted : out std_logic;
     scheduler_done : in std_logic;
+    error_to_host : out std_logic := '0';
+    error_from_host : out std_logic := '0';
     TX_pin : out std_logic;
     RX_pin : in std_logic
   );
@@ -59,6 +61,9 @@ architecture Behavioral of UART_Wrapper is
   signal last_uart_received_valid : std_logic;
   signal frame_error, parity_error : std_logic;
   signal last_scheduler_done : std_logic := '0';
+  signal scheduling_active : std_logic := '0';
+  signal last_write_en_invalid : std_logic := '0';
+  signal data_in_queue_to_send : std_logic := '0';
 
   -- Not more than 14 data bits possible with UART_Unit
   signal unit_data_in_buffer : std_logic_vector(13 downto 0) := (others => '0'); -- Extends smaller UART data vector with zeros
@@ -72,16 +77,31 @@ begin
       if rst = '1' then
         unit_data_in_buffer <= (others => '0');
         write_en_int <= '0';
+        last_write_en_invalid <= '0';
+        error_from_host <= '0';
+        data_in_queue_to_send <= '0';
       else
+        last_write_en_invalid <= '0';
+        error_from_host <= '0';
         if write_en = '1' and write_en_last = '0' then
           -- new data for UART_Unit
           write_en_int <= '1';
           -- Sync unit_data_in_buffer to match write_en_int
           unit_data_in_buffer(HOST_DATA_BITS-1 downto 0)  <= unit_data_in;
+          data_in_queue_to_send <= '1';
         end if;
-        if (full_int = '1' and full_int_last = '0') or write_en = '0' then
+        if (full_int_last = '0' and full_int = '1') or write_en = '0' then
           -- current data read from UART_Unit or current data is invalid
           write_en_int <= '0';
+          data_in_queue_to_send <= '0';
+          if data_in_queue_to_send = '1' and not(full_int_last = '0' and full_int = '1') then
+            -- Waiting data got invalid and not processed in this clock cycle
+            last_write_en_invalid <= '1';
+          end if;
+          if last_write_en_invalid = '1' and not(full_int_last = '0' and full_int = '1') then
+          --  Data got invalid and not processed in this and last clock cycle --> Data got lost --> error
+          error_from_host <= '1';
+        end if;
         end if;
       end if;
     end if;
@@ -93,17 +113,31 @@ begin
       if rst = '1' then 
         scheduler_wanted <= '0';
         unit_data_out <= (others => '0');
+        scheduling_active <= '0';
+        error_to_host <= '0';
       else
+        error_to_host <= '0';
         if last_scheduler_done = '0' and scheduler_done = '1' then
           -- scheduling finished --> resets request at scheduler
           -- Ignoring uart_received_valid in if because there are only valid values from UART Deserializer Buffer if there was once one.
           -- reset scheduler_wanted
           scheduler_wanted <= '0';
           unit_data_out <= (others => '0');
-        elsif last_uart_received_valid = '0' and uart_received_valid = '1' and frame_error = '0' and parity_error = '0' then  
-          -- Schedule current UART package
-          scheduler_wanted <= '1';
-          unit_data_out <= unit_data_out_buffer;
+          scheduling_active <= '0';
+        elsif last_uart_received_valid = '0' and uart_received_valid = '1' then  
+          if frame_error = '0' and parity_error = '0' then
+            -- Schedule current UART package
+            if scheduling_active = '1' then
+              -- Overwriting last received UART package -> Error
+              error_to_host <= '1';
+            end if;
+            scheduler_wanted <= '1';
+            unit_data_out <= unit_data_out_buffer;
+            scheduling_active <= '1';
+          else
+            -- UART error
+            error_to_host <= '1';
+          end if;
         end if;
       end if;
     end if;
