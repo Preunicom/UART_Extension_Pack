@@ -15,6 +15,7 @@ entity Decoder is
     uart_inp_valid : in std_logic;
     uart_error : in std_logic;
     out_en : out std_logic;
+    recv_error : out std_logic;
     access_mode : out std_logic_vector(1 downto 0);
     unit_number : out std_logic_vector(5 downto 0); 
     unit_data : out std_logic_vector(DATA_BITS-1 downto 0)
@@ -49,6 +50,7 @@ begin
       else 
         -- Set default values
         out_en <= '0';
+        recv_error <= '0';
         counter_rst <= '0';
         case state is 
           when S0 => -- no data received, waiting for unit number and access mode
@@ -70,6 +72,7 @@ begin
               state <= S0;
               -- enable output if no uart error exists and set output data
               out_en <= not (uart_error_S1 or uart_error);
+              recv_error <= (uart_error_S1 or uart_error);
               access_mode <= unit_number_data(7 downto 6);
               unit_number <= unit_number_data(5 downto 0);
               unit_data <= uart_inp;

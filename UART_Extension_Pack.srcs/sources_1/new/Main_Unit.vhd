@@ -75,6 +75,8 @@ architecture Behavioral of Main_Unit is
       unit_data_out : out std_logic_vector(13 downto 0);
       scheduler_wanted : out std_logic;
       scheduler_done : in std_logic;
+      error_to_host : out std_logic := '0'; -- unused
+      error_from_host : out std_logic := '0'; -- unused
       TX_pin : out std_logic;
       RX_pin : in std_logic
     );
@@ -95,6 +97,8 @@ architecture Behavioral of Main_Unit is
       unit_data_out : out STD_LOGIC_VECTOR(13 downto 0);
       scheduler_wanted : out std_logic;
       scheduler_done : in std_logic;
+      error_to_host : out std_logic := '0'; -- unused
+      error_from_host : out std_logic := '0'; -- unused
       gpio_data_in : in STD_LOGIC_VECTOR (IN_PINS-1 downto 0);
       gpio_data_out : out STD_LOGIC_VECTOR (OUT_PINS-1 downto 0)
     );
@@ -112,7 +116,9 @@ architecture Behavioral of Main_Unit is
       unit_data_in     : in  STD_LOGIC_VECTOR(HOST_DATA_BITS - 1 downto 0);
       unit_data_out    : out STD_LOGIC_VECTOR(13 downto 0);
       scheduler_wanted : out std_logic;
-      scheduler_done   : in  std_logic
+      scheduler_done   : in  std_logic;
+      error_to_host : out std_logic := '0'; -- unused
+      error_from_host : out std_logic := '0' -- unused
     );
   end component;
   component Reset_Unit
@@ -127,7 +133,28 @@ architecture Behavioral of Main_Unit is
       unit_data_out : out std_logic_vector(13 downto 0); 
       scheduler_wanted : out std_logic; 
       scheduler_done : in std_logic;
+      error_to_host : out std_logic := '0'; -- unused
+      error_from_host : out std_logic := '0'; -- unused
       rst_ext_pack : out std_logic := '0'
+    );
+  end component;
+  component Error_Unit
+    Generic (
+      HOST_DATA_BITS : integer := 8
+    );
+    Port ( 
+      clk, rst : in STD_LOGIC;
+      write_en : in std_logic; -- unused
+      access_mode : in std_logic_vector(1 downto 0); -- unused
+      unit_data_in : in std_logic_vector(HOST_DATA_BITS-1 downto 0); -- unused
+      unit_data_out : out std_logic_vector(13 downto 0);
+      scheduler_wanted : out std_logic;
+      scheduler_done : in std_logic;
+      error_to_host : out std_logic := '0'; -- unused
+      error_from_host : out std_logic := '0'; -- unused
+      units_error_to_host : in std_logic_vector(63 downto 0);
+      decoder_error : in std_logic;
+      units_error_from_host : in std_logic_vector(63 downto 0)
     );
   end component;
   component Decoder
@@ -143,6 +170,7 @@ architecture Behavioral of Main_Unit is
       uart_inp_valid : in std_logic;
       uart_error : in std_logic;
       out_en : out std_logic;
+      recv_error : out std_logic;
       access_mode : out std_logic_vector(1 downto 0);
       unit_number : out std_logic_vector(5 downto 0); 
       unit_data : out std_logic_vector(DATA_BITS-1 downto 0)
@@ -232,6 +260,11 @@ architecture Behavioral of Main_Unit is
   signal rst_unit : std_logic := '0';
   signal rst_ext_pack : std_logic := '0';
 
+  -- Error Unit
+  signal decoder_recv_error : std_logic := '0';
+  signal error_to_host : std_logic_vector(63 downto 0) := (others => '0');
+  signal error_from_host : std_logic_vector(63 downto 0) := (others => '0');
+
   -- scheduler
   signal schedule_control_sig : std_logic_vector(5 downto 0);
   signal scheduler_write_en : std_logic := '0';
@@ -244,16 +277,16 @@ architecture Behavioral of Main_Unit is
   
 begin
   UART_HOST: UART_Unit generic map(FPGA_FREQ, HOST_BAUD, HOST_DATA_BITS, HOST_STOP_BITS, HOST_PARITY_ACTIVE, HOST_PARITY_MODE) port map(clk, rst_ext_pack, host_send_data, host_write_en, host_full, tx_pin_host, host_received_data, host_frame_error, host_parity_error, host_new_data_received, rx_pin_host);
-  DECODE: Decoder generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD) port map(clk, rst_ext_pack, host_received_data, host_new_data_received, host_any_uart_error, decode_out_en, decoded_access_mode, decoded_unit_number, decoded_unit_data);
+  DECODE: Decoder generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD) port map(clk, rst_ext_pack, host_received_data, host_new_data_received, host_any_uart_error, decode_out_en, decoder_recv_error, decoded_access_mode, decoded_unit_number, decoded_unit_data);
   EN_DEMUX: DEMUX port map(clk, rst_ext_pack, decoded_unit_number, decode_out_en, decoded_unit_data, unit_en, unit_data_in);
 
   ------------- SPECIAL UNITS -------------
-  U00_RST: Reset_Unit generic map(HOST_DATA_BITS) port map(clk, rst_ext_pack, unit_en(0), decoded_access_mode, unit_data_in, unit_data_out(0), unit_scheduler_wanted(0), unit_scheduler_done(0), rst_unit);
-
+  U00_RST: Reset_Unit generic map(HOST_DATA_BITS) port map(clk, rst_ext_pack, unit_en(0), decoded_access_mode, unit_data_in, unit_data_out(0), unit_scheduler_wanted(0), unit_scheduler_done(0), error_to_host(0), error_from_host(0), rst_unit);
+  U01_ERR: Error_Unit generic map(HOST_DATA_BITS) port map(clk, rst_ext_pack, unit_en(1), decoded_access_mode, unit_data_in, unit_data_out(1), unit_scheduler_wanted(1), unit_scheduler_done(1), error_to_host(1), error_from_host(1), error_to_host, decoder_recv_error, error_from_host);
   ------------- CUSTOM UNITS --------------
-  U02_UART: UART_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 250000, 8, 1, 0, 0) port map(clk, rst_ext_pack, unit_en(2), decoded_access_mode, unit_data_in, unit_data_out(2), unit_scheduler_wanted(2), unit_scheduler_done(2), tx_pin_a, rx_pin_a);
-  U03_GPIO: GPIO_Wrapper generic map(HOST_DATA_BITS, 1, 2) port map(clk, rst_ext_pack, unit_en(3), decoded_access_mode, unit_data_in, unit_data_out(3), unit_scheduler_wanted(3), unit_scheduler_done(3), gpio_pins_in, gpio_pins_out);
-  U04_TIME: Timer_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD) port map(clk, rst_ext_pack, unit_en(4), decoded_access_mode, unit_data_in, unit_data_out(4), unit_scheduler_wanted(4), unit_scheduler_done(4));
+  U02_UART: UART_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 250000, 8, 1, 0, 0) port map(clk, rst_ext_pack, unit_en(2), decoded_access_mode, unit_data_in, unit_data_out(2), unit_scheduler_wanted(2), unit_scheduler_done(2), error_to_host(2), error_from_host(2), tx_pin_a, rx_pin_a);
+  U03_GPIO: GPIO_Wrapper generic map(HOST_DATA_BITS, 1, 2) port map(clk, rst_ext_pack, unit_en(3), decoded_access_mode, unit_data_in, unit_data_out(3), unit_scheduler_wanted(3), unit_scheduler_done(3), error_to_host(3), error_from_host(3), gpio_pins_in, gpio_pins_out);
+  U04_TIME: Timer_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD) port map(clk, rst_ext_pack, unit_en(4), decoded_access_mode, unit_data_in, unit_data_out(4), unit_scheduler_wanted(4), unit_scheduler_done(4), error_to_host(4), error_from_host(4));
 
   -------------- UNITS END ----------------
   

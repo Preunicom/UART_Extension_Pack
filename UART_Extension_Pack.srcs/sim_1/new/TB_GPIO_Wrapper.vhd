@@ -24,6 +24,8 @@ architecture Behavioral of TB_GPIO_Wrapper is
       unit_data_out : out STD_LOGIC_VECTOR(13 downto 0);
       scheduler_wanted : out std_logic;
       scheduler_done : in std_logic;
+      error_to_host : out std_logic := '0';
+      error_from_host : out std_logic := '0';
       gpio_data_in : in STD_LOGIC_VECTOR (IN_PINS-1 downto 0);
       gpio_data_out : out STD_LOGIC_VECTOR (OUT_PINS-1 downto 0)
     );
@@ -37,12 +39,14 @@ architecture Behavioral of TB_GPIO_Wrapper is
   signal tb_unit_data_out, tb_exp_unit_data_out : STD_LOGIC_VECTOR(13 downto 0);
   signal tb_scheduler_wanted, tb_exp_scheduler_wanted : std_logic;
   signal tb_scheduler_done : std_logic;
+  signal tb_error_to_host, tb_exp_error_to_host : std_logic := '0';
+  signal tb_error_from_host, tb_exp_error_from_host : std_logic := '0'; 
   signal tb_gpio_data_in : STD_LOGIC_VECTOR (0 downto 0);
   signal tb_gpio_data_out, tb_exp_gpio_data_out : STD_LOGIC_VECTOR (0 downto 0);
 
   constant tbase : time := 100 ns;
 begin
-  COMP: GPIO_Wrapper generic map(8, 1, 1) port map(tb_clk, tb_rst, tb_write_en, tb_access_mode, tb_unit_data_in, tb_unit_data_out, tb_scheduler_wanted, tb_scheduler_done, tb_gpio_data_in, tb_gpio_data_out);
+  COMP: GPIO_Wrapper generic map(8, 1, 1) port map(tb_clk, tb_rst, tb_write_en, tb_access_mode, tb_unit_data_in, tb_unit_data_out, tb_scheduler_wanted, tb_scheduler_done, tb_error_to_host, tb_error_from_host, tb_gpio_data_in, tb_gpio_data_out);
 
   -- 10 MHz
   CLOCK: process
@@ -89,6 +93,10 @@ begin
   tb_exp_scheduler_wanted <= 'U', '0' after 1*tbase,
     '1' after 7*tbase, '0' after 10*tbase,
     '1' after 22*tbase, '0' after 34*tbase;
+  
+  tb_exp_error_to_host <= '0';
+
+  tb_exp_error_from_host <= '0';
 
   -- one clock cycle delayed because of GPIO Bank Unit register (only for interrupts)
   tb_exp_gpio_data_out <= "U", "0" after 1*tbase,
@@ -98,6 +106,8 @@ begin
   tb_error <= '0' when 
     (tb_exp_unit_data_out = tb_unit_data_out)
     and (tb_exp_scheduler_wanted = tb_scheduler_wanted)
-    and (tb_exp_gpio_data_out = tb_gpio_data_out) else '1';
+    and (tb_exp_gpio_data_out = tb_gpio_data_out) 
+    and (tb_exp_error_to_host = tb_error_to_host)
+    and (tb_exp_error_from_host = tb_error_from_host) else '1';
 
 end Behavioral;

@@ -21,7 +21,9 @@ architecture Behavioral of TB_Timer_Wrapper is
       unit_data_in     : in  STD_LOGIC_VECTOR(HOST_DATA_BITS - 1 downto 0);
       unit_data_out    : out STD_LOGIC_VECTOR(13 downto 0);
       scheduler_wanted : out std_logic;
-      scheduler_done   : in  std_logic
+      scheduler_done   : in  std_logic;
+      error_to_host    : out std_logic := '0';
+      error_from_host  : out std_logic := '0'
     );
   end component;
   signal tb_clk : STD_LOGIC;
@@ -33,10 +35,12 @@ architecture Behavioral of TB_Timer_Wrapper is
   signal tb_unit_data_out, tb_exp_unit_data_out       : STD_LOGIC_VECTOR(13 downto 0);
   signal tb_scheduler_wanted, tb_exp_scheduler_wanted : std_logic;
   signal tb_scheduler_done                            : std_logic;
+  signal tb_error_to_host, tb_exp_error_to_host       : std_logic := '0';
+  signal tb_error_from_host, tb_exp_error_from_host   : std_logic := '0'; 
 
   constant tbase : time := 100 ns;
 begin
-  COMP: Timer_Wrapper generic map(8, 10000000, 1000000) port map(tb_clk, tb_rst, tb_write_en, tb_access_mode, tb_unit_data_in, tb_unit_data_out, tb_scheduler_wanted, tb_scheduler_done);
+  COMP: Timer_Wrapper generic map(8, 10000000, 1000000) port map(tb_clk, tb_rst, tb_write_en, tb_access_mode, tb_unit_data_in, tb_unit_data_out, tb_scheduler_wanted, tb_scheduler_done, tb_error_to_host, tb_error_from_host);
 
   -- 10 MHz
   CLOCK: process
@@ -112,9 +116,15 @@ begin
     '1' after 2902*tbase, '0' after 2991*tbase,
     '1' after 3302*tbase, '0' after 3391*tbase,
     '1' after 3702*tbase, '0' after 3791*tbase;
+  
+  tb_exp_error_to_host <= '0';
+
+  tb_exp_error_from_host <= '0';
  
   tb_error <= '0' when 
     (tb_exp_unit_data_out = tb_unit_data_out)
-    and (tb_exp_scheduler_wanted = tb_scheduler_wanted) else '1';
+    and (tb_exp_scheduler_wanted = tb_scheduler_wanted) 
+    and (tb_exp_error_to_host = tb_error_to_host)
+    and (tb_exp_error_from_host = tb_error_from_host) else '1';
 
 end architecture;

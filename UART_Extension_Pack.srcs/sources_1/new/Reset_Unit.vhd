@@ -13,6 +13,8 @@ entity Reset_Unit is
     unit_data_out : out std_logic_vector(13 downto 0); 
     scheduler_wanted : out std_logic; 
     scheduler_done : in std_logic;
+    error_to_host : out std_logic := '0'; -- unused
+    error_from_host : out std_logic := '0'; -- unused
     rst_ext_pack : out std_logic := '0'
   );
 end Reset_Unit;
@@ -24,7 +26,7 @@ architecture Behavioral of Reset_Unit is
   signal rst_triggered : std_logic := '1';
 begin
 
-  GET_RST: process(clk)
+  SET_RST: process(clk)
   begin
     if rising_edge(clk) then
       if rst = '1' then
@@ -42,7 +44,7 @@ begin
     end if;
   end process;
 
-  INPUTS: process(clk)
+  GET_RST: process(clk)
   begin
     if rising_edge(clk) then
       if rst ='1' then

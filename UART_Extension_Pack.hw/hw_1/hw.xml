@@ -15,7 +15,7 @@
       <Properties Property="PROGRAM.ERASE" value="1"/>
       <Properties Property="PROGRAM.FILES" value="$_project_name_.runs/impl_1/Main_Unit.bin"/>
       <Properties Property="PROGRAM.PRM_FILE" value=""/>
-      <Properties Property="PROGRAM.UNUSED_PIN_TERMINATION" value="pull-none"/>
+      <Properties Property="PROGRAM.UNUSED_PIN_TERMINATION" value="pull-up"/>
       <Properties Property="PROGRAM.VERIFY" value="1"/>
     </Object>
   </ObjectList>
