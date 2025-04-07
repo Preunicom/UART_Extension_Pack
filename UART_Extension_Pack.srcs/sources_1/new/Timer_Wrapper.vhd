@@ -15,7 +15,9 @@ entity Timer_Wrapper is
     unit_data_in     : in  STD_LOGIC_VECTOR(HOST_DATA_BITS - 1 downto 0);
     unit_data_out    : out STD_LOGIC_VECTOR(13 downto 0);
     scheduler_wanted : out std_logic;
-    scheduler_done   : in  std_logic
+    scheduler_done   : in  std_logic;
+    error_to_host : out std_logic := '0';
+    error_from_host : out std_logic := '0' -- unused
   );
 end entity;
 
@@ -46,6 +48,7 @@ architecture Behavioral of Timer_Wrapper is
   signal clk_prescaled_intern         : std_logic := '0';
   signal prescale_counter             : integer := 1;
   signal last_scheduler_done          : std_logic := '0';
+  signal scheduling_active            : std_logic := '0';
 begin
   TIMER: Timer_Unit generic map (HOST_DATA_BITS) port map (clk_prescaled_intern, rst, timer_active_int, prescale_factor_write_en_int, prescaled_factor_int, start_value_write_en_int, start_value_int, restart_timer_int, is_timer_end_int);
 
@@ -116,16 +119,25 @@ begin
       if rst = '1' then
         scheduler_wanted <= '0';
         unit_data_out <= (others => '0');
+        scheduling_active <= '0';
+        error_to_host <= '0';
       else
+        error_to_host <= '0';
         if last_scheduler_done = '0' and scheduler_done = '1' then
           -- scheduling finished --> resets request at scheduler
           scheduler_wanted <= '0';
           unit_data_out <= (others => '0');
+          scheduling_active <= '0';
         end if;
         if last_is_timer_end_int = '0' and is_timer_end_int = '1' then
           -- Schedule current interrupt
+          if scheduling_active = '1' then
+            -- Overwriting last timer interrupt -> Error
+            error_to_host <= '1';
+          end if;
           scheduler_wanted <= '1';
           unit_data_out <= (others => '1');
+          scheduling_active <= '1';
         end if;
       end if;
     end if;
