@@ -29,7 +29,11 @@ architecture TESTBENCH of TB_Main_Unit is
       tx_pin_a : out std_logic;
       rx_pin_a : in std_logic;
       gpio_pins_in : in STD_LOGIC_VECTOR (0 downto 0);
-      gpio_pins_out : out STD_LOGIC_VECTOR (1 downto 0)
+      gpio_pins_out : out STD_LOGIC_VECTOR (1 downto 0);
+      spi_sck : out std_logic;
+      spi_cs : out std_logic_vector(0 downto 0);
+      spi_mosi : out std_logic;
+      spi_miso : in std_logic
       
       --------------- UNIT PORTS END ---------------
     );
@@ -43,15 +47,19 @@ architecture TESTBENCH of TB_Main_Unit is
   signal tb_rx_pin_a : std_logic;
   signal tb_gpio_pins_in : std_logic_vector(0 downto 0);
   signal tb_gpio_pins_out, tb_exp_gpio_pins_out : std_logic_vector(1 downto 0);
+  signal tb_spi_sck, tb_exp_spi_sck : std_logic;
+  signal tb_spi_cs, tb_exp_spi_cs : std_logic_vector(0 downto 0);
+  signal tb_spi_mosi, tb_exp_spi_mosi : std_logic;
+  signal tb_spi_miso : std_logic;
 
   constant tbase : time := 100 ns;
 begin
-  MU: Main_Unit generic map(10000000, 1000000, 8, 1, 1, 0) port map(tb_clk, tb_rst, tb_tx_pin_host, tb_rx_pin_host, tb_tx_pin_a, tb_rx_pin_a, tb_gpio_pins_in, tb_gpio_pins_out);
+  MU: Main_Unit generic map(10000000, 1000000, 8, 1, 1, 0) port map(tb_clk, tb_rst, tb_tx_pin_host, tb_rx_pin_host, tb_tx_pin_a, tb_rx_pin_a, tb_gpio_pins_in, tb_gpio_pins_out, tb_spi_sck, tb_spi_cs, tb_spi_mosi, tb_spi_miso);
   
   -- 10 MHz
   CLOCK: process
   begin
-    for i in 10000 downto 0 loop
+    for i in 20000 downto 0 loop
       tb_clk <= '1';
       wait for tbase/2;
       tb_clk <= '0';
@@ -112,7 +120,10 @@ begin
     -- Hello World UART stress test END
     -- RESET Unit test
     '0' after 8000*tbase, '0' after 8010*tbase, '0' after 8020*tbase, '0' after 8030*tbase, '0' after 8040*tbase, '0' after 8050*tbase, '0' after 8060*tbase, '0' after 8070*tbase, '0' after 8080*tbase, '0' after 8090*tbase, '1' after 8100*tbase, -- 0x00 (0b00000000)
-    '0' after 8110*tbase, '1' after 8120*tbase, '1' after 8130*tbase, '1' after 8140*tbase, '1' after 8150*tbase, '1' after 8160*tbase, '1' after 8170*tbase, '1' after 8180*tbase, '1' after 8190*tbase, '0' after 8200*tbase, '1' after 8210*tbase; -- 0xFF = 0b11111111
+    '0' after 8110*tbase, '1' after 8120*tbase, '1' after 8130*tbase, '1' after 8140*tbase, '1' after 8150*tbase, '1' after 8160*tbase, '1' after 8170*tbase, '1' after 8180*tbase, '1' after 8190*tbase, '0' after 8200*tbase, '1' after 8210*tbase, -- 0xFF = 0b11111111
+    -- SPI test
+    '0' after 8300*tbase, '1' after 8310*tbase, '0' after 8320*tbase, '1' after 8330*tbase, '0' after 8340*tbase, '0' after 8350*tbase, '0' after 8360*tbase, '0' after 8370*tbase, '0' after 8380*tbase, '0' after 8390*tbase, '1' after 8400*tbase, -- 0x00 (0b00000000)
+    '0' after 8410*tbase, '1' after 8420*tbase, '0' after 8430*tbase, '1' after 8440*tbase, '0' after 8450*tbase, '0' after 8460*tbase, '1' after 8470*tbase, '0' after 8480*tbase, '1' after 8490*tbase, '0' after 8500*tbase, '1' after 8510*tbase; -- 0xFF = 0b10100101
   
   tb_rx_pin_a <= '1',
     '0' after 100*tbase, '0' after 140*tbase, '0' after 180*tbase, '0' after 220*tbase, '0' after 260*tbase, '1' after 300*tbase, '0' after 340*tbase, '0' after 380*tbase, '0' after 420*tbase, '1' after 460*tbase; --0b00010000
@@ -120,6 +131,9 @@ begin
   tb_gpio_pins_in <= "0",
     "1" after 500*tbase,
     "0" after 1100*tbase;
+
+  tb_spi_miso <= '0',
+    '0' after 8521*tbase, '0' after 9563*tbase, '1' after 10605*tbase, '1' after 11647*tbase, '0' after 12689*tbase, '0' after 13731*tbase, '0' after 14773*tbase, '0' after 15815*tbase; --0x30;
 
   tb_exp_tx_pin_host <= '1',
     '0' after 26*tbase, '0' after 36*tbase, '0' after 46*tbase, '0' after 56*tbase, '0' after 66*tbase, '0' after 76*tbase, '0' after 86*tbase, '0' after 96*tbase, '0' after 106*tbase, '0' after 116*tbase, '1' after 126*tbase, --0b00000000 (reset Unit - was reseted - unit)
@@ -135,7 +149,9 @@ begin
     '0' after 3126*tbase, '0' after 3136*tbase, '0' after 3146*tbase, '1' after 3156*tbase, '0' after 3166*tbase, '0' after 3176*tbase, '0' after 3186*tbase, '0' after 3186*tbase, '0' after 3206*tbase, '1' after 3216*tbase, '1' after 3226*tbase, --0b00000100 (Timer interrupt - unit) (0x04)
     '0' after 3236*tbase, '1' after 3246*tbase, '1' after 3256*tbase, '1' after 3266*tbase, '1' after 3276*tbase, '1' after 3286*tbase, '1' after 3296*tbase, '1' after 3306*tbase, '1' after 3316*tbase, '0' after 3326*tbase, '1' after 3336*tbase, --0b11111111 (Timer interrupt - data) (0xFF)
     '0' after 8245*tbase, '0' after 8255*tbase, '0' after 8265*tbase, '0' after 8275*tbase, '0' after 8285*tbase, '0' after 8295*tbase, '0' after 8305*tbase, '0' after 8315*tbase, '0' after 8325*tbase, '0' after 8335*tbase, '1' after 8345*tbase, --0b00000000 (Reset unit - unit) (0x00)
-    '0' after 8355*tbase, '1' after 8365*tbase, '1' after 8375*tbase, '1' after 8385*tbase, '1' after 8395*tbase, '1' after 8405*tbase, '1' after 8415*tbase, '1' after 8425*tbase, '1' after 8435*tbase, '0' after 8445*tbase, '1' after 8455*tbase; --0b11111111 (Reset unit - data) (0xFF)
+    '0' after 8355*tbase, '1' after 8365*tbase, '1' after 8375*tbase, '1' after 8385*tbase, '1' after 8395*tbase, '1' after 8405*tbase, '1' after 8415*tbase, '1' after 8425*tbase, '1' after 8435*tbase, '0' after 8445*tbase, '1' after 8455*tbase, --0b11111111 (Reset unit - data) (0xFF)
+    '0' after 16355*tbase, '1' after 16365*tbase, '0' after 16375*tbase, '1' after 16385*tbase, '0' after 16395*tbase, '0' after 16405*tbase, '0' after 16415*tbase, '0' after 16425*tbase, '0' after 16435*tbase, '0' after 16445*tbase, '1' after 16455*tbase, --0b00000101 (SPI unit - unit) (0x05)
+    '0' after 16465*tbase, '0' after 16475*tbase, '0' after 16485*tbase, '0' after 16495*tbase, '0' after 16505*tbase, '1' after 16515*tbase, '1' after 16525*tbase, '0' after 16535*tbase, '0' after 16545*tbase, '0' after 16555*tbase, '1' after 16565*tbase; --0b00110000 (SPI unit - data) (0x30)
 
   tb_exp_tx_pin_a <= '1',
     '0' after 1181*tbase, '1' after 1221*tbase, '0' after 1261*tbase, '1' after 1301*tbase, '1' after 1341*tbase, '1' after 1381*tbase, '1' after 1421*tbase, '1' after 1461*tbase, '0' after 1501*tbase, '1' after 1541*tbase, --0b01111101 (0x7D)
@@ -156,9 +172,28 @@ begin
     "10" after 720*tbase,
     "00" after 8220*tbase;
 
-    tb_error <= '0' when 
+  tb_exp_spi_sck <= '0',
+    '1' after 9042*tbase, '0' after 9563*tbase, 
+    '1' after 10084*tbase, '0' after 10605*tbase, 
+    '1' after 11126*tbase, '0' after 11647*tbase, 
+    '1' after 12168*tbase, '0' after 12689*tbase, 
+    '1' after 13210*tbase, '0' after 13731*tbase, 
+    '1' after 14252*tbase, '0' after 14773*tbase, 
+    '1' after 15294*tbase, '0' after 15815*tbase, 
+    '1' after 16336*tbase, '0' after 16857*tbase;
+
+  tb_exp_spi_cs <= "1",
+    "0" after 8521*tbase, "1" after 16860*tbase;
+
+  tb_exp_spi_mosi <= '0',
+    '1' after 8521*tbase, '0' after 9563*tbase, '1' after 10605*tbase, '0' after 11647*tbase, '0' after 12689*tbase, '1' after 13731*tbase, '0' after 14773*tbase, '1' after 15815*tbase, '0' after 16857*tbase;
+
+  tb_error <= '0' when 
     (tb_exp_tx_pin_host = tb_tx_pin_host)
     and (tb_exp_tx_pin_a = tb_tx_pin_a)
-    and (tb_exp_gpio_pins_out = tb_gpio_pins_out) else '1';
+    and (tb_exp_gpio_pins_out = tb_gpio_pins_out) 
+    and (tb_exp_spi_sck = tb_spi_sck)
+    and (tb_exp_spi_cs = tb_spi_cs)
+    and (tb_exp_spi_mosi = tb_spi_mosi) else '1';
 
 end TESTBENCH;

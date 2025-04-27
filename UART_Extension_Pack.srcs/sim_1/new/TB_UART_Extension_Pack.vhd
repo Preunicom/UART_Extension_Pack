@@ -48,6 +48,16 @@ architecture TESTBENCH of TB_UART_Extension_Pack is
       signal tb_error : out std_logic
     );
   end component;
+  component TB_SPI_Wrapper
+    Port(
+      signal tb_error : out std_logic
+    );
+  end component;
+  component TB_SPI_Module
+    Port(
+      signal tb_error : out std_logic
+    );
+  end component;
   component TB_Reset_Unit
     Port(
       signal tb_error : out std_logic
@@ -65,6 +75,8 @@ architecture TESTBENCH of TB_UART_Extension_Pack is
   signal tb_error_TB_UART_Wrapper : std_logic;
   signal tb_error_TB_GPIO_Wrapper : std_logic;
   signal tb_error_TB_Timer_Wrapper : std_logic;
+  signal tb_error_TB_SPI_Wrapper : std_logic;
+  signal tb_error_TB_SPI_Module : std_logic;
   signal tb_error_TB_UART_Module : std_logic;
   signal tb_error_TB_Reset_Unit : std_logic;
   signal tb_error_TB_Error_Unit : std_logic;
@@ -76,6 +88,8 @@ begin
   UART_Wrapper: TB_UART_Wrapper port map(tb_error_TB_UART_Wrapper);
   GPIO_Wrapper: TB_GPIO_Wrapper port map(tb_error_TB_GPIO_Wrapper);
   Timer_Wrapper: TB_Timer_Wrapper port map(tb_error_TB_Timer_Wrapper);
+  SPI_Wrapper: TB_SPI_Wrapper port map(tb_error_TB_SPI_Wrapper);
+  SPI_MODULE: TB_SPI_Module port map(tb_error_TB_SPI_Module);
   UART_Module: TB_UART_Module port map(tb_error_TB_UART_Module);
   Reset_Unit: TB_Reset_Unit port map(tb_error_TB_Reset_Unit);
   Error_Unit: TB_Error_Unit port map(tb_error_TB_Error_Unit);
@@ -88,6 +102,8 @@ begin
     and (tb_error_TB_UART_Wrapper = '0')
     and (tb_error_TB_GPIO_Wrapper = '0')
     and (tb_error_TB_Timer_Wrapper = '0') 
+    and (tb_error_TB_SPI_Wrapper = '0') 
+    and (tb_error_TB_SPI_Module = '0') 
     and (tb_error_TB_UART_Module = '0') 
     and (tb_error_TB_Reset_Unit = '0') 
     and (tb_error_TB_Error_Unit = '0') else '1';
