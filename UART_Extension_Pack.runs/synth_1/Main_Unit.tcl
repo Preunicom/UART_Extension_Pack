@@ -70,7 +70,7 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
-set_msg_config -id {Common 17-41} -limit 10000000
+set_param xicom.use_bs_reader 1
 set_msg_config  -id {Board 49-56}  -string {{CRITICAL WARNING: [Board 49-56] Problem parsing board file - /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/production/1.1/board.xml.
 Resolution: Please contact your board vendor with this message.}}  -suppress 
 set_msg_config  -id {Board 49-56}  -string {{CRITICAL WARNING: [Board 49-56] Problem parsing board file - /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.0/board.xml.
@@ -119,6 +119,14 @@ read_vhdl -library xil_defaultlib {
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/PriorityScheduler.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Reset_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Error_Unit.vhd
+  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/SPI_Wrapper.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_CLK_Manager.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Serializer.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Prescaler.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Unit.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Deserializer.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Buffer_Register_Serializer.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Buffer_Register_Deserializer.vhd
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being

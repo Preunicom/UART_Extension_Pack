@@ -7,6 +7,13 @@ entity TB_Main_Unit is
   );
 end TB_Main_Unit;
 
+-- Testbench for 5 fully used Units:
+-- U0: Reset --> generic map(HOST_DATA_BITS)
+-- U1: Error --> generic map(HOST_DATA_BITS)
+-- U2: UART --> generic map(HOST_DATA_BITS, FPGA_FREQ, 250000, 8, 1, 0, 0)
+-- U3: GPIO --> generic map(HOST_DATA_BITS, 1, 2)
+-- U4: Timer --> generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD)
+-- U5: SPI --> generic map(HOST_DATA_BITS, FPGA_FREQ, 9600, 1, 0, 0, 8)
 architecture TESTBENCH of TB_Main_Unit is
   component Main_Unit
     Generic(

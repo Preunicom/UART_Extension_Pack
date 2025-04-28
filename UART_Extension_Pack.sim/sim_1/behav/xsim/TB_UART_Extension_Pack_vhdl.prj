@@ -23,13 +23,25 @@ vhdl xil_defaultlib  \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/Reset_Unit.vhd" \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/Error_Unit.vhd" \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/SPI_Wrapper.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Unit.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Buffer_Register_Serializer.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_CLK_Manager.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Serializer.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Prescaler.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Buffer_Register_Deserializer.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Deserializer.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Deserializer.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Unit_Mode2.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Module.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Prescaler.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Serializer.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Unit_Mode0.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Buffer_Register_Serializer.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_CLK_Manager.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Unit.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Unit_Mode3.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Buffer_Register_Deserializer.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Unit_Mode1.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_CLK_Manager.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Serializer.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Prescaler.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Unit.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Deserializer.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Buffer_Register_Serializer.vhd" \
+"../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Buffer_Register_Deserializer.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Decoder.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Main_Unit.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Encoder.vhd" \
@@ -48,14 +60,6 @@ vhdl xil_defaultlib  \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Reset_Unit.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Error_Unit.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_SPI_Wrapper.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Buffer_Register_Serializer.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Prescaler.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Serializer.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Module.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Deserializer.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Unit.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_CLK_Manager.vhd" \
-"../../../../../FPGA_SPI_Module/FPGA_SPI_Module.srcs/sim_1/new/TB_SPI_Buffer_Register_Deserializer.vhd" \
 
 # Do not sort compile order
 nosort

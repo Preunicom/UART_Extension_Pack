@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date             : Mon Apr  7 19:29:01 2025
-| Host             : 8b565324c0fd running 64-bit Ubuntu 22.04.5 LTS
+| Date             : Mon Apr 28 14:37:20 2025
+| Host             : 194e8c893525 running 64-bit Ubuntu 22.04.5 LTS
 | Command          : report_power -file Main_Unit_power_routed.rpt -pb Main_Unit_power_summary_routed.pb -rpx Main_Unit_power_routed.rpx
 | Design           : Main_Unit
 | Device           : xc7a35tcpg236-1
@@ -30,7 +30,7 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.072        |
+| Total On-Chip Power (W)  | 0.073        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
 | Dynamic (W)              | 0.001        |
@@ -53,16 +53,16 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |    <0.001 |        3 |       --- |             --- |
-| Slice Logic    |    <0.001 |     1417 |       --- |             --- |
-|   LUT as Logic |    <0.001 |      445 |     20800 |            2.14 |
-|   CARRY4       |    <0.001 |      108 |      8150 |            1.33 |
-|   Register     |    <0.001 |      629 |     41600 |            1.51 |
-|   BUFG         |    <0.001 |        3 |        32 |            9.38 |
-|   Others       |     0.000 |       43 |       --- |             --- |
-| Signals        |    <0.001 |      850 |       --- |             --- |
-| I/O            |    <0.001 |        9 |       106 |            8.49 |
+| Slice Logic    |    <0.001 |     1950 |       --- |             --- |
+|   LUT as Logic |    <0.001 |      628 |     20800 |            3.02 |
+|   CARRY4       |    <0.001 |      160 |      8150 |            1.96 |
+|   Register     |    <0.001 |      854 |     41600 |            2.05 |
+|   BUFG         |    <0.001 |        4 |        32 |           12.50 |
+|   Others       |     0.000 |       56 |       --- |             --- |
+| Signals        |    <0.001 |     1233 |       --- |             --- |
+| I/O            |    <0.001 |       16 |       106 |           15.09 |
 | Static Power   |     0.072 |          |           |                 |
-| Total          |     0.072 |          |           |                 |
+| Total          |     0.073 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
