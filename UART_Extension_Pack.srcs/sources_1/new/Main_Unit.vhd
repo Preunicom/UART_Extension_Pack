@@ -24,7 +24,11 @@ entity Main_Unit is
     tx_pin_a : out std_logic;
     rx_pin_a : in std_logic;
     gpio_pins_in : in STD_LOGIC_VECTOR (0 downto 0);
-    gpio_pins_out : out STD_LOGIC_VECTOR (1 downto 0)
+    gpio_pins_out : out STD_LOGIC_VECTOR (1 downto 0);
+    spi_sck : out std_logic;
+    spi_cs : out std_logic_vector(0 downto 0);
+    spi_mosi : out std_logic;
+    spi_miso : in std_logic
     
     --------------- UNIT PORTS END ---------------
   );
@@ -79,6 +83,33 @@ architecture Behavioral of Main_Unit is
       error_from_host : out std_logic := '0'; -- unused
       TX_pin : out std_logic;
       RX_pin : in std_logic
+    );
+  end component;
+  component SPI_Wrapper
+    Generic (
+      HOST_DATA_BITS : integer := 8;
+      -- IN_FREQ_HZ has to be minimum 2*SPI_FREQ_HZ
+      IN_FREQ_HZ : integer := 12000000;
+      SPI_FREQ_HZ : integer := 9600;
+      AMOUNT_SLAVES : integer := 1;
+      SPI_MODE : integer := 0;
+      LEAST_SIG_BIT_FIRST : integer := 0; -- true or false
+      DATA_BITS : integer := 8
+    );
+    Port ( 
+      clk, rst : in STD_LOGIC;
+      write_en : in std_logic;
+      access_mode : in std_logic_vector(1 downto 0); -- unused
+      unit_data_in : in std_logic_vector(HOST_DATA_BITS-1 downto 0);
+      unit_data_out : out std_logic_vector(13 downto 0);
+      scheduler_wanted : out std_logic;
+      scheduler_done : in std_logic;
+      error_to_host : out std_logic := '0';
+      error_from_host : out std_logic := '0';
+      SCK : out std_logic;
+      CS : out std_logic_vector(AMOUNT_SLAVES-1 downto 0) := (others => '1');
+      MOSI : out std_logic;
+      MISO : in std_logic
     );
   end component;
   component GPIO_Wrapper
@@ -287,6 +318,7 @@ begin
   U02_UART: UART_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 250000, 8, 1, 0, 0) port map(clk, rst_ext_pack, unit_en(2), decoded_access_mode, unit_data_in, unit_data_out(2), unit_scheduler_wanted(2), unit_scheduler_done(2), error_to_host(2), error_from_host(2), tx_pin_a, rx_pin_a);
   U03_GPIO: GPIO_Wrapper generic map(HOST_DATA_BITS, 1, 2) port map(clk, rst_ext_pack, unit_en(3), decoded_access_mode, unit_data_in, unit_data_out(3), unit_scheduler_wanted(3), unit_scheduler_done(3), error_to_host(3), error_from_host(3), gpio_pins_in, gpio_pins_out);
   U04_TIME: Timer_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD) port map(clk, rst_ext_pack, unit_en(4), decoded_access_mode, unit_data_in, unit_data_out(4), unit_scheduler_wanted(4), unit_scheduler_done(4), error_to_host(4), error_from_host(4));
+  U05_SPI: SPI_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 9600, 1, 0, 0, 8) port map(clk, rst_ext_pack, unit_en(5), decoded_access_mode, unit_data_in, unit_data_out(5), unit_scheduler_wanted(5), unit_scheduler_done(5), error_to_host(5), error_from_host(5), spi_sck, spi_cs, spi_mosi, spi_miso);
 
   -------------- UNITS END ----------------
   

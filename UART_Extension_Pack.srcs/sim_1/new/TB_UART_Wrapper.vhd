@@ -80,7 +80,7 @@ begin
     "00001111" after 200*tbase, --0x0F
     "11000011" after 210*tbase; --0xC3
 
-  tb_exp_TX_pin <= '1',
+  tb_exp_TX_pin <= 'U', '1' after 1*tbase,
     '0' after 26*tbase,
     '1' after 36*tbase,
     '0' after 56*tbase,

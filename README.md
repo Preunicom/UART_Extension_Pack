@@ -44,7 +44,7 @@ All other bits are zero.
 ### UART_Unit
 Can be configured with BAUD rate, data bits, stop bits and parity bit.  
 Needs two pins (rx and tx) of the FPGA.  
-BAUD has to be less or equal than half of the FGGA frequency. 
+BAUD has to be less or equal than half of the FPGA frequency. 
 **Note:** Integer divisor baud rates lead to more stable UART communication  
 Data bits have to be more than 5 and all bits (stop, data and parity) have to be less or equal 15.  
 Normally: 
@@ -57,6 +57,30 @@ Access mode is ignored.
 **Note:** UART messages with parity or frame errors are ignored!  
 **Note:** If there is too much traffic on the ExtPack and UART Unit has to less priority and is receiving too much load it is possible that UART packages are getting lost because it is scheduled too slow or never because of starvation.
 The system operates on a Best-Effort Delivery basis, meaning it strives to transmit data as efficiently as possible but does not guarantee delivery.
+
+### SPI_Unit
+Can be configured with data rate, amount slaves, SPI mode, LSB or MSB and the amount of data bits per message.  
+The SPI_FREQ_HZ has to be lower or equal to half of the IN_FREQ_HZ.  
+Available SPI_MODEs are 0-3.  
+LEAST_SIG_BIT_FIRST is a boolean value (1 = LSB, 0 = MSB).  
+DATA_BITS have to be less or equal to 14.  
+It needs following pins:  
+
+- SCK pin
+- CS pins (amount is set in the configuration)
+- MISO pin
+- MOSI pin
+
+The access mode handles data sending and the current slave ID:
+
+- "*0": Sends a message to the set slave.
+- "*1": Sets slave to communicate with.
+
+There are three situations where errors are forwarded to the Error_Unit:
+
+- Too slow scheduling (error_to_host)
+- Sending command while SPI_Unit not ready (error_from_host)
+- Slave ID set command with invalid slave ID (error_from_host)
 
 ### GPIO_Unit
 Can be configured with in and out pin amount.  
