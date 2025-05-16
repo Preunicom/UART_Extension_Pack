@@ -24,7 +24,9 @@ end entity;
 architecture Behavioral of Timer_Wrapper is
   component Timer_Unit
     generic (
-      WIDTH : integer := 8
+      WIDTH : integer := 8;
+      IN_FREQ : integer := 12000000;
+      BASE_FREQ : integer := 50000
     );
     port (
       clk, rst                 : in  std_logic;
@@ -45,32 +47,10 @@ architecture Behavioral of Timer_Wrapper is
   signal restart_timer_int            : std_logic := '0';
   signal is_timer_end_int             : std_logic := '0';
   signal last_is_timer_end_int        : std_logic := '0';
-  signal clk_prescaled_intern         : std_logic := '0';
-  signal prescale_counter             : integer := 1;
   signal last_scheduler_done          : std_logic := '0';
   signal scheduling_active            : std_logic := '0';
 begin
-  TIMER: Timer_Unit generic map (HOST_DATA_BITS) port map (clk_prescaled_intern, rst, timer_active_int, prescale_factor_write_en_int, prescaled_factor_int, start_value_write_en_int, start_value_int, restart_timer_int, is_timer_end_int);
-
-  -- Prescales the host clock to 1/20 of the host baud rate, as this is the maximum number of interrupts that can be sent via UART in an 8N1 configuration (because 2*10bit (unit number and unit data) per transmission).
-  PRESCALE: process(clk)
-  begin
-    if rising_edge(clk) then
-      if rst = '1' then
-        clk_prescaled_intern <= '0';
-        prescale_counter <= 1;
-      else
-        prescale_counter <= prescale_counter + 1;
-        clk_prescaled_intern <= clk_prescaled_intern;
-        -- integer gets truncated in VHDL
-        -- Prescales to HOST_BAUD and multiply this value with 20 to get 1/20 of HOST_BAUD as frequency
-        if prescale_counter >= (((FPGA_FREQ + HOST_BAUD) / (2 * HOST_BAUD))*20) then
-          clk_prescaled_intern <= clk_prescaled_intern nand clk_prescaled_intern;
-          prescale_counter <= 1;
-        end if;
-      end if;
-    end if;
-  end process;
+  TIMER: Timer_Unit generic map (HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD/20) port map (clk, rst, timer_active_int, prescale_factor_write_en_int, prescaled_factor_int, start_value_write_en_int, start_value_int, restart_timer_int, is_timer_end_int);
   
   WRITE: process (clk)
   begin

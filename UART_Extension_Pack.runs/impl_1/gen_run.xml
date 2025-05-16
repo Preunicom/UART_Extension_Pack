@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="impl_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1745850966">
-  <File Type="POSTROUTE-PHYSOPT-RQS-RPT" Name="postroute_physopt_report_qor_suggestions_0.rpt"/>
   <File Type="ROUTE-DCP" Name="Main_Unit_routed.dcp"/>
   <File Type="ROUTE-STATUS" Name="Main_Unit_route_status.rpt"/>
   <File Type="ROUTE-PWR-RPX" Name="Main_Unit_power_routed.rpx"/>
@@ -40,15 +39,15 @@
   <File Type="ROUTE-BUS-SKEW-RPX" Name="Main_Unit_bus_skew_routed.rpx"/>
   <File Type="BITSTR-RBT" Name="Main_Unit.rbt"/>
   <File Type="NPI_FILE" Name="Main_Unit.npi"/>
+  <File Type="ROUTE-SIMILARITY" Name="Main_Unit_incremental_reuse_routed.rpt"/>
   <File Type="BITSTR-NKY" Name="Main_Unit.nky"/>
   <File Type="RBD_FILE" Name="Main_Unit.rbd"/>
+  <File Type="ROUTE-CLK" Name="Main_Unit_clock_utilization_routed.rpt"/>
   <File Type="BITSTR-BMM" Name="Main_Unit_bd.bmm"/>
   <File Type="BITSTR-MMI" Name="Main_Unit.mmi"/>
   <File Type="BITSTR-SYSDEF" Name="Main_Unit.sysdef"/>
   <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
   <File Type="BITSTR-LTX" Name="Main_Unit.ltx"/>
-  <File Type="ROUTE-SIMILARITY" Name="Main_Unit_incremental_reuse_routed.rpt"/>
-  <File Type="ROUTE-CLK" Name="Main_Unit_clock_utilization_routed.rpt"/>
   <File Type="ROUTE-BUS-SKEW" Name="Main_Unit_bus_skew_routed.rpt"/>
   <File Type="OPT-DCP" Name="Main_Unit_opt.dcp"/>
   <File Type="PLACE-DCP" Name="Main_Unit_placed.dcp"/>
@@ -70,6 +69,7 @@
   <File Type="PL-PDI-FILE" Name="Main_Unit_pld.pdi"/>
   <File Type="ROUTE-RQS" Name="Main_Unit_routed.rqs"/>
   <File Type="ROUTE-RQS-RPT" Name="route_report_qor_suggestions_0.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-RQS-RPT" Name="postroute_physopt_report_qor_suggestions_0.rpt"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
     <Filter Type="Srcs"/>
     <File Path="$PSRCDIR/sources_1/new/UnitDataArray_Type_PKG.vhd">

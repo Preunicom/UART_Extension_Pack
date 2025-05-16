@@ -98,7 +98,7 @@ Can be configured via UART (No configuration in VHDL code necessary).
 The timer is an x-bit timer with x being the amount of bits of the host UART communication.  
 It counts from a given start value (default 0) up to the maximum value of x bit. The overflow triggers an interrupt which is sent to the host.  
 The timer frequency is at 5% of host baud rate.  
-**Note:** The reason is, that that is the maximum of ExtPack packages (consists of two UART packages: unit number and unit data) that are be able to be transmitted to the host via 8N1 UART, which is the fastest supported host UART mode when looking at packages transmission rate.  
+**Note:** The reason is, that that is the maximum of ExtPack packages (consists of two UART packages: unit number and unit data) that are being able to be transmitted to the host via 8N1 UART, which is the fastest supported host UART mode when looking at packages transmission rate.  
 The speed of counting (prescaler) can also be set as a divisor of this 5% of host BAUD frequency. (default: 1)  
 For example: With a host baud rate of 1 MHz a prescale divisor of 2 results in 25 KHz.  
 The access mode handles all this configurations: 
