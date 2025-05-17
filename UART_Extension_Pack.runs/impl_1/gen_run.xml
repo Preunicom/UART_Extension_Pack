@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1747485151">
+<GenRun Id="impl_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1747512478">
+  <File Type="POSTROUTE-PHYSOPT-RQS-RPT" Name="postroute_physopt_report_qor_suggestions_0.rpt"/>
   <File Type="ROUTE-RQS-RPT" Name="route_report_qor_suggestions_0.rpt"/>
   <File Type="POSTROUTE-PHYSOPT-RQS" Name="Main_Unit_postroute_physopted.rqs"/>
   <File Type="ROUTE-RQS" Name="Main_Unit_routed.rqs"/>
   <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
+  <File Type="RDI-RDI" Name="Main_Unit.vdi"/>
+  <File Type="BG-DRC" Name="Main_Unit.drc"/>
   <File Type="BG-BGN" Name="Main_Unit.bgn"/>
   <File Type="BITSTR-SYSDEF" Name="Main_Unit.sysdef"/>
   <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
@@ -15,7 +18,6 @@
   <File Type="RCFI_FILE" Name="Main_Unit.rcfi"/>
   <File Type="PL-PDI-FILE" Name="Main_Unit_pld.pdi"/>
   <File Type="BOOT-PDI-FILE" Name="Main_Unit_boot.pdi"/>
-  <File Type="RDI-RDI" Name="Main_Unit.vdi"/>
   <File Type="PDI-FILE" Name="Main_Unit.pdi"/>
   <File Type="BITSTR-MMI" Name="Main_Unit.mmi"/>
   <File Type="BITSTR-BMM" Name="Main_Unit_bd.bmm"/>
@@ -23,7 +25,6 @@
   <File Type="BITSTR-RBT" Name="Main_Unit.rbt"/>
   <File Type="BITSTR-MSK" Name="Main_Unit.msk"/>
   <File Type="BG-BIN" Name="Main_Unit.bin"/>
-  <File Type="POSTROUTE-PHYSOPT-RQS-RPT" Name="postroute_physopt_report_qor_suggestions_0.rpt"/>
   <File Type="BG-BIT" Name="Main_Unit.bit"/>
   <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-RPX" Name="Main_Unit_bus_skew_postroute_physopted.rpx"/>
   <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-PB" Name="Main_Unit_bus_skew_postroute_physopted.pb"/>
@@ -33,7 +34,6 @@
   <File Type="POSTROUTE-PHYSOPT-TIMING" Name="Main_Unit_timing_summary_postroute_physopted.rpt"/>
   <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="Main_Unit_postroute_physopt_bb.dcp"/>
   <File Type="POSTROUTE-PHYSOPT-DCP" Name="Main_Unit_postroute_physopt.dcp"/>
-  <File Type="BG-DRC" Name="Main_Unit.drc"/>
   <File Type="ROUTE-RQS-PB" Name="Main_Unit_rqs_routed.pb"/>
   <File Type="ROUTE-BUS-SKEW-RPX" Name="Main_Unit_bus_skew_routed.rpx"/>
   <File Type="ROUTE-BUS-SKEW-PB" Name="Main_Unit_bus_skew_routed.pb"/>
@@ -76,13 +76,13 @@
   <File Type="PWROPT-DRC" Name="Main_Unit_drc_pwropted.rpt"/>
   <File Type="PWROPT-DCP" Name="Main_Unit_pwropt.dcp"/>
   <File Type="OPT-RQA-PB" Name="Main_Unit_rqa_opted.pb"/>
+  <File Type="OPT-TIMING" Name="Main_Unit_timing_summary_opted.rpt"/>
   <File Type="OPT-HWDEF" Name="Main_Unit.hwdef"/>
   <File Type="OPT-METHODOLOGY-DRC" Name="Main_Unit_methodology_drc_opted.rpt"/>
   <File Type="OPT-DRC" Name="Main_Unit_drc_opted.rpt"/>
   <File Type="OPT-DCP" Name="Main_Unit_opt.dcp"/>
-  <File Type="OPT-TIMING" Name="Main_Unit_timing_summary_opted.rpt"/>
-  <File Type="REPORTS-TCL" Name="Main_Unit_reports.tcl"/>
   <File Type="INIT-TIMING" Name="Main_Unit_timing_summary_init.rpt"/>
+  <File Type="REPORTS-TCL" Name="Main_Unit_reports.tcl"/>
   <File Type="PA-TCL" Name="Main_Unit.tcl"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
     <Filter Type="Srcs"/>

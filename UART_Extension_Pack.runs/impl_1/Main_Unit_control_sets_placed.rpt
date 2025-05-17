@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date         : Sat May 17 12:34:23 2025
-| Host         : fc66ac1e00b3 running 64-bit Ubuntu 22.04.5 LTS
+| Date         : Sat May 17 20:09:47 2025
+| Host         : 336eb1c66212 running 64-bit Ubuntu 22.04.5 LTS
 | Command      : report_control_sets -verbose -file Main_Unit_control_sets_placed.rpt
 | Design       : Main_Unit
 | Device       : xc7a35t
@@ -23,11 +23,11 @@ Table of Contents
 +----------------------------------------------------------+-------+
 |                          Status                          | Count |
 +----------------------------------------------------------+-------+
-| Total control sets                                       |    46 |
-|    Minimum number of control sets                        |    46 |
+| Total control sets                                       |    44 |
+|    Minimum number of control sets                        |    44 |
 |    Addition due to synthesis replication                 |     0 |
 |    Addition due to physical synthesis replication        |     0 |
-| Unused register locations in slices containing registers |   133 |
+| Unused register locations in slices containing registers |   117 |
 +----------------------------------------------------------+-------+
 * Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
 ** Run report_qor_suggestions for automated merging and remapping suggestions
@@ -39,12 +39,12 @@ Table of Contents
 +--------------------+-------+
 |       Fanout       | Count |
 +--------------------+-------+
-| Total control sets |    46 |
+| Total control sets |    44 |
 | >= 0 to < 4        |     2 |
 | >= 4 to < 6        |     1 |
 | >= 6 to < 8        |     3 |
 | >= 8 to < 10       |    19 |
-| >= 10 to < 12      |     5 |
+| >= 10 to < 12      |     3 |
 | >= 12 to < 14      |     0 |
 | >= 14 to < 16      |     0 |
 | >= 16              |    16 |
@@ -58,67 +58,65 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
-| No           | No                    | No                     |              63 |           27 |
+| No           | No                    | No                     |              95 |           29 |
 | No           | No                    | Yes                    |               0 |            0 |
-| No           | Yes                   | No                     |             336 |          101 |
+| No           | Yes                   | No                     |             324 |           97 |
 | Yes          | No                    | No                     |              16 |            4 |
 | Yes          | No                    | Yes                    |               0 |            0 |
-| Yes          | Yes                   | No                     |             420 |          128 |
+| Yes          | Yes                   | No                     |             400 |          109 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
 
 4. Detailed Control Set Information
 -----------------------------------
 
-+----------------+------------------------------------------------------------------------------------+---------------------------------------------------------+------------------+----------------+--------------+
-|  Clock Signal  |                                    Enable Signal                                   |                     Set/Reset Signal                    | Slice Load Count | Bel Load Count | Bels / Slice |
-+----------------+------------------------------------------------------------------------------------+---------------------------------------------------------+------------------+----------------+--------------+
-|  clk_IBUF_BUFG | U05_SPI/SPI/CLK_MAN/CS[0]_i_1_n_0                                                  | U00_RST/rst_ext_pack                                    |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG | U03_GPIO/write_mode_en                                                             | U00_RST/rst_ext_pack                                    |                1 |              2 |         2.00 |
-|  clk_IBUF_BUFG |                                                                                    | U00_RST/SS[0]                                           |                3 |              4 |         1.33 |
-|  clk_IBUF_BUFG | UART_HOST/TRANSMITTER/PRES/E[0]                                                    | U00_RST/rst_ext_pack                                    |                3 |              6 |         2.00 |
-|  clk_IBUF_BUFG |                                                                                    | SCHEDULE/scheduler_done[5]_i_1_n_0                      |                1 |              6 |         6.00 |
-|  clk_IBUF_BUFG | U02_UART/UART/TRANSMITTER/PRES/E[0]                                                | U00_RST/rst_ext_pack                                    |                1 |              6 |         6.00 |
-|  clk_IBUF_BUFG | U05_SPI/SPI/DESER/E[0]                                                             | U00_RST/rst_ext_pack                                    |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | UART_HOST/TRANSMITTER/PRES/clk_en_prescaled_reg_0[0]                               |                                                         |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG | U05_SPI/SPI/BUF_DESER/new_data_reg_1[0]                                            | U00_RST/scheduler_done_reg[5][0]                        |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG | ENCODE/uart_out[7]_i_1_n_0                                                         | U00_RST/rst_ext_pack                                    |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG | UART_HOST/RECEIVER/PRES/prescaled_clk_en_intern                                    | UART_HOST/RECEIVER/DESER/parallel_out[7]_i_1_n_0        |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | U02_UART/UART/RECEIVER/PRES/prescaled_clk_en_intern                                | U02_UART/UART/RECEIVER/DESER/parallel_out[7]_i_1__0_n_0 |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | U02_UART/UART/TRANSMITTER/PRES/clk_en_prescaled_reg_0[0]                           |                                                         |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG | U05_SPI/SPI/CLK_MAN/access_mode_reg[0][0]                                          | U00_RST/rst_ext_pack                                    |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | U04_TIME/start_value_write_en                                                      | U00_RST/rst_ext_pack                                    |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | U04_TIME/prescale_factor_write_en                                                  | U04_TIME/TIMER/prescale_factor_int[7]_i_1_n_0           |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | U04_TIME/TIMER/timer_counter[7]_i_2_n_0                                            | U04_TIME/TIMER/timer_counter[7]_i_1_n_0                 |                5 |              8 |         1.60 |
-|  clk_IBUF_BUFG | EN_DEMUX/E[0]                                                                      | U00_RST/rst_ext_pack                                    |                1 |              8 |         8.00 |
-|  clk_IBUF_BUFG |                                                                                    | U00_RST/search_reset_reg[0]                             |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | U02_UART/UART/RECEIVER/BRDESER/last_uart_received_valid_reg[0]                     | U00_RST/last_scheduler_done_reg_0[0]                    |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG | DECODE/E[0]                                                                        | U00_RST/rst_ext_pack                                    |                3 |              9 |         3.00 |
-|  clk_IBUF_BUFG | UART_HOST/RECEIVER/DESER/data_ready_intern                                         | U00_RST/rst_ext_pack                                    |                3 |              9 |         3.00 |
-|  clk_IBUF_BUFG | U02_UART/UART/RECEIVER/DESER/E[0]                                                  | U00_RST/rst_ext_pack                                    |                3 |              9 |         3.00 |
-|  clk_IBUF_BUFG | DECODE/unit_number_data[7]_i_1_n_0                                                 | U00_RST/rst_ext_pack                                    |                4 |              9 |         2.25 |
-|  clk_IBUF_BUFG | DECODE/access_mode_reg[1]_0[0]                                                     | U00_RST/rst_ext_pack                                    |                3 |              9 |         3.00 |
-|  clk_IBUF_BUFG | UART_HOST/RECEIVER/PRES/prescaled_clk_en_intern                                    | U00_RST/SS[0]                                           |                3 |             10 |         3.33 |
-|  clk_IBUF_BUFG | U02_UART/UART/RECEIVER/PRES/prescaled_clk_en_intern                                | U00_RST/search_reset_reg[0]                             |                3 |             10 |         3.33 |
-|  clk_IBUF_BUFG | U02_UART/UART/TRANSMITTER/BRSER/data_not_needed_anymore_change_detected_i_1__0_n_0 | U00_RST/rst_ext_pack                                    |                2 |             10 |         5.00 |
-|  clk_IBUF_BUFG | UART_HOST/TRANSMITTER/BRSER/data_not_needed_anymore_change_detected_i_1_n_0        | U00_RST/rst_ext_pack                                    |                4 |             10 |         2.50 |
-|  clk_IBUF_BUFG | ENCODE/unit_number_reg                                                             | U00_RST/rst_ext_pack                                    |                2 |             11 |         5.50 |
-|  clk_IBUF_BUFG | DECODE/access_mode[1]_i_1_n_0                                                      | U00_RST/rst_ext_pack                                    |                5 |             16 |         3.20 |
-|  clk_IBUF_BUFG |                                                                                    | U02_UART/UART/RECEIVER/PRES/counter[31]_i_1__3_n_0      |                8 |             28 |         3.50 |
-|  clk_IBUF_BUFG |                                                                                    | U00_RST/rst_ext_pack_reg_0[0]                           |                8 |             28 |         3.50 |
-|  clk_IBUF_BUFG | U02_UART/UART/RECEIVER/PRES/clk_en_prescaled_reg_0[0]                              | U02_UART/UART/RECEIVER/DESER/counter[31]_i_1__2_n_0     |                8 |             29 |         3.62 |
-|  clk_IBUF_BUFG | UART_HOST/RECEIVER/PRES/E[0]                                                       | UART_HOST/RECEIVER/DESER/counter[31]_i_1_n_0            |                8 |             29 |         3.62 |
-|  clk_IBUF_BUFG |                                                                                    | U00_RST/SR[0]                                           |                8 |             30 |         3.75 |
-|  clk_IBUF_BUFG |                                                                                    | UART_HOST/RECEIVER/PRES/counter[31]_i_1__0_n_0          |                8 |             30 |         3.75 |
-|  clk_IBUF_BUFG | U05_SPI/SPI/CLK_MAN/counter                                                        | U00_RST/rst_ext_pack                                    |                8 |             32 |         4.00 |
-|  clk_IBUF_BUFG |                                                                                    | U04_TIME/TIMER/prescale_counter_0                       |               11 |             32 |         2.91 |
-|  clk_IBUF_BUFG |                                                                                    | U05_SPI/SPI/PRESCAL/counter[0]_i_1__2_n_0               |                8 |             32 |         4.00 |
-|  clk_IBUF_BUFG |                                                                                    | DECODE/counter[0]_i_1__0_n_0                            |                8 |             32 |         4.00 |
-|  clk_IBUF_BUFG | U05_SPI/SPI/PRESCAL/clk_prescaled_falling_edge1                                    | U05_SPI/SPI/CLK_MAN/comb_pres_rst                       |                9 |             33 |         3.67 |
-|  clk_IBUF_BUFG | U05_SPI/SPI/CLK_MAN/E[0]                                                           | U00_RST/rst_ext_pack                                    |               13 |             41 |         3.15 |
-|  clk_IBUF_BUFG | U05_SPI/SPI/CLK_MAN/serializer_clk_en                                              | U05_SPI/SPI/CLK_MAN/comb_pres_rst                       |               11 |             41 |         3.73 |
-|  clk_IBUF_BUFG |                                                                                    |                                                         |               27 |             63 |         2.33 |
-|  clk_IBUF_BUFG |                                                                                    | U00_RST/rst_ext_pack                                    |               35 |            106 |         3.03 |
-+----------------+------------------------------------------------------------------------------------+---------------------------------------------------------+------------------+----------------+--------------+
++----------------+----------------------------------------------------------------+---------------------------------------------------------+------------------+----------------+--------------+
+|  Clock Signal  |                          Enable Signal                         |                     Set/Reset Signal                    | Slice Load Count | Bel Load Count | Bels / Slice |
++----------------+----------------------------------------------------------------+---------------------------------------------------------+------------------+----------------+--------------+
+|  clk_IBUF_BUFG | U05_SPI/SPI/CLK_MAN/CS[0]_i_1_n_0                              | U00_RST/rst_ext_pack                                    |                1 |              1 |         1.00 |
+|  clk_IBUF_BUFG | U03_GPIO/write_mode_en                                         | U00_RST/rst_ext_pack                                    |                1 |              2 |         2.00 |
+|  clk_IBUF_BUFG |                                                                | UART_HOST/RECEIVER/DESER/SS[0]                          |                2 |              4 |         2.00 |
+|  clk_IBUF_BUFG |                                                                | SCHEDULE/scheduler_done[5]_i_1_n_0                      |                3 |              6 |         2.00 |
+|  clk_IBUF_BUFG | U02_UART/UART/TRANSMITTER/PRES/E[0]                            | U00_RST/rst_ext_pack                                    |                2 |              6 |         3.00 |
+|  clk_IBUF_BUFG | UART_HOST/TRANSMITTER/PRES/E[0]                                | U00_RST/rst_ext_pack                                    |                2 |              6 |         3.00 |
+|  clk_IBUF_BUFG | U05_SPI/SPI/BUF_DESER/new_data_reg_1[0]                        | U00_RST/last_scheduler_done_reg_1[0]                    |                1 |              8 |         8.00 |
+|  clk_IBUF_BUFG | U04_TIME/TIMER/timer_counter[7]_i_2_n_0                        | U04_TIME/TIMER/timer_counter[7]_i_1_n_0                 |                4 |              8 |         2.00 |
+|  clk_IBUF_BUFG | U04_TIME/prescale_factor_write_en                              | U04_TIME/TIMER/prescale_factor_int[7]_i_1_n_0           |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | U02_UART/UART/RECEIVER/BRDESER/last_uart_received_valid_reg[0] | U00_RST/SR[0]                                           |                1 |              8 |         8.00 |
+|  clk_IBUF_BUFG | U05_SPI/SPI/DESER/E[0]                                         | U00_RST/rst_ext_pack                                    |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | UART_HOST/RECEIVER/PRES/prescaled_clk_en_intern                | UART_HOST/RECEIVER/DESER/parallel_out[7]_i_1_n_0        |                1 |              8 |         8.00 |
+|  clk_IBUF_BUFG | EN_DEMUX/E[0]                                                  | U00_RST/rst_ext_pack                                    |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | U02_UART/UART/TRANSMITTER/PRES/clk_en_prescaled_reg_0[0]       |                                                         |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | U05_SPI/SPI/CLK_MAN/last_write_enable_reg[0]                   | U00_RST/rst_ext_pack                                    |                1 |              8 |         8.00 |
+|  clk_IBUF_BUFG |                                                                | U02_UART/UART/RECEIVER/DESER/SR[0]                      |                4 |              8 |         2.00 |
+|  clk_IBUF_BUFG | UART_HOST/TRANSMITTER/PRES/clk_en_prescaled_reg_0[0]           |                                                         |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | U04_TIME/start_value_write_en                                  | U00_RST/rst_ext_pack                                    |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | ENCODE/uart_out[7]_i_1_n_0                                     | U00_RST/rst_ext_pack                                    |                1 |              8 |         8.00 |
+|  clk_IBUF_BUFG | U02_UART/UART/RECEIVER/PRES/prescaled_clk_en_intern            | U02_UART/UART/RECEIVER/DESER/parallel_out[7]_i_1__0_n_0 |                1 |              8 |         8.00 |
+|  clk_IBUF_BUFG | U02_UART/UART/RECEIVER/DESER/E[0]                              | U00_RST/rst_ext_pack                                    |                2 |              9 |         4.50 |
+|  clk_IBUF_BUFG | DECODE/unit_number_data[7]_i_1_n_0                             | U00_RST/rst_ext_pack                                    |                3 |              9 |         3.00 |
+|  clk_IBUF_BUFG | DECODE/E[0]                                                    | U00_RST/rst_ext_pack                                    |                2 |              9 |         4.50 |
+|  clk_IBUF_BUFG | DECODE/access_mode_reg[0]_1[0]                                 | U00_RST/rst_ext_pack                                    |                2 |              9 |         4.50 |
+|  clk_IBUF_BUFG | UART_HOST/RECEIVER/DESER/data_ready_intern                     | U00_RST/rst_ext_pack                                    |                3 |              9 |         3.00 |
+|  clk_IBUF_BUFG | U02_UART/UART/RECEIVER/PRES/prescaled_clk_en_intern            | U02_UART/UART/RECEIVER/DESER/SR[0]                      |                4 |             10 |         2.50 |
+|  clk_IBUF_BUFG | UART_HOST/RECEIVER/PRES/prescaled_clk_en_intern                | UART_HOST/RECEIVER/DESER/SS[0]                          |                3 |             10 |         3.33 |
+|  clk_IBUF_BUFG | ENCODE/unit_number_reg                                         | U00_RST/rst_ext_pack                                    |                3 |             11 |         3.67 |
+|  clk_IBUF_BUFG | DECODE/access_mode[1]_i_1_n_0                                  | U00_RST/rst_ext_pack                                    |                4 |             16 |         4.00 |
+|  clk_IBUF_BUFG |                                                                | U02_UART/UART/RECEIVER/PRES/counter[31]_i_1__2_n_0      |                8 |             28 |         3.50 |
+|  clk_IBUF_BUFG |                                                                | U02_UART/UART/TRANSMITTER/PRES/counter[31]_i_1__4_n_0   |                8 |             28 |         3.50 |
+|  clk_IBUF_BUFG | U02_UART/UART/RECEIVER/PRES/clk_en_prescaled_reg_0[0]          | U02_UART/UART/RECEIVER/DESER/counter[31]_i_1__3_n_0     |                8 |             29 |         3.62 |
+|  clk_IBUF_BUFG | UART_HOST/RECEIVER/PRES/E[0]                                   | UART_HOST/RECEIVER/DESER/counter[31]_i_1__0_n_0         |                8 |             29 |         3.62 |
+|  clk_IBUF_BUFG |                                                                | UART_HOST/RECEIVER/PRES/counter[31]_i_1_n_0             |                8 |             30 |         3.75 |
+|  clk_IBUF_BUFG |                                                                | UART_HOST/TRANSMITTER/PRES/counter[31]_i_1__1_n_0       |                8 |             30 |         3.75 |
+|  clk_IBUF_BUFG | U05_SPI/SPI/CLK_MAN/counter                                    | U00_RST/rst_ext_pack                                    |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG |                                                                | DECODE/counter[0]_i_1__1_n_0                            |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG |                                                                | U05_SPI/SPI/PRESCAL/counter[0]_i_1_n_0                  |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG |                                                                | U04_TIME/TIMER/prescale_counter                         |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG | U05_SPI/SPI/PRESCAL/clk_prescaled_falling_edge1                | U00_RST/comb_pres_rst                                   |                9 |             33 |         3.67 |
+|  clk_IBUF_BUFG | U05_SPI/SPI/CLK_MAN/E[0]                                       | U00_RST/rst_ext_pack                                    |               16 |             41 |         2.56 |
+|  clk_IBUF_BUFG | U05_SPI/SPI/CLK_MAN/serializer_clk_en                          | U00_RST/comb_pres_rst                                   |               10 |             41 |         4.10 |
+|  clk_IBUF_BUFG |                                                                | U00_RST/rst_ext_pack                                    |               32 |             94 |         2.94 |
+|  clk_IBUF_BUFG |                                                                |                                                         |               29 |             95 |         3.28 |
++----------------+----------------------------------------------------------------+---------------------------------------------------------+------------------+----------------+--------------+
 
 

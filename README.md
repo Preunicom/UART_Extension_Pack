@@ -44,7 +44,7 @@ All other bits are zero.
 ### UART_Unit
 Can be configured with BAUD rate, data bits, stop bits and parity bit.  
 Needs two pins (rx and tx) of the FPGA.  
-BAUD has to be less or equal than half of the FPGA frequency. 
+BAUD has to be less or equal than the FPGA frequency. 
 **Note:** Integer divisor baud rates lead to more stable UART communication  
 Data bits have to be more than 5 and all bits (stop, data and parity) have to be less or equal 15.  
 Normally: 

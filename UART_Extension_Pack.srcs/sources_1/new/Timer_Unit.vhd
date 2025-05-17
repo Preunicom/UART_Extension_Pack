@@ -21,26 +21,27 @@ entity Timer_Unit is
 end entity;
 
 architecture Behavioral of Timer_Unit is
+  constant PRESCALE_COUNTER_END : integer := IN_FREQ / BASE_FREQ;
+  constant PRESCALE_COUNTER_HALF : integer := IN_FREQ / (2*BASE_FREQ);
+  constant is_timer_end_value : unsigned(WIDTH-1 downto 0) := (others => '1');
   signal timer_counter : unsigned(WIDTH-1 downto 0) := (others => '0');
   signal start_value_int : std_logic_vector(WIDTH-1 downto 0) := (others => '0');
-  signal is_timer_end_value : unsigned(WIDTH-1 downto 0) := (others => '1');
   signal prescale_factor_int : std_logic_vector(WIDTH-1 downto 0) := std_logic_vector(to_unsigned(1, WIDTH));
   signal prescale_counter : integer := 1;
   signal clk_en_prescaled : std_logic := '0';
   signal timer_rst : std_logic := '0';
-
 begin
 
-  PRESCALER: process (clk)
+  PRESCALER: process(clk)
   begin
     if rising_edge(clk) then
       if rst = '1' then
         clk_en_prescaled <= '0';
-        prescale_counter <= (((IN_FREQ*(to_integer(unsigned(prescale_factor_int)))) / BASE_FREQ) / 2)+ 2; -- TODO: Pipeline this expression
+        prescale_counter <= (PRESCALE_COUNTER_HALF*(to_integer(unsigned(prescale_factor_int)))) + 2; -- TODO : set 0 & edit TB (same procedure in other units)
       else
         prescale_counter <= prescale_counter + 1;
         clk_en_prescaled <= '0';
-        if prescale_counter >= ((IN_FREQ*(to_integer(unsigned(prescale_factor_int)))) / BASE_FREQ) then  -- TODO: Pipeline this expression
+        if prescale_counter >= (PRESCALE_COUNTER_END*(to_integer(unsigned(prescale_factor_int)))) then 
           clk_en_prescaled <= '1';
           prescale_counter <= 1;
         end if;
@@ -60,7 +61,7 @@ begin
       else
         if prescale_factor_write_en = '1' then
           -- Save new prescale factor
-          prescale_factor_int <= prescale_factor;
+          prescale_factor_int <= prescale_factor; -- TODO: Directly calculate counter end value here and only test it above in prescaler
           if to_integer(unsigned(prescale_factor)) = 0 then
             prescale_factor_int <= std_logic_vector(to_unsigned(1, WIDTH));
           end if;

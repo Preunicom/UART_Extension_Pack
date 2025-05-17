@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1747485151" LaunchWriteIncrSynthDcp="true">
+<GenRun Id="synth_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1747512478" LaunchWriteIncrSynthDcp="true">
+  <File Type="VDS-TIMING-PB" Name="Main_Unit_timing_summary_synth.pb"/>
   <File Type="VDS-TIMINGSUMMARY" Name="Main_Unit_timing_summary_synth.rpt"/>
   <File Type="RDS-DCP" Name="Main_Unit.dcp"/>
   <File Type="RDS-UTIL-PB" Name="Main_Unit_utilization_synth.pb"/>
@@ -7,7 +8,6 @@
   <File Type="RDS-PROPCONSTRS" Name="Main_Unit_drc_synth.rpt"/>
   <File Type="RDS-RDS" Name="Main_Unit.vds"/>
   <File Type="REPORTS-TCL" Name="Main_Unit_reports.tcl"/>
-  <File Type="VDS-TIMING-PB" Name="Main_Unit_timing_summary_synth.pb"/>
   <File Type="PA-TCL" Name="Main_Unit.tcl"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
     <Filter Type="Srcs"/>
