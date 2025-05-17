@@ -36,11 +36,11 @@ begin
     if rising_edge(clk) then
       if rst = '1' then
         clk_en_prescaled <= '0';
-        prescale_counter <= (((IN_FREQ*(to_integer(unsigned(prescale_factor_int)))) / BASE_FREQ) / 2)+ 2;
+        prescale_counter <= (((IN_FREQ*(to_integer(unsigned(prescale_factor_int)))) / BASE_FREQ) / 2)+ 2; -- TODO: Pipeline this expression
       else
         prescale_counter <= prescale_counter + 1;
         clk_en_prescaled <= '0';
-        if prescale_counter >= ((IN_FREQ*(to_integer(unsigned(prescale_factor_int)))) / BASE_FREQ) then
+        if prescale_counter >= ((IN_FREQ*(to_integer(unsigned(prescale_factor_int)))) / BASE_FREQ) then  -- TODO: Pipeline this expression
           clk_en_prescaled <= '1';
           prescale_counter <= 1;
         end if;

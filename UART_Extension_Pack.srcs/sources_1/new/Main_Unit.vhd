@@ -5,7 +5,7 @@ use work.UnitDataArray_Type_PKG.ALL;
 
 entity Main_Unit is
   Generic(
-    -- FPGA_FREQ has to be minimum 2*HOST_BAUD
+    -- FPGA_FREQ has to be minimum 2*HOST_BAUD if using units which create clock signals
     FPGA_FREQ : integer := 12000000;
     HOST_BAUD : integer := 1000000;
     -- HOST_DATA_BITS + HOST_STOP_BITS + HOST_PARITY_ACTIVE <= 15 has to be fullfilled
@@ -37,7 +37,6 @@ end Main_Unit;
 architecture Behavioral of Main_Unit is
   component UART_Unit
     Generic (
-      -- IN_FREQ_HZ has to be minimum 2*OUT_FREQ_HZ
       IN_FREQ_HZ : integer := 12000000;
       BAUD_FREQ_HZ : integer := 9600;
       -- DATA_BITS + STOP_BITS + PARITY_ACTIVE <= 15 has to be fullfilled
@@ -62,7 +61,6 @@ architecture Behavioral of Main_Unit is
   component UART_Wrapper
     Generic (
       HOST_DATA_BITS : integer := 8;
-      -- IN_FREQ_HZ has to be minimum 2*BAUD_FREQ_HZ
       IN_FREQ_HZ : integer := 12000000;
       BAUD_FREQ_HZ : integer := 9600;
       -- DATA_BITS + STOP_BITS + PARITY_ACTIVE <= 15 has to be fullfilled

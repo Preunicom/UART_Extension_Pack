@@ -179,21 +179,21 @@ begin
     "10" after 720*tbase,
     "00" after 8220*tbase;
 
-  tb_exp_spi_sck <= '0',
-    '1' after 9042*tbase, '0' after 9563*tbase, 
-    '1' after 10084*tbase, '0' after 10605*tbase, 
-    '1' after 11126*tbase, '0' after 11647*tbase, 
-    '1' after 12168*tbase, '0' after 12689*tbase, 
-    '1' after 13210*tbase, '0' after 13731*tbase, 
-    '1' after 14252*tbase, '0' after 14773*tbase, 
-    '1' after 15294*tbase, '0' after 15815*tbase, 
-    '1' after 16336*tbase, '0' after 16857*tbase;
+  tb_exp_spi_sck <= 'U', '0' after 1*tbase,
+    '1' after 9043*tbase, '0' after 9564*tbase, 
+    '1' after 10085*tbase, '0' after 10606*tbase, 
+    '1' after 11127*tbase, '0' after 11648*tbase, 
+    '1' after 12169*tbase, '0' after 12690*tbase, 
+    '1' after 13211*tbase, '0' after 13732*tbase, 
+    '1' after 14253*tbase, '0' after 14774*tbase, 
+    '1' after 15295*tbase, '0' after 15816*tbase, 
+    '1' after 16337*tbase, '0' after 16858*tbase;
 
   tb_exp_spi_cs <= "1",
-    "0" after 8521*tbase, "1" after 16860*tbase;
+    "0" after 8521*tbase, "1" after 16859*tbase;
 
   tb_exp_spi_mosi <= '0',
-    '1' after 8521*tbase, '0' after 9563*tbase, '1' after 10605*tbase, '0' after 11647*tbase, '0' after 12689*tbase, '1' after 13731*tbase, '0' after 14773*tbase, '1' after 15815*tbase, '0' after 16857*tbase;
+    '1' after 8522*tbase, '0' after 9564*tbase, '1' after 10606*tbase, '0' after 11648*tbase, '0' after 12690*tbase, '1' after 13732*tbase, '0' after 14774*tbase, '1' after 15816*tbase, '0' after 16858*tbase;
 
   tb_error <= '0' when 
     (tb_exp_tx_pin_host = tb_tx_pin_host)

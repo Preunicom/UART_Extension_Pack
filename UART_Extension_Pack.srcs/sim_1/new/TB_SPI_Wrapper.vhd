@@ -71,60 +71,60 @@ begin
   tb_rst <= '1', '0' after 2*tbase;
 
   tb_write_en <= '0',
-    '1' after 10*tbase, '0' after 11*tbase,
-    '1' after 15*tbase, '0' after 16*tbase,
-    '1' after 20*tbase, '0' after 21*tbase,
-    '1' after 35*tbase, '0' after 36*tbase,
-    '1' after 45*tbase, '0' after 46*tbase,
-    '1' after 70*tbase, '0' after 71*tbase,
-    '1' after 91*tbase, '0' after 92*tbase;
+    '1' after 9*tbase, '0' after 10*tbase,
+    '1' after 14*tbase, '0' after 15*tbase,
+    '1' after 19*tbase, '0' after 20*tbase,
+    '1' after 34*tbase, '0' after 35*tbase,
+    '1' after 44*tbase, '0' after 45*tbase,
+    '1' after 69*tbase, '0' after 70*tbase,
+    '1' after 90*tbase, '0' after 91*tbase;
 
   tb_access_mode <= "00",
-    "01" after 15*tbase,
-    "01" after 20*tbase,
-    "00" after 35*tbase;
+    "01" after 14*tbase,
+    "01" after 19*tbase,
+    "00" after 34*tbase;
 
   tb_unit_data_in <= "00000000",
-    "11000011" after 10*tbase, -- 0xC3
-    "00000100" after 15*tbase, -- Slave ID (invalid, ID too big)
-    "00000010" after 20*tbase, -- Slave ID
-    "00001111" after 35*tbase, -- 0x0F
-    "00010001" after 45*tbase, -- 0x11 (invalid, SPI Unit not ready)
-    "00010001" after 70*tbase, -- 0x11
-    "00100011" after 91*tbase; -- 0x23
+    "11000011" after 9*tbase, -- 0xC3
+    "00000100" after 14*tbase, -- Slave ID (invalid, ID too big)
+    "00000010" after 19*tbase, -- Slave ID
+    "00001111" after 34*tbase, -- 0x0F
+    "00010001" after 44*tbase, -- 0x11 (invalid, SPI Unit not ready)
+    "00010001" after 69*tbase, -- 0x11
+    "00100011" after 90*tbase; -- 0x23
 
   tb_scheduler_done <= '0',
-    '1' after 40*tbase, '0' after 41*tbase,
-    '1' after 60*tbase, '0' after 61*tbase,
-    '1' after 120*tbase, '0' after 121*tbase; -- Error because SPI package got overwritten
+    '1' after 39*tbase, '0' after 40*tbase,
+    '1' after 59*tbase, '0' after 60*tbase,
+    '1' after 119*tbase, '0' after 120*tbase; -- Error because SPI package got overwritten
 
   tb_MISO <= '0',
     '0' after 93*tbase, '0' after 95*tbase, '1' after 97*tbase, '1' after 99*tbase, '0' after 101*tbase, '0' after 103*tbase, '0' after 105*tbase, '0' after 107*tbase; --0x30
 
   tb_exp_unit_data_out <= (others => 'U'), (others => '0') after 1*tbase,
-    "00000000110000" after 110*tbase, (others => '0') after 120*tbase;
+    "00000000110000" after 110*tbase, (others => '0') after 119*tbase;
 
   tb_exp_scheduler_wanted <= 'U', '0' after 1*tbase,
-    '1' after 29*tbase, '0' after 40*tbase,
-    '1' after 54*tbase, '0' after 60*tbase,
-    '1' after 89*tbase, '0' after 120*tbase;
+    '1' after 29*tbase, '0' after 39*tbase,
+    '1' after 54*tbase, '0' after 59*tbase,
+    '1' after 89*tbase, '0' after 119*tbase;
 
   tb_exp_error_to_host <= '0',
     '1' after 110*tbase, '0' after 111*tbase;
 
   tb_exp_error_from_host <= '0',
-    '1' after 15*tbase, '0' after 16*tbase,
-    '1' after 45*tbase, '0' after 46*tbase;
+    '1' after 14*tbase, '0' after 15*tbase,
+    '1' after 44*tbase, '0' after 45*tbase;
  
   tb_exp_CS <= "111",
-    "110" after 12*tbase,
-    "111" after 31*tbase,
-    "011" after 37*tbase,
-    "111" after 56*tbase,
-    "011" after 72*tbase,
-    "111" after 91*tbase,
-    "011" after 93*tbase,
-    "111" after 112*tbase;
+    "110" after 11*tbase,
+    "111" after 29*tbase,
+    "011" after 36*tbase,
+    "111" after 54*tbase,
+    "011" after 71*tbase,
+    "111" after 89*tbase,
+    "011" after 92*tbase,
+    "111" after 110*tbase;
 
   tb_exp_MOSI <= '0',
     '1' after 12*tbase, '0' after 16*tbase,
@@ -135,7 +135,7 @@ begin
     '1' after 97*tbase, '0' after 99*tbase,
     '1' after 105*tbase, '0' after 109*tbase;
 
-  tb_exp_SCK <= '0',
+  tb_exp_SCK <= 'U', '0' after 1*tbase,
     '1' after 13*tbase, '0' after 14*tbase, 
     '1' after 15*tbase, '0' after 16*tbase, 
     '1' after 17*tbase, '0' after 18*tbase, 
