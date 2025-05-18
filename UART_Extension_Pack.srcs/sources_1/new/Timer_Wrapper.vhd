@@ -1,6 +1,6 @@
 library IEEE;
   use IEEE.STD_LOGIC_1164.all;
-  use IEEE.std_logic_unsigned.all;
+  use IEEE.NUMERIC_STD.all;
 
 entity Timer_Wrapper is
   generic (
@@ -29,21 +29,21 @@ architecture Behavioral of Timer_Wrapper is
       BASE_FREQ : integer := 50000
     );
     port (
-      clk, rst                 : in  std_logic;
-      en                       : in  std_logic;
-      prescale_factor_write_en : in  std_logic;
-      prescale_factor          : in  std_logic_vector(WIDTH - 1 downto 0);
-      start_value_write_en     : in  std_logic;
-      start_value              : in  std_logic_vector(WIDTH - 1 downto 0);
-      restart_timer            : in  std_logic;
-      is_timer_end             : out std_logic
+      clk, rst : in std_logic;
+      en : in std_logic;
+      prescale_factor_write_en : in std_logic;
+      prescale_factor : in integer;
+      start_value_write_en : in std_logic;
+      start_value : in unsigned(WIDTH-1 downto 0);
+      restart_timer : in std_logic;
+      is_timer_end : out std_logic
     );
   end component;
   signal timer_active_int             : std_logic := '0';
   signal prescale_factor_write_en_int : std_logic := '0';
-  signal prescaled_factor_int         : std_logic_vector(HOST_DATA_BITS - 1 downto 0);
+  signal prescaled_factor_int         : integer;
   signal start_value_write_en_int     : std_logic := '0';
-  signal start_value_int              : std_logic_vector(HOST_DATA_BITS - 1 downto 0);
+  signal start_value_int              : unsigned(HOST_DATA_BITS-1 downto 0);
   signal restart_timer_int            : std_logic := '0';
   signal is_timer_end_int             : std_logic := '0';
   signal last_is_timer_end_int        : std_logic := '0';
@@ -60,7 +60,7 @@ begin
         prescale_factor_write_en_int <= '0';
         start_value_write_en_int <= '0';
         start_value_int <= (others => '0');
-        prescaled_factor_int <= (others => '0');
+        prescaled_factor_int <= 0;
         timer_active_int <= '0';
       else
         restart_timer_int <= '0';
@@ -68,7 +68,7 @@ begin
           -- Received data from host
           case access_mode is
             when "00" =>
-              if unit_data_in > 0 then
+              if unsigned(unit_data_in) > 0 then
                 -- enable timer
                 timer_active_int <= '1';
               else
@@ -81,11 +81,11 @@ begin
             when "10" =>
               -- set prescale factor
               prescale_factor_write_en_int <= '1';
-              prescaled_factor_int <= unit_data_in;
+              prescaled_factor_int <= to_integer(unsigned(unit_data_in));
             when "11" =>
               -- set start value
               start_value_write_en_int <= '1';
-              start_value_int <= unit_data_in;
+              start_value_int <= unsigned(unit_data_in);
             when others => null;
           end case;
         end if;

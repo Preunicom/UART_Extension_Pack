@@ -12,21 +12,20 @@ entity Timer_Unit is
     clk, rst : in std_logic;
     en : in std_logic;
     prescale_factor_write_en : in std_logic;
-    prescale_factor : in std_logic_vector(WIDTH-1 downto 0);
+    prescale_factor : in integer;
     start_value_write_en : in std_logic;
-    start_value : in std_logic_vector(WIDTH-1 downto 0);
+    start_value : in unsigned(WIDTH-1 downto 0);
     restart_timer : in std_logic;
     is_timer_end : out std_logic
   );
 end entity;
 
 architecture Behavioral of Timer_Unit is
-  constant PRESCALE_COUNTER_END : integer := IN_FREQ / BASE_FREQ;
-  constant PRESCALE_COUNTER_HALF : integer := IN_FREQ / (2*BASE_FREQ);
+  constant PRESCALE_COUNTER_END_DEFAULT : integer := IN_FREQ / BASE_FREQ;
   constant is_timer_end_value : unsigned(WIDTH-1 downto 0) := (others => '1');
   signal timer_counter : unsigned(WIDTH-1 downto 0) := (others => '0');
-  signal start_value_int : std_logic_vector(WIDTH-1 downto 0) := (others => '0');
-  signal prescale_factor_int : std_logic_vector(WIDTH-1 downto 0) := std_logic_vector(to_unsigned(1, WIDTH));
+  signal start_value_int :unsigned(WIDTH-1 downto 0) := (others => '0');
+  signal prescale_counter_end : integer := PRESCALE_COUNTER_END_DEFAULT;
   signal prescale_counter : integer := 1;
   signal clk_en_prescaled : std_logic := '0';
   signal timer_rst : std_logic := '0';
@@ -37,11 +36,11 @@ begin
     if rising_edge(clk) then
       if rst = '1' then
         clk_en_prescaled <= '0';
-        prescale_counter <= (PRESCALE_COUNTER_HALF*(to_integer(unsigned(prescale_factor_int)))) + 2; -- TODO : set 0 & edit TB (same procedure in other units)
+        prescale_counter <= 0;
       else
         prescale_counter <= prescale_counter + 1;
         clk_en_prescaled <= '0';
-        if prescale_counter >= (PRESCALE_COUNTER_END*(to_integer(unsigned(prescale_factor_int)))) then 
+        if prescale_counter >= prescale_counter_end then 
           clk_en_prescaled <= '1';
           prescale_counter <= 1;
         end if;
@@ -57,14 +56,11 @@ begin
     if rising_edge(clk) then
       if rst = '1' then
         start_value_int <= (others => '0');
-        prescale_factor_int <= std_logic_vector(to_unsigned(1, WIDTH));
+        prescale_counter_end <= PRESCALE_COUNTER_END_DEFAULT;
       else
         if prescale_factor_write_en = '1' then
           -- Save new prescale factor
-          prescale_factor_int <= prescale_factor; -- TODO: Directly calculate counter end value here and only test it above in prescaler
-          if to_integer(unsigned(prescale_factor)) = 0 then
-            prescale_factor_int <= std_logic_vector(to_unsigned(1, WIDTH));
-          end if;
+          prescale_counter_end <= PRESCALE_COUNTER_END_DEFAULT*prescale_factor;
         end if;
         if start_value_write_en = '1' then
           -- Save new start value
@@ -85,14 +81,14 @@ begin
         if timer_counter = 0 then
           -- Overflow or rst happended last clock cycle
           --> jump to start_value (+1)
-          timer_counter <= unsigned(start_value_int) + 1;
+          timer_counter <= start_value_int + 1;
         else
           -- Normal counting
           timer_counter <= timer_counter + 1;
         end if;
         -- Timer end OR start value is end value (what means every clock cycle is timer end)
         -- The end value case would be not catched if it would not be an extra condition
-        if (timer_counter = is_timer_end_value) or (unsigned(start_value_int) = is_timer_end_value) then
+        if (timer_counter = is_timer_end_value) or (start_value_int = is_timer_end_value) then
           -- timer overflow 
           --> Interrupt + Reset counter to 0
           is_timer_end <= '1';
