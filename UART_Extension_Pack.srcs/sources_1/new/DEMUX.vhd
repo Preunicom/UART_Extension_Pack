@@ -8,7 +8,7 @@ entity DEMUX is
   );
   Port ( 
     clk, rst : in std_logic;
-    control : in STD_LOGIC_VECTOR (5 downto 0);
+    control : in STD_LOGIC_VECTOR(5 downto 0);
     inp_en : in STD_LOGIC;
     inp_data : in std_logic_vector(DATA_BITS-1 downto 0);
     outp_en : out STD_LOGIC_VECTOR(63 downto 0);

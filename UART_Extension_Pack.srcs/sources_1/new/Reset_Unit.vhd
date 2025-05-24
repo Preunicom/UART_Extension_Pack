@@ -73,6 +73,7 @@ begin
     if rising_edge(clk) then
       if rst = '1' then
         last_write_enable <= '0';
+        last_scheduler_done <= '0';
       else
         -- check if write_en has changed
         last_write_enable <= write_en;

@@ -40,6 +40,16 @@ The message structure is shown in the following:
 - Bit 2: Indicates an error of any unit while processing data from the host. (for example when the UART Unit can not send data as the unit still processes the last data)
 All other bits are zero.
 
+### ACK Unit
+The Acknowledge Unit sends, if activated, every received data package back to the host. 
+The host then can for example check if the data was correctly received.
+The ACK unit can be activated by sending a number unequal zero to the unit.
+If sent zero the unit gets deactivated.
+**Node:** Both packages activate and deactivate send acknowledges to the host.
+**Note:** The unit has to get the decoder output enable signal as "write_en" as it should react to all units' data.
+The signal is internally delayed by one clock cyle to match the unit data.
+The "unit_number" parameter is the decoded unit number from the decoder output.
+
 ## Custom Units
 ### UART_Unit
 Can be configured with BAUD rate, data bits, stop bits and parity bit.  
