@@ -15,7 +15,7 @@ entity ACK_Unit is
     unit_data_out : out std_logic_vector(13 downto 0); 
     scheduler_wanted : out std_logic; 
     scheduler_done : in std_logic;
-    error_to_host : out std_logic := '0'; -- unused
+    error_to_host : out std_logic := '0';
     error_from_host : out std_logic := '0'; -- unused
     unit_number : in std_logic_vector(5 downto 0)
   );

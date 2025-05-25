@@ -31,6 +31,8 @@ vhdl xil_defaultlib  \
 "../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Buffer_Register_Serializer.vhd" \
 "../../../../src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Buffer_Register_Deserializer.vhd" \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/ACK_Unit.vhd" \
+"../../../../UART_Extension_Pack.srcs/sources_1/new/IO_Sync.vhd" \
+"../../../../UART_Extension_Pack.srcs/sources_1/new/IO_Sync_Vector.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Decoder.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Main_Unit.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Encoder.vhd" \

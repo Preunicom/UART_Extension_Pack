@@ -21,7 +21,10 @@ Units are declared in the Main_Unit between "CUSTOM UNITS" and "UNITS END".
 the first generic and the first 10 ports are the same for all units.
 Following generics and ports are unit specific.  
 The specific ports have to be additionally declared in the constraints file and in the entity of Main_Unit between "UNIT PORTS" and "UNIT PORTS END". 
-**Note:** The last line before "UNIT PORTS END" must not have a semicolon at the end!
+**Note:** The last line before "UNIT PORTS END" must not have a semicolon at the end!  
+Units with input pins have to use an IO_Sync. Every input pin has to declare an IO_Sync or IO_Sync_Vector between "UNIT SYNC" and "SYNC END".  
+The corresponding signal has to be declared between "UNIT SYNC SIGNALS" and "SYNC SIGNALS END".  
+Use the input pin signal declared in port(...) as "async_in" of IO_SYNC(_Vector) and the "sync_out" with the declared signal to the unit input.
 
 ### Define host communication
 Set the default values of Main_Unit to your specific UART configuration of your host.  
