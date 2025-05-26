@@ -89,7 +89,9 @@ begin
   EDGE_DETECTION: process(clk)
   begin
     if rising_edge(clk) then
-      if not (rst = '1') then
+      if rst = '1' then
+        last_scheduler_done <= '0';
+      else
         -- Reset et rising edge of scheduler done
         last_scheduler_done <= scheduler_done;
       end if;

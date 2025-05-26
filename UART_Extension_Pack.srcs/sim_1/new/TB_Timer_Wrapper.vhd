@@ -57,65 +57,65 @@ begin
   tb_rst <= '1', '0' after 2*tbase;
 
   tb_write_en <= '0',
-    '1' after 2*tbase, '0' after 3*tbase, -- set start_value (0xFF)
-    '1' after 212*tbase, '0' after 213*tbase, -- restart
-    '1' after 222*tbase, '0' after 223*tbase, -- en
-    '1' after 505*tbase, '0' after 506*tbase, -- set start_value (0xFE)
-    '1' after 1400*tbase, '0' after 1401*tbase, -- set prescale factor
-    '1' after 2400*tbase, '0' after 2401*tbase, -- set start_value (0xFF)
-    '1' after 4000*tbase, '0' after 4001*tbase; -- en
+    '1' after 104*tbase, '0' after 105*tbase, -- set start_value (0xFF)
+    '1' after 314*tbase, '0' after 315*tbase, -- restart
+    '1' after 324*tbase, '0' after 325*tbase, -- en
+    '1' after 607*tbase, '0' after 608*tbase, -- set start_value (0xFE)
+    '1' after 1502*tbase, '0' after 1503*tbase, -- set prescale factor
+    '1' after 2502*tbase, '0' after 2503*tbase, -- set start_value (0xFF)
+    '1' after 4102*tbase, '0' after 4103*tbase; -- en
 
   tb_access_mode <= "00",
-    "11" after 2*tbase,
-    "01" after 212*tbase,
-    "00" after 222*tbase,
-    "11" after 505*tbase,
-    "10" after 1400*tbase,
-    "11" after 2400*tbase,
-    "00" after 4000*tbase;
+    "11" after 104*tbase,
+    "01" after 314*tbase,
+    "00" after 324*tbase,
+    "11" after 607*tbase,
+    "10" after 1502*tbase,
+    "11" after 2502*tbase,
+    "00" after 4102*tbase;
 
   tb_unit_data_in <= "00000000",
-    "11111111" after 2*tbase,
-    "00000000" after 212*tbase,
-    "11111111" after 222*tbase,
-    "11111110" after 55*tbase,
-    "00000010" after 1400*tbase,
-    "11111111" after 2400*tbase,
-    "00000000" after 4000*tbase;
+    "11111111" after 104*tbase,
+    "00000000" after 314*tbase,
+    "11111111" after 324*tbase,
+    "11111110" after 157*tbase,
+    "00000010" after 1502*tbase,
+    "11111111" after 2502*tbase,
+    "00000000" after 4102*tbase;
 
   tb_scheduler_done <= '0',
-    '1' after 321*tbase, '0' after 322*tbase,
-    '1' after 531*tbase, '0' after 532*tbase,
-    '1' after 721*tbase, '0' after 722*tbase,
-    '1' after 1191*tbase, '0' after 1192*tbase,
-    '1' after 1791*tbase, '0' after 1792*tbase,
-    '1' after 2191*tbase, '0' after 2192*tbase,
-    '1' after 2591*tbase, '0' after 2592*tbase,
-    '1' after 2991*tbase, '0' after 2992*tbase,
-    '1' after 3391*tbase, '0' after 3392*tbase,
-    '1' after 3791*tbase, '0' after 3792*tbase;
+    '1' after 423*tbase, '0' after 424*tbase,
+    '1' after 633*tbase, '0' after 634*tbase,
+    '1' after 1023*tbase, '0' after 1024*tbase,
+    '1' after 1493*tbase, '0' after 1494*tbase,
+    '1' after 1893*tbase, '0' after 1894*tbase,
+    '1' after 2293*tbase, '0' after 2294*tbase,
+    '1' after 2693*tbase, '0' after 2694*tbase,
+    '1' after 3093*tbase, '0' after 3094*tbase,
+    '1' after 3493*tbase, '0' after 3494*tbase,
+    '1' after 3893*tbase, '0' after 3894*tbase;
 
   tb_exp_unit_data_out <= (others => 'U'), (others => '0') after 1*tbase,
-    (others => '1') after 302*tbase, (others => '0') after 321*tbase,
-    (others => '1') after 502*tbase, (others => '0') after 531*tbase,
-    (others => '1') after 702*tbase, (others => '0') after 721*tbase,
-    (others => '1') after 1102*tbase, (others => '0') after 1191*tbase,
-    (others => '1') after 2102*tbase, (others => '0') after 2191*tbase,
-    (others => '1') after 2502*tbase, (others => '0') after 2591*tbase,
-    (others => '1') after 2902*tbase, (others => '0') after 2991*tbase,
-    (others => '1') after 3302*tbase, (others => '0') after 3391*tbase,
-    (others => '1') after 3702*tbase, (others => '0') after 3791*tbase;
+    (others => '1') after 404*tbase, (others => '0') after 423*tbase,
+    (others => '1') after 604*tbase, (others => '0') after 633*tbase,
+    (others => '1') after 1004*tbase, (others => '0') after 1023*tbase,
+    (others => '1') after 1404*tbase, (others => '0') after 1493*tbase,
+    (others => '1') after 2204*tbase, (others => '0') after 2293*tbase,
+    (others => '1') after 2604*tbase, (others => '0') after 2693*tbase,
+    (others => '1') after 3004*tbase, (others => '0') after 3093*tbase,
+    (others => '1') after 3404*tbase, (others => '0') after 3493*tbase,
+    (others => '1') after 3804*tbase, (others => '0') after 3893*tbase;
 
   tb_exp_scheduler_wanted <= 'U', '0' after 1*tbase,
-    '1' after 302*tbase, '0' after 321*tbase,
-    '1' after 502*tbase, '0' after 531*tbase,
-    '1' after 702*tbase, '0' after 721*tbase,
-    '1' after 1102*tbase, '0' after 1191*tbase,
-    '1' after 2102*tbase, '0' after 2191*tbase,
-    '1' after 2502*tbase, '0' after 2591*tbase,
-    '1' after 2902*tbase, '0' after 2991*tbase,
-    '1' after 3302*tbase, '0' after 3391*tbase,
-    '1' after 3702*tbase, '0' after 3791*tbase;
+    '1' after 404*tbase, '0' after 423*tbase,
+    '1' after 604*tbase, '0' after 633*tbase,
+    '1' after 1004*tbase, '0' after 1023*tbase,
+    '1' after 1404*tbase, '0' after 1493*tbase,
+    '1' after 2204*tbase, '0' after 2293*tbase,
+    '1' after 2604*tbase, '0' after 2693*tbase,
+    '1' after 3004*tbase, '0' after 3093*tbase,
+    '1' after 3404*tbase, '0' after 3493*tbase,
+    '1' after 3804*tbase, '0' after 3893*tbase;
   
   tb_exp_error_to_host <= '0';
 

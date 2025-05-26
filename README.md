@@ -21,7 +21,10 @@ Units are declared in the Main_Unit between "CUSTOM UNITS" and "UNITS END".
 the first generic and the first 10 ports are the same for all units.
 Following generics and ports are unit specific.  
 The specific ports have to be additionally declared in the constraints file and in the entity of Main_Unit between "UNIT PORTS" and "UNIT PORTS END". 
-**Note:** The last line before "UNIT PORTS END" must not have a semicolon at the end!
+**Note:** The last line before "UNIT PORTS END" must not have a semicolon at the end!  
+Units with input pins have to use an IO_Sync. Every input pin has to declare an IO_Sync or IO_Sync_Vector between "UNIT SYNC" and "SYNC END".  
+The corresponding signal has to be declared between "UNIT SYNC SIGNALS" and "SYNC SIGNALS END".  
+Use the input pin signal declared in port(...) as "async_in" of IO_SYNC(_Vector) and the "sync_out" with the declared signal to the unit input.
 
 ### Define host communication
 Set the default values of Main_Unit to your specific UART configuration of your host.  
@@ -40,11 +43,21 @@ The message structure is shown in the following:
 - Bit 2: Indicates an error of any unit while processing data from the host. (for example when the UART Unit can not send data as the unit still processes the last data)
 All other bits are zero.
 
+### ACK Unit
+The Acknowledge Unit sends, if activated, every received data package back to the host. 
+The host then can for example check if the data was correctly received.
+The ACK unit can be activated by sending a number unequal zero to the unit.
+If sent zero the unit gets deactivated.
+**Node:** Both packages activate and deactivate send acknowledges to the host.
+**Note:** The unit has to get the decoder output enable signal as "write_en" as it should react to all units' data.
+The signal is internally delayed by one clock cyle to match the unit data.
+The "unit_number" parameter is the decoded unit number from the decoder output.
+
 ## Custom Units
 ### UART_Unit
 Can be configured with BAUD rate, data bits, stop bits and parity bit.  
 Needs two pins (rx and tx) of the FPGA.  
-BAUD has to be less or equal than half of the FPGA frequency. 
+BAUD has to be less or equal than the FPGA frequency. 
 **Note:** Integer divisor baud rates lead to more stable UART communication  
 Data bits have to be more than 5 and all bits (stop, data and parity) have to be less or equal 15.  
 Normally: 
@@ -98,7 +111,7 @@ Can be configured via UART (No configuration in VHDL code necessary).
 The timer is an x-bit timer with x being the amount of bits of the host UART communication.  
 It counts from a given start value (default 0) up to the maximum value of x bit. The overflow triggers an interrupt which is sent to the host.  
 The timer frequency is at 5% of host baud rate.  
-**Note:** The reason is, that that is the maximum of ExtPack packages (consists of two UART packages: unit number and unit data) that are be able to be transmitted to the host via 8N1 UART, which is the fastest supported host UART mode when looking at packages transmission rate.  
+**Note:** The reason is, that that is the maximum of ExtPack packages (consists of two UART packages: unit number and unit data) that are being able to be transmitted to the host via 8N1 UART, which is the fastest supported host UART mode when looking at packages transmission rate.  
 The speed of counting (prescaler) can also be set as a divisor of this 5% of host BAUD frequency. (default: 1)  
 For example: With a host baud rate of 1 MHz a prescale divisor of 2 results in 25 KHz.  
 The access mode handles all this configurations: 

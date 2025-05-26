@@ -96,6 +96,7 @@ begin
       if rst = '1' then
         last_values_read <= (others => '0');
         last_write_enable <= '0';
+        last_scheduler_done <= '0';
       else
         -- Check if input pin values have changed
         last_values_read <= values_read;

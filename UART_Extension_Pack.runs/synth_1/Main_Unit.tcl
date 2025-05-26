@@ -70,7 +70,7 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
-set_param xicom.use_bs_reader 1
+set_msg_config -id {Common 17-41} -limit 10000000
 set_msg_config  -id {Board 49-56}  -string {{CRITICAL WARNING: [Board 49-56] Problem parsing board file - /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/production/1.1/board.xml.
 Resolution: Please contact your board vendor with this message.}}  -suppress 
 set_msg_config  -id {Board 49-56}  -string {{CRITICAL WARNING: [Board 49-56] Problem parsing board file - /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.0/board.xml.
@@ -98,21 +98,13 @@ OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_vhdl -library xil_defaultlib {
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UnitDataArray_Type_PKG.vhd
-  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Buffer_Register_Deserializer.vhd
-  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Buffer_Register_Serializer.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/DEMUX.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Decoder.vhd
-  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Deserializer.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/GPIO_Bank_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/GPIO_Wrapper.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/MUX.vhd
-  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Prescaler.vhd
-  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Serializer.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Timer_Wrapper.vhd
-  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/UART_Receiver.vhd
-  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/UART_Transmitter.vhd
-  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/UART_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/UART_Wrapper.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Main_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Encoder.vhd
@@ -120,6 +112,14 @@ read_vhdl -library xil_defaultlib {
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Reset_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/Error_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/SPI_Wrapper.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Serializer.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Buffer_Register_Serializer.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Prescaler.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Deserializer.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/UART_Transmitter.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/UART_Receiver.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/Buffer_Register_Deserializer.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_UART_Module/UART_Module.srcs/sources_1/new/UART_Unit.vhd
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_CLK_Manager.vhd
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Serializer.vhd
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Prescaler.vhd
@@ -127,6 +127,9 @@ read_vhdl -library xil_defaultlib {
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Deserializer.vhd
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Buffer_Register_Serializer.vhd
   /home/user/Data/UART_Extension_Pack/src_ext/FPGA_SPI_Module/FPGA_SPI_Module.srcs/sources_1/new/SPI_Buffer_Register_Deserializer.vhd
+  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/ACK_Unit.vhd
+  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/IO_Sync.vhd
+  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/IO_Sync_Vector.vhd
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being

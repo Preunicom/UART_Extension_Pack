@@ -68,6 +68,11 @@ architecture TESTBENCH of TB_UART_Extension_Pack is
       signal tb_error : out std_logic
     );
   end component;
+  component TB_ACK_Unit
+    Port(
+      signal tb_error : out std_logic
+    );
+  end component;
   signal tb_error_TB_Main_Unit : std_logic;
   signal tb_error_TB_Decoder : std_logic;
   signal tb_error_TB_PriorityScheduler : std_logic;
@@ -80,6 +85,7 @@ architecture TESTBENCH of TB_UART_Extension_Pack is
   signal tb_error_TB_UART_Module : std_logic;
   signal tb_error_TB_Reset_Unit : std_logic;
   signal tb_error_TB_Error_Unit : std_logic;
+  signal tb_error_TB_ACK_Unit : std_logic;
 begin
   Main_Unit: TB_Main_Unit port map(tb_error_TB_Main_Unit);
   Decoder: TB_Decoder port map(tb_error_TB_Decoder);
@@ -93,6 +99,7 @@ begin
   UART_Module: TB_UART_Module port map(tb_error_TB_UART_Module);
   Reset_Unit: TB_Reset_Unit port map(tb_error_TB_Reset_Unit);
   Error_Unit: TB_Error_Unit port map(tb_error_TB_Error_Unit);
+  ACK_Unit: TB_ACK_Unit port map(tb_error_TB_ACK_Unit);
 
   tb_error <= '0' when 
     (tb_error_TB_Main_Unit = '0')
@@ -106,6 +113,7 @@ begin
     and (tb_error_TB_SPI_Module = '0') 
     and (tb_error_TB_UART_Module = '0') 
     and (tb_error_TB_Reset_Unit = '0') 
-    and (tb_error_TB_Error_Unit = '0') else '1';
+    and (tb_error_TB_Error_Unit = '0') 
+    and (tb_error_TB_ACK_Unit = '0') else '1';
 
 end TESTBENCH;

@@ -25,10 +25,10 @@ set_property -dict { PACKAGE_PIN G17   IOSTANDARD LVCMOS33 } [get_ports { spi_cs
 set_property -dict { PACKAGE_PIN G19   IOSTANDARD LVCMOS33 } [get_ports { spi_mosi }]; #IO_L4N_T0_D05_14 Sch=ja[2]
 #set_property -dict { PACKAGE_PIN N18   IOSTANDARD LVCMOS33 } [get_ports { ja[2] }]; #IO_L9P_T1_DQS_14 Sch=ja[3]
 set_property -dict { PACKAGE_PIN L18   IOSTANDARD LVCMOS33 } [get_ports { spi_sck }]; #IO_L8P_T1_D11_14 Sch=ja[4]
-set_property -dict { PACKAGE_PIN H17   IOSTANDARD LVCMOS33 } [get_ports { gpio_pins_out[2] }]; #IO_L5P_T0_D06_14 Sch=ja[7]
-set_property -dict { PACKAGE_PIN H19   IOSTANDARD LVCMOS33 } [get_ports { gpio_pins_out[3] }]; #IO_L4P_T0_D04_14 Sch=ja[8]
-set_property -dict { PACKAGE_PIN J19   IOSTANDARD LVCMOS33 } [get_ports { gpio_pins_out[4] }]; #IO_L6N_T0_D08_VREF_14 Sch=ja[9]
-set_property -dict { PACKAGE_PIN K18   IOSTANDARD LVCMOS33 } [get_ports { gpio_pins_out[5] }]; #IO_L8N_T1_D12_14 Sch=ja[10]
+#set_property -dict { PACKAGE_PIN H17   IOSTANDARD LVCMOS33 } [get_ports { gpio_pins_out[2] }]; #IO_L5P_T0_D06_14 Sch=ja[7]
+#set_property -dict { PACKAGE_PIN H19   IOSTANDARD LVCMOS33 } [get_ports { gpio_pins_out[3] }]; #IO_L4P_T0_D04_14 Sch=ja[8]
+#set_property -dict { PACKAGE_PIN J19   IOSTANDARD LVCMOS33 } [get_ports { gpio_pins_out[4] }]; #IO_L6N_T0_D08_VREF_14 Sch=ja[9]
+#set_property -dict { PACKAGE_PIN K18   IOSTANDARD LVCMOS33 } [get_ports { gpio_pins_out[5] }]; #IO_L8N_T1_D12_14 Sch=ja[10]
 
 ## Analog XADC Pins
 ## Only declare these if you want to use pins 15 and 16 as single ended analog inputs. pin 15 -> vaux4, pin16 -> vaux12
@@ -81,7 +81,7 @@ set_property -dict {PACKAGE_PIN N1 IOSTANDARD LVCMOS33} [get_ports rx_pin_host]
 #set_property -dict { PACKAGE_PIN U3    IOSTANDARD LVCMOS33 } [get_ports { pio44 }]; #IO_L9P_T1_DQS_34 Sch=pio[44]
 #set_property -dict { PACKAGE_PIN U7    IOSTANDARD LVCMOS33 } [get_ports { pio45 }]; #IO_L19P_T3_34 Sch=pio[45]
 #set_property -dict { PACKAGE_PIN W7    IOSTANDARD LVCMOS33 } [get_ports { pio46 }]; #IO_L13P_T2_MRCC_34 Sch=pio[46]
-#set_property -dict { PACKAGE_PIN U8    IOSTANDARD LVCMOS33 } [get_ports { pio47 }]; #IO_L14P_T2_SRCC_34 Sch=pio[47]
+set_property -dict { PACKAGE_PIN U8    IOSTANDARD LVCMOS33 } [get_ports { spi_miso }]; #IO_L14P_T2_SRCC_34 Sch=pio[47]
 #set_property -dict { PACKAGE_PIN V8    IOSTANDARD LVCMOS33 } [get_ports { clk_testing }]; #IO_L14N_T2_SRCC_34 Sch=pio[48]
 
 ## UART
