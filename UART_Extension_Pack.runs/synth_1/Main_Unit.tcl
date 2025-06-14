@@ -70,6 +70,7 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
+set_param chipscope.maxJobs 2
 set_msg_config -id {Common 17-41} -limit 10000000
 set_msg_config  -id {Board 49-56}  -string {{CRITICAL WARNING: [Board 49-56] Problem parsing board file - /home/user/Xilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/production/1.1/board.xml.
 Resolution: Please contact your board vendor with this message.}}  -suppress 
@@ -130,6 +131,10 @@ read_vhdl -library xil_defaultlib {
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/ACK_Unit.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/IO_Sync.vhd
   /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/IO_Sync_Vector.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_I2C_Module/I2C_Module.srcs/sources_1/new/I2C_Communication.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_I2C_Module/I2C_Module.srcs/sources_1/new/I2C_Unit.vhd
+  /home/user/Data/UART_Extension_Pack/src_ext/FPGA_I2C_Module/I2C_Module.srcs/sources_1/new/I2C_Prescaler.vhd
+  /home/user/Data/UART_Extension_Pack/UART_Extension_Pack.srcs/sources_1/new/I2C_Wrapper.vhd
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being

@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date             : Sun May 25 17:36:19 2025
-| Host             : 3bdcfbddd213 running 64-bit Ubuntu 22.04.5 LTS
+| Date             : Sat Jun 14 22:05:16 2025
+| Host             : 5680a6ca5b44 running 64-bit Ubuntu 22.04.5 LTS
 | Command          : report_power -file Main_Unit_power_routed.rpt -pb Main_Unit_power_summary_routed.pb -rpx Main_Unit_power_routed.rpx
 | Design           : Main_Unit
 | Device           : xc7a35tcpg236-1
@@ -53,14 +53,14 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |    <0.001 |        3 |       --- |             --- |
-| Slice Logic    |    <0.001 |     1940 |       --- |             --- |
-|   LUT as Logic |    <0.001 |      579 |     20800 |            2.78 |
-|   CARRY4       |    <0.001 |      162 |      8150 |            1.99 |
-|   Register     |    <0.001 |      880 |     41600 |            2.12 |
-|   F7/F8 Muxes  |    <0.001 |        1 |     32600 |           <0.01 |
-|   Others       |     0.000 |       63 |       --- |             --- |
-| Signals        |    <0.001 |     1306 |       --- |             --- |
-| I/O            |    <0.001 |       13 |       106 |           12.26 |
+| Slice Logic    |    <0.001 |     2212 |       --- |             --- |
+|   LUT as Logic |    <0.001 |      658 |     20800 |            3.16 |
+|   CARRY4       |    <0.001 |      174 |      8150 |            2.13 |
+|   Register     |    <0.001 |     1024 |     41600 |            2.46 |
+|   F7/F8 Muxes  |    <0.001 |        8 |     32600 |            0.02 |
+|   Others       |     0.000 |       67 |       --- |             --- |
+| Signals        |    <0.001 |     1506 |       --- |             --- |
+| I/O            |    <0.001 |       15 |       106 |           14.15 |
 | Static Power   |     0.072 |          |           |                 |
 | Total          |     0.073 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
@@ -72,7 +72,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.010 |       0.001 |      0.010 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.011 |       0.001 |      0.010 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.013 |       0.000 |      0.013 |       NA    | Unspecified | NA         |
 | Vcco33    |       3.300 |     0.001 |       0.000 |      0.001 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -138,8 +138,10 @@ Table of Contents
 3.1 By Hierarchy
 ----------------
 
-+------+-----------+
-| Name | Power (W) |
-+------+-----------+
++-----------+-----------+
+| Name      | Power (W) |
++-----------+-----------+
+| Main_Unit |     0.001 |
++-----------+-----------+
 
 

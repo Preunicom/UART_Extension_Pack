@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version              : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date                      : Sun May 25 17:35:59 2025
-| Host                      : 3bdcfbddd213 running 64-bit Ubuntu 22.04.5 LTS
+| Date                      : Sat Jun 14 22:04:54 2025
+| Host                      : 5680a6ca5b44 running 64-bit Ubuntu 22.04.5 LTS
 | Command                   : report_io -file Main_Unit_io_placed.rpt
 | Design                    : Main_Unit
 | Device                    : xc7a35t
@@ -25,7 +25,7 @@ Table of Contents
 +---------------+
 | Total User IO |
 +---------------+
-|            13 |
+|            15 |
 +---------------+
 
 
@@ -150,7 +150,7 @@ Table of Contents
 | J18        |                  | High Range | IO_L7N_T1_D10_14             | User IO       |             |      14 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
 | J19        |                  | High Range | IO_L6N_T0_D08_VREF_14        | User IO       |             |      14 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
 | K1         |                  | High Range | VCCO_35                      | VCCO          |             |      35 |            |      |                     |                      |    3.30 |            |           |          |      |                  |              |                   |              |
-| K2         |                  | High Range | IO_L5P_T0_AD13P_35           | User IO       |             |      35 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
+| K2         | i2c_scl          | High Range | IO_L5P_T0_AD13P_35           | BIDIR         | LVCMOS33    |      35 |         12 | SLOW |                     |            FP_VTT_50 |         | FIXED      |           |          |      | NONE             |              |                   |              |
 | K3         |                  | High Range | IO_L7N_T1_AD6N_35            | User IO       |             |      35 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
 | K7         |                  | High Range | VCCO_35                      | VCCO          |             |      35 |            |      |                     |                      |    3.30 |            |           |          |      |                  |              |                   |              |
 | K8         |                  |            | GND                          | GND           |             |         |            |      |                     |                      |     0.0 |            |           |          |      |                  |              |                   |              |
@@ -159,7 +159,7 @@ Table of Contents
 | K17        |                  | High Range | IO_L12N_T1_MRCC_14           | User IO       |             |      14 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
 | K18        |                  | High Range | IO_L8N_T1_D12_14             | User IO       |             |      14 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
 | K19        |                  | High Range | IO_L6P_T0_FCS_B_14           | User IO       |             |      14 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
-| L1         |                  | High Range | IO_L6N_T0_VREF_35            | User IO       |             |      35 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
+| L1         | i2c_sda          | High Range | IO_L6N_T0_VREF_35            | BIDIR         | LVCMOS33    |      35 |         12 | SLOW |                     |            FP_VTT_50 |         | FIXED      |           |          |      | NONE             |              |                   |              |
 | L2         |                  | High Range | IO_L5N_T0_AD13N_35           | User IO       |             |      35 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
 | L3         |                  | High Range | IO_L8P_T1_AD14P_35           | User IO       |             |      35 |            |      |                     |                      |         |            |           |          |      |                  |              |                   |              |
 | L7         |                  | High Range | VCCO_35                      | VCCO          |             |      35 |            |      |                     |                      |    3.30 |            |           |          |      |                  |              |                   |              |

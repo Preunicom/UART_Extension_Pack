@@ -95,6 +95,34 @@ There are three situations where errors are forwarded to the Error_Unit:
 - Sending command while SPI_Unit not ready (error_from_host)
 - Slave ID set command with invalid slave ID (error_from_host)
 
+### I2C_Unit
+Can be configured with a data rate.  
+The I2C_FREQ_HZ has to be lower or equal to quarter of the IN_FREQ_HZ.  
+I2C uses MSB.  
+It uses repeated start when sending packages directly following on each other to different slaves or to the same slave with another mode (send/receive).  
+Packages to the same slave with the same mode (send/receive) following on each other are directly sent after the ACK.
+The Unit supports slave clock stretching.  
+**Note:** The I2C Unit does not work with multiple masters. It has to be the only master on the bus.
+
+**Note:** This unit can not be synced as the pin is inout!
+
+The I2C_Unit needs following pins:  
+
+- SCL (inout) (The pin/connection has to be connected with a pull-up resistor)
+- SDA (inout) (The pin/connection has to be connected with a pull-up resistor)
+
+The access mode handles data sending and the current slave ID:
+
+- "*1": Sets partner address (lowest 7 bits of received data)
+- "10": Receives a message from the partner with currently set partner address
+- "00": Sends a message to the partner with currently set partner address
+
+There are three situations where errors are forwarded to the Error_Unit:
+
+- Too slow scheduling (error_to_host)
+- Sending command while another command is already waiting for the I2C Unit to be ready (error_from_host)
+- NACK received while sending (error_from_host)
+
 ### GPIO_Unit
 Can be configured with in and out pin amount.  
 Pin amount has to be at least 1 and maximum the amount of data bits of the host UART communication.
