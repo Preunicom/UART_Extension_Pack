@@ -47,6 +47,9 @@ architecture TESTBENCH of TB_I2C_Wrapper is
   constant tbase : time := 100 ns;
   constant tbase_scl : time := 10000 ns;
 
+  signal SCL_temp : std_logic;
+  signal SCL_en : std_logic;
+
 begin
 
   COMP: I2C_Wrapper generic map(8, 10000000, 100000) port map(tb_clk, tb_rst, tb_write_en, tb_access_mode, tb_unit_data_in, tb_unit_data_out, tb_scheduler_wanted, tb_scheduler_done, tb_error_to_host, tb_error_from_host, tb_SCL_no_pullup, tb_SDA_no_pullup);
@@ -69,16 +72,22 @@ begin
   -- 100 KHz
   CLOCK_CLA: process
   begin
-    tb_exp_SCL <= '0';
+    SCL_temp <= '0';
     wait for 1*tbase; -- Init Prescaler because of reset
     for i in 199 downto 0 loop
-      tb_exp_SCL <= '0';
+      SCL_temp <= '0';
       wait for tbase_scl/2;
-      tb_exp_SCL <= 'H';
+      SCL_temp <= 'H';
       wait for tbase_scl/2;
     end loop;
     wait;
   end process;
+
+  SCL_en <= '1', '0' after 1*tbase,
+    '1' after 101*tbase, '0' after 1951*tbase,
+    '1' after 2601*tbase, '0' after 6351*tbase;
+
+  tb_exp_SCL <= '0' when SCL_en = '1' and SCL_temp = '0' else 'H';
 
   tb_rst <= '1', '0' after 2*tbase;
 
@@ -107,18 +116,18 @@ begin
     '1' after 6200*tbase, '0' after 6201*tbase;
 
   tb_SDA_no_pullup <= 'Z',
-    '0' after 1002*tbase, 'Z' after 1102*tbase, --Adr ACK
-    '0' after 1902*tbase, 'Z' after 2002*tbase, --Data ACK
-    '0' after 3402*tbase, 'Z' after 3502*tbase, --Adr ACK
-    '0' after 4302*tbase, 'Z' after 4402*tbase, --Data ACK
-    '0' after 5302*tbase, 'Z' after 5402*tbase, --Adr ACK
-    '0' after 5402*tbase, '0' after 5502*tbase, 'Z' after 5602*tbase, 'Z' after 5702*tbase, '0' after 5802*tbase, '0' after 5902*tbase, '0' after 6002*tbase, 'Z' after 6102*tbase; -- DATA (0x31)
+    '0' after 927*tbase, 'Z' after 1027*tbase, --Adr ACK
+    '0' after 1827*tbase, 'Z' after 1927*tbase, --Data ACK
+    '0' after 3427*tbase, 'Z' after 3527*tbase, --Adr ACK
+    '0' after 4327*tbase, 'Z' after 4427*tbase, --Data ACK
+    '0' after 5327*tbase, 'Z' after 5427*tbase, --Adr ACK
+    '0' after 5427*tbase, '0' after 5527*tbase, 'Z' after 5627*tbase, 'Z' after 5727*tbase, '0' after 5827*tbase, '0' after 5927*tbase, '0' after 6027*tbase, 'Z' after 6127*tbase; -- DATA (0x31)
 
   tb_exp_unit_data_out <= (others => 'U'), (others => '0') after 1*tbase,
-    "00000000ZZ000Z" after 6155*tbase, (others => '0') after 6200*tbase;
+    "00000000ZZ000Z" after 6179*tbase, (others => '0') after 6200*tbase;
 
   tb_exp_scheduler_wanted <= 'U', '0' after 1*tbase,
-    '1' after 6155*tbase, '0' after 6200*tbase;
+    '1' after 6179*tbase, '0' after 6200*tbase;
   
   tb_exp_error_to_host <= '0';
 
@@ -126,26 +135,26 @@ begin
     '1' after 2601*tbase, '0' after 2602*tbase;
 
   tb_exp_SDA <= 'H',
-    '0' after 153*tbase, --START
-    'H' after 202*tbase, '0' after 302*tbase, '0' after 402*tbase, '0' after 502*tbase, '0' after 602*tbase, '0' after 702*tbase, 'H' after 802*tbase, '0' after 902*tbase, -- ADR (0x82)
-    '0' after 1002*tbase, --ACK
-    '0' after 1102*tbase, '0' after 1202*tbase, '0' after 1302*tbase, '0' after 1402*tbase, 'H' after 1502*tbase, 'H' after 1602*tbase, 'H' after 1702*tbase, 'H' after 1802*tbase, -- DATA (0x0F)
-    '0' after 1902*tbase, --ACK
-    '0' after 2002*tbase, --STOP_PREP
-    'H' after 2053*tbase, --STOP
-    '0' after 2553*tbase, --START
-    'H' after 2602*tbase, '0' after 2702*tbase, '0' after 2802*tbase, '0' after 2902*tbase, '0' after 3002*tbase, '0' after 3102*tbase, 'H' after 3202*tbase, '0' after 3302*tbase, -- ADR (0x82)
-    '0' after 3402*tbase, --ACK
-    'H' after 3502*tbase, '0' after 3602*tbase, '0' after 3702*tbase, '0' after 3802*tbase, '0' after 3902*tbase, '0' after 4002*tbase, '0' after 4102*tbase, 'H' after 4202*tbase, -- DATA (0x81)
-    '0' after 4302*tbase, --ACK
-    'H' after 4402*tbase, --RS_PREP
-    '0' after 4453*tbase, -- RS (Repeated Start)
-    'H' after 4502*tbase, '0' after 4602*tbase, '0' after 4702*tbase, '0' after 4802*tbase, '0' after 4902*tbase, '0' after 5002*tbase, 'H' after 5102*tbase, 'H' after 5202*tbase, -- ADR (0x83)
-    '0' after 5302*tbase, --ACK
-    '0' after 5402*tbase, '0' after 5502*tbase, 'H' after 5602*tbase, 'H' after 5702*tbase, '0' after 5802*tbase, '0' after 5902*tbase, '0' after 6002*tbase, 'H' after 6102*tbase, -- DATA (0x31)
-    '0' after 6202*tbase, --ACK
-    '0' after 6302*tbase, --STOP_PREP
-    'H' after 6353*tbase; --STOP
+    '0' after 77*tbase, --START
+    'H' after 127*tbase, '0' after 227*tbase, '0' after 327*tbase, '0' after 427*tbase, '0' after 527*tbase, '0' after 627*tbase, 'H' after 727*tbase, '0' after 827*tbase, -- ADR (0x82)
+    '0' after 927*tbase, --ACK
+    '0' after 1027*tbase, '0' after 1127*tbase, '0' after 1227*tbase, '0' after 1327*tbase, 'H' after 1427*tbase, 'H' after 1527*tbase, 'H' after 1627*tbase, 'H' after 1727*tbase, -- DATA (0x0F)
+    '0' after 1827*tbase, --ACK
+    '0' after 1927*tbase, --STOP_PREP
+    'H' after 1977*tbase, --STOP
+    '0' after 2577*tbase, --START
+    'H' after 2627*tbase, '0' after 2727*tbase, '0' after 2827*tbase, '0' after 2927*tbase, '0' after 3027*tbase, '0' after 3127*tbase, 'H' after 3227*tbase, '0' after 3327*tbase, -- ADR (0x82)
+    '0' after 3427*tbase, --ACK
+    'H' after 3527*tbase, '0' after 3627*tbase, '0' after 3727*tbase, '0' after 3827*tbase, '0' after 3927*tbase, '0' after 4027*tbase, '0' after 4127*tbase, 'H' after 4227*tbase, -- DATA (0x81)
+    '0' after 4327*tbase, --ACK
+    'H' after 4427*tbase, --RS_PREP
+    '0' after 4477*tbase, -- RS (Repeated Start)
+    'H' after 4527*tbase, '0' after 4627*tbase, '0' after 4727*tbase, '0' after 4827*tbase, '0' after 4927*tbase, '0' after 5027*tbase, 'H' after 5127*tbase, 'H' after 5227*tbase, -- ADR (0x83)
+    '0' after 5327*tbase, --ACK
+    '0' after 5427*tbase, '0' after 5527*tbase, 'H' after 5627*tbase, 'H' after 5727*tbase, '0' after 5827*tbase, '0' after 5927*tbase, '0' after 6027*tbase, 'H' after 6127*tbase, -- DATA (0x31)
+    'H' after 6227*tbase, --NACK (Recv end)
+    '0' after 6327*tbase, --STOP_PREP
+    'H' after 6377*tbase; --STOP
  
   tb_error <= '0' when 
     (tb_exp_unit_data_out = tb_unit_data_out)
