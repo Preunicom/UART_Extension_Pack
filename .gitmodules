@@ -4,3 +4,9 @@
 [submodule "src_ext/FPGA_SPI_Module"]
 	path = src_ext/FPGA_SPI_Module
 	url = git@github.com:Preunicom/FPGA_SPI_Module.git
+[submodule "src_ext/src_ext"]
+	path = src_ext/src_ext
+	url = git@github.com:Preunicom/FPGA_UART_Module.git
+[submodule "src_ext/FPGA_I2C_Module"]
+	path = src_ext/FPGA_I2C_Module
+	url = git@github.com:Preunicom/FPGA_I2C_Module.git

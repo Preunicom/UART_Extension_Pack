@@ -15,6 +15,7 @@ end TB_Main_Unit;
 -- U4: GPIO --> generic map(HOST_DATA_BITS, 1, 2)
 -- U5: Timer --> generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD)
 -- U6: SPI --> generic map(HOST_DATA_BITS, FPGA_FREQ, 9600, 1, 0, 0, 8)
+-- U7: I2C --> generic map(HOST_DATA_BITS, FPGA_FREQ, 100000)
 architecture TESTBENCH of TB_Main_Unit is
   component Main_Unit
     Generic(
@@ -41,7 +42,9 @@ architecture TESTBENCH of TB_Main_Unit is
       spi_sck : out std_logic;
       spi_cs : out std_logic_vector(0 downto 0);
       spi_mosi : out std_logic;
-      spi_miso : in std_logic
+      spi_miso : in std_logic;
+      i2c_scl : inout std_logic;
+      i2c_sda : inout std_logic
       
       --------------- UNIT PORTS END ---------------
     );
@@ -59,11 +62,20 @@ architecture TESTBENCH of TB_Main_Unit is
   signal tb_spi_cs, tb_exp_spi_cs : std_logic_vector(0 downto 0);
   signal tb_spi_mosi, tb_exp_spi_mosi : std_logic;
   signal tb_spi_miso : std_logic;
+  signal tb_i2c_scl, tb_exp_i2c_scl, tb_i2c_scl_no_pullup : std_logic;
+  signal tb_i2c_sda, tb_exp_i2c_sda, tb_i2c_sda_no_pullup : std_logic;
 
   constant tbase : time := 100 ns;
+  constant tbase_i2c_scl : time := 10000 ns;
+
+  signal exp_SCL_temp : std_logic;
+  signal exp_SCL_en : std_logic;
 begin
-  MU: Main_Unit generic map(10000000, 1000000, 8, 1, 1, 0) port map(tb_clk, tb_rst, tb_tx_pin_host, tb_rx_pin_host, tb_tx_pin_a, tb_rx_pin_a, tb_gpio_pins_in, tb_gpio_pins_out, tb_spi_sck, tb_spi_cs, tb_spi_mosi, tb_spi_miso);
+  MU: Main_Unit generic map(10000000, 1000000, 8, 1, 1, 0) port map(tb_clk, tb_rst, tb_tx_pin_host, tb_rx_pin_host, tb_tx_pin_a, tb_rx_pin_a, tb_gpio_pins_in, tb_gpio_pins_out, tb_spi_sck, tb_spi_cs, tb_spi_mosi, tb_spi_miso, tb_i2c_scl_no_pullup, tb_i2c_sda_no_pullup);
   
+  tb_i2c_sda <= tb_i2c_sda_no_pullup when tb_i2c_sda_no_pullup /= 'Z' else 'H';
+  tb_i2c_scl <= tb_i2c_scl_no_pullup when tb_i2c_scl_no_pullup /= 'Z' else 'H';
+
   -- 10 MHz
   CLOCK: process
   begin
@@ -75,6 +87,34 @@ begin
     end loop;
     wait;
   end process;
+
+  -- 100 KHz
+  CLOCK_CLA: process
+  begin
+    exp_SCL_temp <= '0';
+    wait for 3*tbase; -- Init Prescaler because of reset
+    for i in 81 downto 0 loop
+      exp_SCL_temp <= '0';
+      wait for tbase_i2c_scl/2;
+      exp_SCL_temp <= '1';
+      wait for tbase_i2c_scl/2;
+    end loop;
+    exp_SCL_temp <= '0';
+    wait for 19*tbase; -- Reset unit test
+    for i in 117 downto 0 loop
+      exp_SCL_temp <= '0';
+      wait for tbase_i2c_scl/2;
+      exp_SCL_temp <= '1';
+      wait for tbase_i2c_scl/2;
+    end loop;
+    exp_SCL_temp <= '0';
+    wait;
+  end process;
+
+  exp_SCL_en <= '1', '0' after 1*tbase,
+    '1' after 9922*tbase, '0' after 13672*tbase;
+
+  tb_exp_i2c_scl <= '0' when exp_SCL_en = '1' and exp_SCL_temp = '0' else 'H';
 
   tb_rst <= '1', '0' after 2*tbase;
 
@@ -137,7 +177,14 @@ begin
     '0' after 8710*tbase, '1' after 8720*tbase, '0' after 8730*tbase, '1' after 8740*tbase, '0' after 8750*tbase, '0' after 8760*tbase, '1' after 8770*tbase, '0' after 8780*tbase, '1' after 8790*tbase, '0' after 8800*tbase, '1' after 8810*tbase, -- 0xA5 = 0b10100101
     -- ACK test end
     '0' after 8900*tbase, '0' after 8910*tbase, '1' after 8920*tbase, '0' after 8930*tbase, '0' after 8940*tbase, '0' after 8950*tbase, '0' after 8960*tbase, '0' after 8970*tbase, '0' after 8980*tbase, '1' after 8990*tbase, '1' after 9000*tbase, -- 0x02 (0b00000010)
-    '0' after 9010*tbase, '0' after 9020*tbase, '0' after 9030*tbase, '0' after 9040*tbase, '0' after 9050*tbase, '0' after 9060*tbase, '0' after 9070*tbase, '0' after 9080*tbase, '0' after 9090*tbase, '0' after 9100*tbase, '1' after 9110*tbase; -- 0x00 = 0b00000000
+    '0' after 9010*tbase, '0' after 9020*tbase, '0' after 9030*tbase, '0' after 9040*tbase, '0' after 9050*tbase, '0' after 9060*tbase, '0' after 9070*tbase, '0' after 9080*tbase, '0' after 9090*tbase, '0' after 9100*tbase, '1' after 9110*tbase, -- 0x00 = 0b00000000
+    -- I2C test
+    '0' after 9300*tbase, '1' after 9310*tbase, '1' after 9320*tbase, '1' after 9330*tbase, '0' after 9340*tbase, '0' after 9350*tbase, '0' after 9360*tbase, '1' after 9370*tbase, '0' after 9380*tbase, '0' after 9390*tbase, '1' after 9400*tbase, -- 0x47 (0b01000111) (set partner adr)
+    '0' after 9410*tbase, '1' after 9420*tbase, '0' after 9430*tbase, '0' after 9440*tbase, '0' after 9450*tbase, '0' after 9460*tbase, '0' after 9470*tbase, '0' after 9480*tbase, '0' after 9490*tbase, '1' after 9500*tbase, '1' after 9510*tbase, -- 0x01 = 0b00000001
+    '0' after 9600*tbase, '1' after 9610*tbase, '1' after 9620*tbase, '1' after 9630*tbase, '0' after 9640*tbase, '0' after 9650*tbase, '0' after 9660*tbase, '0' after 9670*tbase, '0' after 9680*tbase, '1' after 9690*tbase, '1' after 9700*tbase, -- 0x07 (0b00000111) (send)
+    '0' after 9710*tbase, '0' after 9720*tbase, '0' after 9730*tbase, '0' after 9740*tbase, '0' after 9750*tbase, '1' after 9760*tbase, '1' after 9770*tbase, '1' after 9780*tbase, '1' after 9790*tbase, '0' after 9800*tbase, '1' after 9810*tbase, -- 0xF0 = 11110000
+    '0' after 9900*tbase, '1' after 9910*tbase, '1' after 9920*tbase, '1' after 9930*tbase, '0' after 9940*tbase, '0' after 9950*tbase, '0' after 9960*tbase, '0' after 9970*tbase, '1' after 9980*tbase, '0' after 9990*tbase, '1' after 10000*tbase, -- 0x87 (0b10000111) (recv)
+    '0' after 10010*tbase, '0' after 10020*tbase, '0' after 10030*tbase, '0' after 10040*tbase, '0' after 10050*tbase, '1' after 10060*tbase, '1' after 10070*tbase, '1' after 10080*tbase, '1' after 10090*tbase, '0' after 10100*tbase, '1' after 10110*tbase; -- 0xF0 = 11110000 -- Ignored
 
   tb_rx_pin_a <= '1',
     '0' after 100*tbase, '0' after 140*tbase, '0' after 180*tbase, '0' after 220*tbase, '0' after 260*tbase, '1' after 300*tbase, '0' after 340*tbase, '0' after 380*tbase, '0' after 420*tbase, '1' after 460*tbase; --0b00010000
@@ -148,6 +195,12 @@ begin
 
   tb_spi_miso <= '0',
     '0' after 8821*tbase, '0' after 9863*tbase, '1' after 10905*tbase, '1' after 11947*tbase, '0' after 12989*tbase, '0' after 14031*tbase, '0' after 15073*tbase, '0' after 16115*tbase; --0x30;
+
+  tb_i2c_sda_no_pullup <= 'Z',
+    '0' after 10748*tbase, 'Z' after 10848*tbase, --ACK ADR
+    '0' after 11648*tbase, 'Z' after 11748*tbase, --ACK DATA
+    '0' after 12648*tbase, 'Z' after 12748*tbase, --ACK ADR
+    '0' after 12748*tbase, '0' after 12848*tbase, 'H' after 12948*tbase, 'H' after 13048*tbase, '0' after 13148*tbase, '0' after 13248*tbase, '0' after 13348*tbase, 'H' after 13448*tbase; -- DATA (0x31)
 
   tb_exp_tx_pin_host <= 'U', '1' after 3*tbase,
     '0' after 28*tbase, '0' after 38*tbase, '0' after 48*tbase, '0' after 58*tbase, '0' after 68*tbase, '0' after 78*tbase, '0' after 88*tbase, '0' after 98*tbase, '0' after 108*tbase, '0' after 118*tbase, '1' after 128*tbase, --0b00000000 (reset Unit - was reseted - unit)
@@ -170,6 +223,8 @@ begin
     '0' after 8947*tbase, '1' after 8957*tbase, '0' after 8967*tbase, '1' after 8977*tbase, '0' after 8987*tbase, '0' after 8997*tbase, '1' after 9007*tbase, '0' after 9017*tbase, '1' after 9027*tbase, '0' after 9037*tbase, '1' after 9047*tbase, --0b10100101 (ACK unit - data) (0xA5)
     '0' after 9137*tbase, '0' after 9147*tbase, '1' after 9157*tbase, '0' after 9167*tbase, '0' after 9177*tbase, '0' after 9187*tbase, '0' after 9197*tbase, '0' after 9207*tbase, '0' after 9217*tbase, '1' after 9227*tbase, '1' after 9237*tbase, --0b00000010 (ACK unit - unit) (0x02)
     '0' after 9247*tbase, '0' after 9257*tbase, '0' after 9267*tbase, '0' after 9277*tbase, '0' after 9287*tbase, '0' after 9297*tbase, '0' after 9307*tbase, '0' after 9317*tbase, '0' after 9327*tbase, '0' after 9337*tbase, '1' after 9347*tbase, --0b00000000 (ACK unit - data) (0x00)
+    '0' after 13517*tbase, '1' after 13527*tbase, '1' after 13537*tbase, '1' after 13547*tbase, '0' after 13557*tbase, '0' after 13567*tbase, '0' after 13577*tbase, '0' after 13587*tbase, '0' after 13597*tbase, '1' after 13607*tbase, '1' after 13617*tbase, --0b00000111 (I2C unit - unit) (0x07)
+    '0' after 13627*tbase, 'H' after 13637*tbase, '0' after 13647*tbase, '0' after 13657*tbase, '0' after 13667*tbase, 'H' after 13677*tbase, 'H' after 13687*tbase, '0' after 13697*tbase, '0' after 13707*tbase, '1' after 13717*tbase, '1' after 13727*tbase, --0b00110001 (I2C unit - data) (0x31)
     '0' after 16657*tbase, '0' after 16667*tbase, '1' after 16677*tbase, '1' after 16687*tbase, '0' after 16697*tbase, '0' after 16707*tbase, '0' after 16717*tbase, '0' after 16727*tbase, '0' after 16737*tbase, '0' after 16747*tbase, '1' after 16757*tbase, --0b00000110 (SPI unit - unit) (0x06)
     '0' after 16767*tbase, '0' after 16777*tbase, '0' after 16787*tbase, '0' after 16797*tbase, '0' after 16807*tbase, '1' after 16817*tbase, '1' after 16827*tbase, '0' after 16837*tbase, '0' after 16847*tbase, '0' after 16857*tbase, '1' after 16867*tbase; --0b00110000 (SPI unit - data) (0x30)
 
@@ -208,12 +263,29 @@ begin
   tb_exp_spi_mosi <= '0',
     '1' after 8824*tbase, '0' after 9866*tbase, '1' after 10908*tbase, '0' after 11950*tbase, '0' after 12992*tbase, '1' after 14034*tbase, '0' after 15076*tbase, '1' after 16118*tbase, '0' after 17160*tbase;
 
+  tb_exp_i2c_sda <= 'H',
+    '0' after 9898*tbase, --START
+    '0' after 9948*tbase, '0' after 10048*tbase, '0' after 10148*tbase, '0' after 10248*tbase, '0' after 10348*tbase, '0' after 10448*tbase, 'H' after 10548*tbase, '0' after 10648*tbase, -- ADR+RW (0x02)
+    '0' after 10748*tbase, --ACK
+    'H' after 10848*tbase, 'H' after 10948*tbase, 'H' after 11048*tbase, 'H' after 11148*tbase, '0' after 11248*tbase, '0' after 11348*tbase, '0' after 11448*tbase, '0' after 11548*tbase, -- DATA (0xF0)
+    '0' after 11648*tbase, --ACK
+    'H' after 11748*tbase, --RS_PREP
+    '0' after 11798*tbase, -- RS (Repeated Start)
+    '0' after 11848*tbase, '0' after 11948*tbase, '0' after 12048*tbase, '0' after 12148*tbase, '0' after 12248*tbase, '0' after 12348*tbase, 'H' after 12448*tbase, 'H' after 12548*tbase, -- ADR+RW (0x03)
+    '0' after 12648*tbase, --ACK
+    '0' after 12748*tbase, '0' after 12848*tbase, 'H' after 12948*tbase, 'H' after 13048*tbase, '0' after 13148*tbase, '0' after 13248*tbase, '0' after 13348*tbase, 'H' after 13448*tbase, -- DATA (0x31)
+    'H' after 13548*tbase, --NACK (Recv end)
+    '0' after 13648*tbase, --STOP_PREP
+    'H' after 13698*tbase; --STOP;
+
   tb_error <= '0' when 
     (tb_exp_tx_pin_host = tb_tx_pin_host)
     and (tb_exp_tx_pin_a = tb_tx_pin_a)
     and (tb_exp_gpio_pins_out = tb_gpio_pins_out) 
     and (tb_exp_spi_sck = tb_spi_sck)
     and (tb_exp_spi_cs = tb_spi_cs)
-    and (tb_exp_spi_mosi = tb_spi_mosi) else '1';
+    and (tb_exp_spi_mosi = tb_spi_mosi)
+    and (tb_exp_i2c_scl = tb_i2c_scl)
+    and (tb_exp_i2c_sda = tb_i2c_sda) else '1';
 
 end TESTBENCH;
