@@ -162,6 +162,40 @@ The access mode handles all this configurations:
  1) disable the timer
  2) init the timer like described above
 
+## ISSI_IS61WV5128BLL_SRAM_Unit (SRAM_Unit)
+The ISSI_IS61WV5128BLL_SRAM_Unit (short: SRAM_Unit) is used to communicate with the internal SRAM Module (of the Cmod A7 35T).
+It can be configured with the time needed to access data in ns (8/10/20/25/35) (Use the datasheet to identify the correct one; The Cmod A7 35T needs the 8ns configuration)
+Additionally the FPGA frequency has to be given.
+As the part uses the same clock as the FPGA the pins does not have to be synced.
+
+The SRAM_Unit needs following pins:  
+
+- sram_adr (out (vector: 19x))
+- sram_data (inout (vector: 8x))
+- sram_oen (out)
+- sram_cen (out)
+- sram_wen (out)
+
+The access mode handles writing, reading and setting address:
+
+- "00": Reseting the address to 0x0000 and setting the next address slot to write to 0
+- "01": Setting the next address slot to the data
+- "10": Reading the data from the set address
+- "11": Writing the data to the set address
+
+There are three situations where errors are forwarded to the Error_Unit:
+
+- Too slow scheduling (error_to_host)
+- Reading or writing while another read/write operation is still processed (error_from_host)
+- Writing in an address slot above the address length (error_from_host)
+
+The address is set in blocks of HOST_DATA_BITS. The last block may not be used completely (bits above the used ones are ignored).
+The first block sets the LSB. The second one the next, etc.
+When a block is set completely above the address (no bit is still unset in the address) there will be an error_from_host and the received data will we ignored.
+To start again, reset the address to zero (access_mode: "00").
+
+If there was a read or write operation the next address block to set is reset to the first block but the address is still valid and not reset to zero.
+This allows the host to modify for example the last bit of the address without setting all blocks again.
 
 ## Internal structure
 ### Incoming data from host

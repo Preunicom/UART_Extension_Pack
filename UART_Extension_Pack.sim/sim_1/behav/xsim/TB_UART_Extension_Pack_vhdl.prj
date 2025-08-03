@@ -37,6 +37,8 @@ vhdl xil_defaultlib  \
 "../../../../src_ext/FPGA_I2C_Module/I2C_Module.srcs/sources_1/new/I2C_Unit.vhd" \
 "../../../../src_ext/FPGA_I2C_Module/I2C_Module.srcs/sources_1/new/I2C_Prescaler.vhd" \
 "../../../../UART_Extension_Pack.srcs/sources_1/new/I2C_Wrapper.vhd" \
+"../../../../UART_Extension_Pack.srcs/sources_1/new/ISSI_IS61WV5128BLL_SRAM_Wrapper.vhd" \
+"../../../../UART_Extension_Pack.srcs/sources_1/new/ISSI_IS61WV5128BLL_SRAM_Unit.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Decoder.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Main_Unit.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_Encoder.vhd" \
@@ -73,6 +75,8 @@ vhdl xil_defaultlib  \
 "../../../../src_ext/FPGA_I2C_Module/I2C_Module.srcs/sim_1/new/TB_I2C_Unit.vhd" \
 "../../../../src_ext/FPGA_I2C_Module/I2C_Module.srcs/sim_1/new/TB_I2C_Communication.vhd" \
 "../../../../UART_Extension_Pack.srcs/sim_1/new/TB_I2C_Wrapper.vhd" \
+"../../../../UART_Extension_Pack.srcs/sim_1/new/TB_ISSI_IS61WV5128BLL_SRAM_Wrapper.vhd" \
+"../../../../UART_Extension_Pack.srcs/sim_1/new/TB_ISSI_IS61WV5128BLL_SRAM_Unit.vhd" \
 
 # Do not sort compile order
 nosort

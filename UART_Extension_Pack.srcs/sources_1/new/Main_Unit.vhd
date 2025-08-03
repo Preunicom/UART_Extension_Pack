@@ -9,7 +9,7 @@ entity Main_Unit is
     FPGA_FREQ : integer := 12000000;
     HOST_BAUD : integer := 1000000;
     -- HOST_DATA_BITS + HOST_STOP_BITS + HOST_PARITY_ACTIVE <= 15 has to be fullfilled
-    -- HOST_DATA_BITS >= 8 has to be fullfilled
+    -- HOST_DATA_BITS >= 8 has to be fullfilled (64 units (6 bit) + 2 access bits)
     HOST_DATA_BITS : integer := 8;
     HOST_STOP_BITS : integer := 1;
     HOST_PARITY_ACTIVE : integer := 0; -- 0: No Parity; 1: Even or Odd Parity
@@ -30,8 +30,13 @@ entity Main_Unit is
     spi_mosi : out std_logic;
     spi_miso : in std_logic;
     i2c_scl : inout std_logic;
-    i2c_sda : inout std_logic
-    
+    i2c_sda : inout std_logic;
+    sram_adr : out std_logic_vector(18 downto 0);
+    sram_data : inout std_logic_vector(7 downto 0);
+    sram_oen : out std_logic := '1';
+    sram_cen : out std_logic := '1';
+    sram_wen : out std_logic := '1'
+
     --------------- UNIT PORTS END ---------------
   );
 end Main_Unit;
@@ -171,6 +176,29 @@ architecture Behavioral of Main_Unit is
       scheduler_done   : in  std_logic;
       error_to_host : out std_logic := '0'; -- unused
       error_from_host : out std_logic := '0' -- unused
+    );
+  end component;
+  component ISSI_IS61WV5128BLL_SRAM_Wrapper
+    Generic (
+      HOST_DATA_BITS : integer := 8;
+      IN_FREQ : integer := 12000000;
+      ACCESS_TIME_NS : integer := 8
+    );
+    Port ( 
+      clk, rst : in STD_LOGIC;
+      write_en : in std_logic;
+      access_mode : in std_logic_vector(1 downto 0); -- unused
+      unit_data_in : in std_logic_vector(HOST_DATA_BITS-1 downto 0);
+      unit_data_out : out std_logic_vector(13 downto 0) := (others => '0');
+      scheduler_wanted : out std_logic;
+      scheduler_done : in std_logic;
+      error_to_host : out std_logic := '0';
+      error_from_host : out std_logic := '0';
+      sram_adr : out std_logic_vector(18 downto 0);
+      sram_data : inout std_logic_vector(7 downto 0);
+      sram_oen : out std_logic := '1';
+      sram_cen : out std_logic := '1';
+      sram_wen : out std_logic := '1'
     );
   end component;
   component Reset_Unit
@@ -396,6 +424,7 @@ begin
   U05_TIME: Timer_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD) port map(clk, rst_ext_pack, unit_en(5), decoded_access_mode, unit_data_in, unit_data_out(5), unit_scheduler_wanted(5), unit_scheduler_done(5), error_to_host(5), error_from_host(5));
   U06_SPI: SPI_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 9600, 1, 0, 0, 8) port map(clk, rst_ext_pack, unit_en(6), decoded_access_mode, unit_data_in, unit_data_out(6), unit_scheduler_wanted(6), unit_scheduler_done(6), error_to_host(6), error_from_host(6), spi_sck, spi_cs, spi_mosi, spi_miso_sync);
   U07_I2C: I2C_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 100000) port map(clk, rst_ext_pack, unit_en(7), decoded_access_mode, unit_data_in, unit_data_out(7), unit_scheduler_wanted(7), unit_scheduler_done(7), error_to_host(7), error_from_host(7), i2c_scl, i2c_sda);
+  U08_RAM: ISSI_IS61WV5128BLL_SRAM_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 8) port map(clk, rst_ext_pack, unit_en(8), decoded_access_mode, unit_data_in, unit_data_out(8), unit_scheduler_wanted(8), unit_scheduler_done(8), error_to_host(8), error_from_host(8), sram_adr, sram_data, sram_oen, sram_cen, sram_wen);
 
   -------------- UNITS END ----------------
   
