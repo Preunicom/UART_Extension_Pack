@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date             : Mon Jun 16 22:17:28 2025
-| Host             : ed1e97441267 running 64-bit Ubuntu 22.04.5 LTS
+| Date             : Sun Aug  3 13:22:48 2025
+| Host             : cc0446787e9f running 64-bit Ubuntu 22.04.5 LTS
 | Command          : report_power -file Main_Unit_power_routed.rpt -pb Main_Unit_power_summary_routed.pb -rpx Main_Unit_power_routed.rpx
 | Design           : Main_Unit
 | Device           : xc7a35tcpg236-1
@@ -53,14 +53,13 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |    <0.001 |        3 |       --- |             --- |
-| Slice Logic    |    <0.001 |     2214 |       --- |             --- |
-|   LUT as Logic |    <0.001 |      669 |     20800 |            3.22 |
-|   CARRY4       |    <0.001 |      174 |      8150 |            2.13 |
-|   Register     |    <0.001 |     1026 |     41600 |            2.47 |
-|   F7/F8 Muxes  |    <0.001 |        8 |     32600 |            0.02 |
-|   Others       |     0.000 |       69 |       --- |             --- |
-| Signals        |    <0.001 |     1500 |       --- |             --- |
-| I/O            |    <0.001 |       15 |       106 |           14.15 |
+| Slice Logic    |    <0.001 |     2414 |       --- |             --- |
+|   LUT as Logic |    <0.001 |      723 |     20800 |            3.48 |
+|   CARRY4       |    <0.001 |      175 |      8150 |            2.15 |
+|   Register     |    <0.001 |     1128 |     41600 |            2.71 |
+|   Others       |     0.000 |       73 |       --- |             --- |
+| Signals        |    <0.001 |     1633 |       --- |             --- |
+| I/O            |    <0.001 |       45 |       106 |           42.45 |
 | Static Power   |     0.072 |          |           |                 |
 | Total          |     0.073 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
@@ -72,7 +71,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.010 |       0.001 |      0.010 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.011 |       0.001 |      0.010 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.013 |       0.000 |      0.013 |       NA    | Unspecified | NA         |
 | Vcco33    |       3.300 |     0.001 |       0.000 |      0.001 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |

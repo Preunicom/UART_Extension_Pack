@@ -16,6 +16,7 @@ end TB_Main_Unit;
 -- U5: Timer --> generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD)
 -- U6: SPI --> generic map(HOST_DATA_BITS, FPGA_FREQ, 9600, 1, 0, 0, 8)
 -- U7: I2C --> generic map(HOST_DATA_BITS, FPGA_FREQ, 100000)
+-- U8: SRAM --> generic map(HOST_DATA_BITS, FPGA_FREQ, 8)
 architecture TESTBENCH of TB_Main_Unit is
   component Main_Unit
     Generic(
@@ -44,7 +45,12 @@ architecture TESTBENCH of TB_Main_Unit is
       spi_mosi : out std_logic;
       spi_miso : in std_logic;
       i2c_scl : inout std_logic;
-      i2c_sda : inout std_logic
+      i2c_sda : inout std_logic;
+      sram_adr : out std_logic_vector(18 downto 0);
+      sram_data : inout std_logic_vector(7 downto 0);
+      sram_oen : out std_logic := '1';
+      sram_cen : out std_logic := '1';
+      sram_wen : out std_logic := '1'
       
       --------------- UNIT PORTS END ---------------
     );
@@ -64,6 +70,11 @@ architecture TESTBENCH of TB_Main_Unit is
   signal tb_spi_miso : std_logic;
   signal tb_i2c_scl, tb_exp_i2c_scl, tb_i2c_scl_no_pullup : std_logic;
   signal tb_i2c_sda, tb_exp_i2c_sda, tb_i2c_sda_no_pullup : std_logic;
+  signal tb_sram_adr, tb_exp_sram_adr : std_logic_vector(18 downto 0);
+  signal tb_sram_data, tb_exp_sram_data, tb_sram_data_no_pullup : std_logic_vector(7 downto 0);
+  signal tb_sram_oen, tb_exp_sram_oen : std_logic := '1';
+  signal tb_sram_cen, tb_exp_sram_cen : std_logic := '1';
+  signal tb_sram_wen, tb_exp_sram_wen : std_logic := '1';
 
   constant tbase : time := 100 ns;
   constant tbase_i2c_scl : time := 10000 ns;
@@ -71,10 +82,11 @@ architecture TESTBENCH of TB_Main_Unit is
   signal exp_SCL_temp : std_logic;
   signal exp_SCL_en : std_logic;
 begin
-  MU: Main_Unit generic map(10000000, 1000000, 8, 1, 1, 0) port map(tb_clk, tb_rst, tb_tx_pin_host, tb_rx_pin_host, tb_tx_pin_a, tb_rx_pin_a, tb_gpio_pins_in, tb_gpio_pins_out, tb_spi_sck, tb_spi_cs, tb_spi_mosi, tb_spi_miso, tb_i2c_scl_no_pullup, tb_i2c_sda_no_pullup);
+  MU: Main_Unit generic map(10000000, 1000000, 8, 1, 1, 0) port map(tb_clk, tb_rst, tb_tx_pin_host, tb_rx_pin_host, tb_tx_pin_a, tb_rx_pin_a, tb_gpio_pins_in, tb_gpio_pins_out, tb_spi_sck, tb_spi_cs, tb_spi_mosi, tb_spi_miso, tb_i2c_scl_no_pullup, tb_i2c_sda_no_pullup, tb_sram_adr, tb_sram_data_no_pullup, tb_sram_oen, tb_sram_cen, tb_sram_wen);
   
   tb_i2c_sda <= tb_i2c_sda_no_pullup when tb_i2c_sda_no_pullup /= 'Z' else 'H';
   tb_i2c_scl <= tb_i2c_scl_no_pullup when tb_i2c_scl_no_pullup /= 'Z' else 'H';
+  tb_sram_data <= tb_sram_data_no_pullup when tb_sram_data_no_pullup /= "ZZZZZZZZ" else (others => 'H');
 
   -- 10 MHz
   CLOCK: process
@@ -184,7 +196,18 @@ begin
     '0' after 9600*tbase, '1' after 9610*tbase, '1' after 9620*tbase, '1' after 9630*tbase, '0' after 9640*tbase, '0' after 9650*tbase, '0' after 9660*tbase, '0' after 9670*tbase, '0' after 9680*tbase, '1' after 9690*tbase, '1' after 9700*tbase, -- 0x07 (0b00000111) (send)
     '0' after 9710*tbase, '0' after 9720*tbase, '0' after 9730*tbase, '0' after 9740*tbase, '0' after 9750*tbase, '1' after 9760*tbase, '1' after 9770*tbase, '1' after 9780*tbase, '1' after 9790*tbase, '0' after 9800*tbase, '1' after 9810*tbase, -- 0xF0 = 11110000
     '0' after 9900*tbase, '1' after 9910*tbase, '1' after 9920*tbase, '1' after 9930*tbase, '0' after 9940*tbase, '0' after 9950*tbase, '0' after 9960*tbase, '0' after 9970*tbase, '1' after 9980*tbase, '0' after 9990*tbase, '1' after 10000*tbase, -- 0x87 (0b10000111) (recv)
-    '0' after 10010*tbase, '0' after 10020*tbase, '0' after 10030*tbase, '0' after 10040*tbase, '0' after 10050*tbase, '1' after 10060*tbase, '1' after 10070*tbase, '1' after 10080*tbase, '1' after 10090*tbase, '0' after 10100*tbase, '1' after 10110*tbase; -- 0xF0 = 11110000 -- Ignored
+    '0' after 10010*tbase, '0' after 10020*tbase, '0' after 10030*tbase, '0' after 10040*tbase, '0' after 10050*tbase, '1' after 10060*tbase, '1' after 10070*tbase, '1' after 10080*tbase, '1' after 10090*tbase, '0' after 10100*tbase, '1' after 10110*tbase, -- 0xF0 = 11110000 -- Ignored
+    -- SRAM test
+    '0' after 10500*tbase, '0' after 10510*tbase, '0' after 10520*tbase, '0' after 10530*tbase, '1' after 10540*tbase, '0' after 10550*tbase, '0' after 10560*tbase, '1' after 10570*tbase, '0' after 10580*tbase, '0' after 10590*tbase, '1' after 10600*tbase, -- 0x48 (01001000) (set SRAM adr)
+    '0' after 10700*tbase, '0' after 10710*tbase, '0' after 10720*tbase, '0' after 10730*tbase, '0' after 10740*tbase, '1' after 10750*tbase, '1' after 10760*tbase, '1' after 10770*tbase, '1' after 10780*tbase, '0' after 10790*tbase, '1' after 10800*tbase, -- 0xF0 (11110000)
+    '0' after 10810*tbase, '0' after 10820*tbase, '0' after 10830*tbase, '0' after 10840*tbase, '1' after 10850*tbase, '0' after 10860*tbase, '0' after 10870*tbase, '1' after 10880*tbase, '0' after 10890*tbase, '0' after 10900*tbase, '1' after 10910*tbase, -- 0x48 (01001000) (set SRAM adr)
+    '0' after 11010*tbase, '1' after 11020*tbase, '1' after 11030*tbase, '1' after 11040*tbase, '1' after 11050*tbase, '0' after 11060*tbase, '0' after 11070*tbase, '0' after 11080*tbase, '0' after 11090*tbase, '0' after 11100*tbase, '1' after 11110*tbase, -- 0x0F (00001111)
+    '0' after 11120*tbase, '0' after 11130*tbase, '0' after 11140*tbase, '0' after 11150*tbase, '1' after 11160*tbase, '0' after 11170*tbase, '0' after 11180*tbase, '1' after 11190*tbase, '0' after 11200*tbase, '0' after 11210*tbase, '1' after 11220*tbase, -- 0x48 (01001000) (set SRAM adr)
+    '0' after 11320*tbase, '1' after 11330*tbase, '0' after 11340*tbase, '0' after 11350*tbase, '0' after 11360*tbase, '0' after 11370*tbase, '0' after 11380*tbase, '0' after 11390*tbase, '0' after 11400*tbase, '1' after 11410*tbase, '1' after 11420*tbase, -- 0x01 (00000001)
+    '0' after 11430*tbase, '0' after 11440*tbase, '0' after 11450*tbase, '0' after 11460*tbase, '1' after 11470*tbase, '0' after 11480*tbase, '0' after 11490*tbase, '1' after 11500*tbase, '1' after 11510*tbase, '1' after 11520*tbase, '1' after 11530*tbase, -- 0xC8 (11001000) (Write SRAM)
+    '0' after 11630*tbase, '1' after 11640*tbase, '1' after 11650*tbase, '1' after 11660*tbase, '1' after 11670*tbase, '1' after 11680*tbase, '1' after 11690*tbase, '0' after 11700*tbase, '0' after 11710*tbase, '0' after 11720*tbase, '1' after 11730*tbase, -- 0x3F (00111111)
+    '0' after 11740*tbase, '0' after 11750*tbase, '0' after 11760*tbase, '0' after 11770*tbase, '1' after 11780*tbase, '0' after 11790*tbase, '0' after 11800*tbase, '0' after 11810*tbase, '1' after 11820*tbase, '0' after 11830*tbase, '1' after 11840*tbase, -- 0x88 (1001000) (Read SRAM)
+    '0' after 11940*tbase, '0' after 11950*tbase, '0' after 11960*tbase, '0' after 11970*tbase, '0' after 11980*tbase, '0' after 11990*tbase, '0' after 12000*tbase, '0' after 12010*tbase, '0' after 12020*tbase, '0' after 12030*tbase, '1' after 12040*tbase; -- 0x00 (00000000)
 
   tb_rx_pin_a <= '1',
     '0' after 100*tbase, '0' after 140*tbase, '0' after 180*tbase, '0' after 220*tbase, '0' after 260*tbase, '1' after 300*tbase, '0' after 340*tbase, '0' after 380*tbase, '0' after 420*tbase, '1' after 460*tbase; --0b00010000
@@ -201,6 +224,9 @@ begin
     '0' after 11648*tbase, 'Z' after 11748*tbase, --ACK DATA
     '0' after 12648*tbase, 'Z' after 12748*tbase, --ACK ADR
     '0' after 12748*tbase, '0' after 12848*tbase, 'H' after 12948*tbase, 'H' after 13048*tbase, '0' after 13148*tbase, '0' after 13248*tbase, '0' after 13348*tbase, 'H' after 13448*tbase; -- DATA (0x31)
+  
+  tb_sram_data_no_pullup <= (others => 'Z'),
+    x"3F" after 12054*tbase, (others=>'Z') after 12056*tbase;
 
   tb_exp_tx_pin_host <= 'U', '1' after 3*tbase,
     '0' after 28*tbase, '0' after 38*tbase, '0' after 48*tbase, '0' after 58*tbase, '0' after 68*tbase, '0' after 78*tbase, '0' after 88*tbase, '0' after 98*tbase, '0' after 108*tbase, '0' after 118*tbase, '1' after 128*tbase, --0b00000000 (reset Unit - was reseted - unit)
@@ -223,6 +249,8 @@ begin
     '0' after 8947*tbase, '1' after 8957*tbase, '0' after 8967*tbase, '1' after 8977*tbase, '0' after 8987*tbase, '0' after 8997*tbase, '1' after 9007*tbase, '0' after 9017*tbase, '1' after 9027*tbase, '0' after 9037*tbase, '1' after 9047*tbase, --0b10100101 (ACK unit - data) (0xA5)
     '0' after 9137*tbase, '0' after 9147*tbase, '1' after 9157*tbase, '0' after 9167*tbase, '0' after 9177*tbase, '0' after 9187*tbase, '0' after 9197*tbase, '0' after 9207*tbase, '0' after 9217*tbase, '1' after 9227*tbase, '1' after 9237*tbase, --0b00000010 (ACK unit - unit) (0x02)
     '0' after 9247*tbase, '0' after 9257*tbase, '0' after 9267*tbase, '0' after 9277*tbase, '0' after 9287*tbase, '0' after 9297*tbase, '0' after 9307*tbase, '0' after 9317*tbase, '0' after 9327*tbase, '0' after 9337*tbase, '1' after 9347*tbase, --0b00000000 (ACK unit - data) (0x00)
+    '0' after 12077*tbase, '0' after 12087*tbase, '0' after 12097*tbase, '0' after 12107*tbase, '1' after 12117*tbase, '0' after 12127*tbase, '0' after 12137*tbase, '0' after 12147*tbase, '0' after 12157*tbase, '1' after 12167*tbase, '1' after 12177*tbase, --0b00001000 (SRAM unit - unit) (0x08)
+    '0' after 12187*tbase, '1' after 12197*tbase, '1' after 12207*tbase, '1' after 12217*tbase, '1' after 12227*tbase, '1' after 12237*tbase, '1' after 12247*tbase, '0' after 12257*tbase, '0' after 12267*tbase, '0' after 12277*tbase, '1' after 12287*tbase, --0b00111111 (SRAM unit - data) (0x3F)
     '0' after 13517*tbase, '1' after 13527*tbase, '1' after 13537*tbase, '1' after 13547*tbase, '0' after 13557*tbase, '0' after 13567*tbase, '0' after 13577*tbase, '0' after 13587*tbase, '0' after 13597*tbase, '1' after 13607*tbase, '1' after 13617*tbase, --0b00000111 (I2C unit - unit) (0x07)
     '0' after 13627*tbase, 'H' after 13637*tbase, '0' after 13647*tbase, '0' after 13657*tbase, '0' after 13667*tbase, 'H' after 13677*tbase, 'H' after 13687*tbase, '0' after 13697*tbase, '0' after 13707*tbase, '1' after 13717*tbase, '1' after 13727*tbase, --0b00110001 (I2C unit - data) (0x31)
     '0' after 16657*tbase, '0' after 16667*tbase, '1' after 16677*tbase, '1' after 16687*tbase, '0' after 16697*tbase, '0' after 16707*tbase, '0' after 16717*tbase, '0' after 16727*tbase, '0' after 16737*tbase, '0' after 16747*tbase, '1' after 16757*tbase, --0b00000110 (SPI unit - unit) (0x06)
@@ -278,6 +306,27 @@ begin
     '0' after 13648*tbase, --STOP_PREP
     'H' after 13698*tbase; --STOP;
 
+  tb_exp_sram_data <= (others=>'H'),
+    x"3F" after 11744*tbase, (others=>'H') after 11746*tbase,
+    x"3F" after 12054*tbase, (others=>'H') after 12056*tbase;
+
+  tb_exp_sram_adr <= (others=>'U'), (others=>'0') after 1*tbase,
+    "0010000111111110000" after 11742*tbase, (others=>'0') after 11746*tbase,
+    "0010000111111110000" after 12052*tbase, (others=>'0') after 12055*tbase;
+
+  tb_exp_sram_cen <= '1',
+    '0' after 11742*tbase, '1' after 11746*tbase, -- Write
+    '0' after 12052*tbase, '1' after 12055*tbase; -- Read
+    
+
+  tb_exp_sram_oen <= '1',
+    '1' after 11742*tbase, '1' after 11746*tbase, -- Write
+    '0' after 12052*tbase, '1' after 12055*tbase; -- Read
+
+  tb_exp_sram_wen <= '1',
+    '0' after 11742*tbase, '1' after 11746*tbase, -- Write
+    '1' after 12052*tbase, '1' after 12055*tbase; -- Read
+
   tb_error <= '0' when 
     (tb_exp_tx_pin_host = tb_tx_pin_host)
     and (tb_exp_tx_pin_a = tb_tx_pin_a)
@@ -286,6 +335,11 @@ begin
     and (tb_exp_spi_cs = tb_spi_cs)
     and (tb_exp_spi_mosi = tb_spi_mosi)
     and (tb_exp_i2c_scl = tb_i2c_scl)
-    and (tb_exp_i2c_sda = tb_i2c_sda) else '1';
+    and (tb_exp_i2c_sda = tb_i2c_sda)
+    and (tb_exp_sram_adr = tb_sram_adr)
+    and (tb_exp_sram_data = tb_sram_data)
+    and (tb_exp_sram_cen = tb_sram_cen)
+    and (tb_exp_sram_oen = tb_sram_oen)
+    and (tb_exp_sram_wen = tb_sram_wen) else '1';
 
 end TESTBENCH;
