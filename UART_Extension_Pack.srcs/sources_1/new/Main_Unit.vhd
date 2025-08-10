@@ -439,3 +439,9 @@ begin
   rst_ext_pack <= rst_sync or rst_unit;
 
 end Behavioral;
+
+-- TOOD: Add new structure (prepare data for send / prepare data for recv) --> Modularer und als library verwendbar
+-- TODO: README in Doxygen einbinden wo mögl.
+-- TODO: Ordnerstruktur in vivado ändern --> Externe Module in gleichen Ordner und gleichen Ordner aufteilen in Topics
+-- TODO: Libs nur mit Code in GitHub --> Doxygen entsprechend anpassen
+-- TODO: Remove comments in component declaration

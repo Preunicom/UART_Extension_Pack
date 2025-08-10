@@ -1,41 +1,51 @@
+--! @file
+--! @brief Incoming UART packet decoder for unit control.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
+--! Decodes a two-part UART packet into control fields and data, handling errors and timeouts.
 entity Decoder is
   Generic (
-    DATA_BITS : integer := 8;
-    FPGA_FREQ : integer := 12000000;
-    HOST_BAUD : integer := 1000000
+    DATA_BITS : integer := 8; --! The amount of data bits used by the ExtPack and the host.
+    FPGA_FREQ : integer := 12000000; --! The frequency in Hz of the FPGA.
+    HOST_BAUD : integer := 1000000 --! The BAUD rate used by the host.
   );
   Port ( 
-    clk : in STD_LOGIC;
-    rst : in STD_LOGIC;
-    uart_inp : in std_logic_vector(DATA_BITS-1 downto 0);
-    uart_inp_valid : in std_logic;
-    uart_error : in std_logic;
-    out_en : out std_logic;
-    recv_error : out std_logic;
-    access_mode : out std_logic_vector(1 downto 0);
-    unit_number : out std_logic_vector(5 downto 0); 
-    unit_data : out std_logic_vector(DATA_BITS-1 downto 0)
+    clk : in STD_LOGIC; --! Clock signal.
+    rst : in STD_LOGIC; --! Reset signal.
+    uart_inp : in std_logic_vector(DATA_BITS-1 downto 0); --! Parallel UART package input.
+    uart_inp_valid : in std_logic; --! Enable signal for the uart_inp signal.
+    uart_error : in std_logic; --! UART error indicator for the current UART package.
+    out_en : out std_logic; --! Output enable signal when valid decoded data is ready.
+    recv_error : out std_logic; --! Indicates that an error occurred during reception.
+    access_mode : out std_logic_vector(1 downto 0); --! Access mode extracted from the first received UART package.
+    unit_number : out std_logic_vector(5 downto 0); --! Unit number extracted from the first received UART package.
+    unit_data : out std_logic_vector(DATA_BITS-1 downto 0) --! Unit data from the second received UART package.
   );
 end Decoder;
 
+--! Architecture implementing a state machine to process UART packets, detect errors, and handle timeouts.
 architecture Behavioral of Decoder is
-  -- state signals
+  --! Decoding machine chart state data type
   type statetype is (S0, S1);
+  --! Current state of the packet decoding state machine.
   signal state : statetype := S0;
-  -- counter signals
+  --! Counts clock cycles for the inter-package timeout period.
   signal counter: integer := 0;
+  --! Resets the counter when starting a new command.
   signal counter_rst : std_logic := '1';
+  --! Indicates when the timeout counter has expired.
   signal counter_ready : std_logic := '0';
-  -- data signals
+  --! Stores UART error flag from the first byte.
   signal uart_error_S1 : std_logic := '0';
+  --! Previous value of uart_inp_valid for edge detection.
   signal last_uart_inp_valid : std_logic := '0';
+  --! Stores the first package containing unit number and access mode.
   signal unit_number_data : std_logic_vector(DATA_BITS-1 downto 0) := (others => '0');
 begin
 
+  --! Main decoding state machine process.
   PROC1: process(clk)
   begin
     if rising_edge(clk) then
@@ -90,6 +100,7 @@ begin
     end if;
   end process;
 
+  --! Captures previous uart_inp_valid to detect rising edges.
   EDGE_DETECTION: process(clk)
   begin
     if rising_edge(clk) then
@@ -102,6 +113,7 @@ begin
     end if;
   end process;
 
+  --! Timeout timer process for detecting missing second byte within ~3 UART packet times.
   TIMER: process(clk)
     -- timer for duration of ca. 3 UART package transmissions
   begin

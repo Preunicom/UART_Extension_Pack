@@ -1,27 +1,37 @@
+--! @file
+--! @brief Scheduler working with priority using the unit number.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+--! Sets a control signal depending on the requesting unit with the lowest unit number and acknowledges the request to the unit.
 entity PriorityScheduler is
   Port ( 
-    clk, rst : in STD_LOGIC;
-    schedule_next : in std_logic;
-    outp_valid : out std_logic;
-    control_sig : out std_logic_vector(5 downto 0);
-    scheduler_wanted : in std_logic_vector(63 downto 0);
-    scheduler_done : out std_logic_vector(63 downto 0)
+    clk : in std_logic; --! The clock signal.
+    rst : in std_logic; --! The reset signal.
+    schedule_next : in std_logic; --! Request of the following unit to switch to the next unit data.
+    outp_valid : out std_logic; --! Enable signal for the control_sig signal.
+    control_sig : out std_logic_vector(5 downto 0); --! The scheduled unit number to work with next.
+    scheduler_wanted : in std_logic_vector(63 downto 0); --! Scheduling requests of the units. Each unit is 0 (not requesting) or 1 (requesting).
+    scheduler_done : out std_logic_vector(63 downto 0) --! Acknowledge to the units that their request was processed.
   );
 end PriorityScheduler;
 
+--! @brief Architecture of the PriorityScheduler.
 architecture Behavioral of PriorityScheduler is
-  -- outputs signalizes the unit that their scheduled data was sent
+  --! Outputs signalizes the unit that their scheduled data was sent. Set when data is scheduled. Sent when data is processed.
   signal next_outputs : std_logic_vector(63 downto 0);
+  --! Edge detection helper signal fot the schedule_next signal.
   signal last_schedule_next : std_logic := '0';
 
-  -- state chart data
+  --! Scheduling state machine state data type
   type statetype is (S0, S1);
+  --! Current state of the scheduling state machine.
   signal state : statetype := S0;
 begin
 
+  --! @brief State machine to schedule the data.
+  --! @details Syncronous process with sync reset and a one process state machine.
+  --! Handles the scheduling of the unit data and the communication of the scheduling status messages like acknowledges of the unit scheduling request.
   SCHEDULE_STATE_MACH: process(clk)
   begin
     if rising_edge(clk) then
@@ -264,6 +274,8 @@ begin
     end if;
   end process;
 
+  --! @brief Helper process to detect edges of signals.
+  --! @details Syncronous process with sync reset to save the last signal state to be able to detect edges in other places.
   EDGE_DETECTION: process(clk)
   begin
     if rising_edge(clk) then
