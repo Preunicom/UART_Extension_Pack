@@ -3,7 +3,7 @@
 --! @details Buffers parallel data for UART transmission and provides handshake logic with serializer to avoid overwriting data before it is sent.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 
 --! Entity implementing a parallel data buffer that holds UART TX data until the serializer no longer needs it.

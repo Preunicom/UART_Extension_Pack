@@ -3,7 +3,7 @@
 --! @details Allows the host to set partner addresses, send and receive data over I2C. Manages readiness, scheduler handshakes, and error reporting.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.numeric_std.all;
+use IEEE.NUMERIC_STD.all;
 
 --! \defgroup UNIT_WRAPPER ExtPack unit wrapper.
 --! @brief Wrapper for units of ExtPack.

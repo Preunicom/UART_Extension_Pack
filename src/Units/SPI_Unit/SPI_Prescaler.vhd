@@ -3,7 +3,7 @@
 --! @details Generates rising and falling edge enable pulses for the SPI clock (SCK) at a prescaled rate based on the input clock frequency, SPI mode, and frame length.
 library IEEE;
   use IEEE.STD_LOGIC_1164.all;
-  use IEEE.STD_LOGIC_UNSIGNED.all;
+  use IEEE.NUMERIC_STD.all;
 
 --! Entity implementing an SPI clock prescaler producing separate rising and falling edge pulses.
 entity SPI_Prescaler is

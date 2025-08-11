@@ -2,7 +2,7 @@
 --! @brief Incoming UART packet decoder for unit control.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 --! Decodes a two-part UART packet into control fields and data, handling errors and timeouts.
 entity Decoder is

@@ -4,7 +4,7 @@
 
 library IEEE;
   use IEEE.STD_LOGIC_1164.all;
-  use IEEE.STD_LOGIC_UNSIGNED.all;
+  use IEEE.NUMERIC_STD.all;
 
 --! Entity implementing a frequency divider to create a baud-rate clock enable.
 entity Prescaler is

@@ -3,7 +3,7 @@
 --! @details Controls SCK polarity/phase per SPI mode, generates serializer/deserializer clock enables, manages CS lines and prescaler reset, and indicates ready state.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.numeric_std.all;
+use IEEE.NUMERIC_STD.all;
 
 --! Entity coordinating SPI SCK generation, enable pulses, chip-select handling, and transaction control.
 entity SPI_CLK_Manager is

@@ -16,8 +16,10 @@ entity DEMUX is
     control : in STD_LOGIC_VECTOR(5 downto 0); --! 6-bit control signal selecting which output channel is active.
     inp_en : in STD_LOGIC; --! Input enable signal.
     inp_data : in std_logic_vector(DATA_BITS-1 downto 0); --! Input data bus.
+    inp_acc_mode : in std_logic_vector(1 downto 0); --! Input access mode.
     outp_en : out STD_LOGIC_VECTOR(63 downto 0); --! 64-bit output enable vector, one bit per channel.
-    outp_data : out std_logic_vector(DATA_BITS-1 downto 0) --! Output data bus.
+    outp_data : out std_logic_vector(DATA_BITS-1 downto 0); --! Output data bus.
+    outp_acc_mode : out std_logic_vector(1 downto 0) --! Output access mode.
   );
 end DEMUX;
 
@@ -35,7 +37,9 @@ begin
         outp_en <= (others => '0');
         -- Set the selected output enable bit according to inp_en.
         outp_en(to_integer(unsigned(control))) <= inp_en;
+        -- Delay signals to match enable signal timing.
         outp_data <= inp_data;
+        outp_acc_mode <= inp_acc_mode;
       end if;
     end if;
   end process;

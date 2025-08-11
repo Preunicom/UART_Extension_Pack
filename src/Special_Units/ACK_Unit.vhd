@@ -3,7 +3,7 @@
 --! @details Provides an ACK mechanism. When active, incoming data is echoed back.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.numeric_std.all;
+use IEEE.NUMERIC_STD.all;
 
 --! \defgroup SPECIAL_UNIT Special ExtPack units
 --! @brief Special units of ExtPack.

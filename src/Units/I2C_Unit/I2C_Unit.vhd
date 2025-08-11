@@ -3,7 +3,7 @@
 --! @details Coordinates I2C prescaling and byte-level communication, exposing a simple read/write interface and open-drain SCL/SDA control.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.numeric_std.all;
+use IEEE.NUMERIC_STD.all;
 
 --! \defgroup UNIT ExtPack units
 --! @brief Standard units of ExtPack.

@@ -3,7 +3,7 @@
 --! @details Sends a two-byte packet: first the zero-extended unit number, then the unit data. Coordinates with UART readiness and requests the next schedule item when done.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 --! Encodes control information into UART bytes and triggers scheduling of the next unit.
 entity Encoder is

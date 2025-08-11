@@ -3,7 +3,7 @@
 --! @details Provides both TX and RX logic with configurable baud rate, data bits, stop bits, and parity settings.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 --! \defgroup UNIT ExtPack units
 --! @brief Standard units of ExtPack.

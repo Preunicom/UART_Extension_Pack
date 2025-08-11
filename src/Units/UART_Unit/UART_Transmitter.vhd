@@ -3,7 +3,7 @@
 --! @details Handles buffering and serializing of TX data according to configured baud rate, data bits, stop bits, and parity settings.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 --! Top-level UART transmitter entity, instantiating Prescaler, Buffer_Register_Serializer, and Serializer.
 entity UART_Transmitter is

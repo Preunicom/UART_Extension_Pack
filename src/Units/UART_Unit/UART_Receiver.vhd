@@ -3,7 +3,7 @@
 --! @details Handles detection, deserialization, buffering, and error reporting for UART RX data with configurable baud rate, data bits, stop bits, and parity.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 --! Top-level UART receiver entity, instantiating Prescaler, Buffer_Register_Deserializer, and Deserializer.
 entity UART_Receiver is

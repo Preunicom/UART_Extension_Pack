@@ -3,7 +3,7 @@
 --! @details Buffers parallel TX data for SPI transmission and coordinates handshaking with the serializer to prevent data overwrite until transmission is complete.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 --! Entity implementing a parallel TX buffer that stores data until the serializer signals it is no longer needed.
 entity SPI_Buffer_Register_Serializer is

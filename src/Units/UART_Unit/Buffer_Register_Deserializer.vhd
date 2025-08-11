@@ -3,7 +3,7 @@
 --! @details Buffers parallel RX data and associated error flags from the deserializer, ensuring they remain stable until consumed by downstream logic.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.std_logic_unsigned.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 --! Entity implementing a buffer for UART reception, holding parallel data and error flags until they are read.
 entity Buffer_Register_Deserializer is

@@ -3,7 +3,7 @@
 --! @details Buffers parallel RX data from the SPI deserializer and holds it stable until it is read by downstream logic.
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.std_logic_unsigned.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 --! Entity implementing a buffer that stores received SPI data until consumption, generating a new_data pulse when updated.
 entity SPI_Buffer_Register_Deserializer is

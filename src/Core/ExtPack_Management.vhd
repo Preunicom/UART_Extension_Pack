@@ -4,7 +4,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
 use work.UnitDataArray_Type_PKG.ALL;
 
 --! Top-level management entity wiring host interface, units and scheduler.
@@ -89,8 +89,10 @@ architecture Behavioral of ExtPack_Management is
       control : in STD_LOGIC_VECTOR (5 downto 0);
       inp_en : in STD_LOGIC;
       inp_data : in std_logic_vector(DATA_BITS-1 downto 0);
+      inp_acc_mode : in std_logic_vector(1 downto 0);
       outp_en : out STD_LOGIC_VECTOR(63 downto 0);
-      outp_data : out std_logic_vector(DATA_BITS-1 downto 0)
+      outp_data : out std_logic_vector(DATA_BITS-1 downto 0);
+      outp_acc_mode : out std_logic_vector(1 downto 0)
     );
   end component;
   --! Component declaration for the Reset_Unit.
@@ -252,6 +254,10 @@ architecture Behavioral of ExtPack_Management is
   --! @details Delayed for one clock cycle to match the enable signal.
   signal unit_data_received_internal : std_logic_vector(HOST_DATA_BITS-1 downto 0);
 
+  --! @brief The delayed decoded unit access mode of the received command from the host. 
+  --! @details Delayed for one clock cycle to match the enable signal.
+  signal unit_acc_mode_received_internal : std_logic_vector(1 downto 0);
+
   -- Units
 
   --! @brief The schedule requests of the units. Enable signals for unit_data_send_internal. 
@@ -318,19 +324,19 @@ begin
   --! Decodes the received data from the host over the UART_Unit in access mode, unit number and unit data. Also checks for UART errors.
   DECODE: Decoder generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD) port map(clk, rst_ext_pack, host_received_data, host_new_data_received, host_any_uart_error, decode_out_en, decoder_recv_error, decoded_access_mode_internal, decoded_unit_number, decoded_unit_data);
   
-  --! Enables the matching unit to process the received command from host decoded by the Decoder. Delays the unit data to match the enable signal timing.
-  EN_DEMUX: DEMUX port map(clk, rst_ext_pack, decoded_unit_number, decode_out_en, decoded_unit_data, unit_en_internal, unit_data_received_internal);
+  --! Enables the matching unit to process the received command from host decoded by the Decoder. Delays the unit data und access mode to match the enable signal timing.
+  EN_DEMUX: DEMUX port map(clk, rst_ext_pack, decoded_unit_number, decode_out_en, decoded_unit_data, decoded_access_mode_internal, unit_en_internal, unit_data_received_internal, unit_acc_mode_received_internal);
 
   ------------- SPECIAL UNITS -------------
 
   --! Special unit zero: Reset_Unit. Communicates resets of the ExtPack to the host and handles reset requests from the host.
-  U00_RST: Reset_Unit generic map(HOST_DATA_BITS) port map(clk, rst_ext_pack, unit_en_internal(0), decoded_access_mode_internal, unit_data_received_internal, unit_data_send_internal(0), unit_scheduler_wanted_internal(0), unit_scheduler_done_internal(0), error_to_host_internal(0), error_from_host_internal(0), rst_unit);
+  U00_RST: Reset_Unit generic map(HOST_DATA_BITS) port map(clk, rst_ext_pack, unit_en_internal(0), unit_acc_mode_received_internal, unit_data_received_internal, unit_data_send_internal(0), unit_scheduler_wanted_internal(0), unit_scheduler_done_internal(0), error_to_host_internal(0), error_from_host_internal(0), rst_unit);
   
   --! Special unit one: Error_Unit. Sends Errors of the units or decoder errors to the host.
-  U01_ERR: Error_Unit generic map(HOST_DATA_BITS) port map(clk, rst_ext_pack, unit_en_internal(1), decoded_access_mode_internal, unit_data_received_internal, unit_data_send_internal(1), unit_scheduler_wanted_internal(1), unit_scheduler_done_internal(1), error_to_host_internal(1), error_from_host_internal(1), error_to_host_internal, decoder_recv_error, error_from_host_internal);
+  U01_ERR: Error_Unit generic map(HOST_DATA_BITS) port map(clk, rst_ext_pack, unit_en_internal(1), unit_acc_mode_received_internal, unit_data_received_internal, unit_data_send_internal(1), unit_scheduler_wanted_internal(1), unit_scheduler_done_internal(1), error_to_host_internal(1), error_from_host_internal(1), error_to_host_internal, decoder_recv_error, error_from_host_internal);
   
   --! Special unit two: ACK_Unit. If activated echos all command data received from the host by the ExtPack back to the host.
-  U02_ACK: ACK_Unit generic map(HOST_DATA_BITS, 2) port map(clk, rst_ext_pack, decode_out_en, decoded_access_mode_internal, unit_data_received_internal, unit_data_send_internal(2), unit_scheduler_wanted_internal(2), unit_scheduler_done_internal(2), error_to_host_internal(2), error_from_host_internal(2), decoded_unit_number);
+  U02_ACK: ACK_Unit generic map(HOST_DATA_BITS, 2) port map(clk, rst_ext_pack, decode_out_en, unit_acc_mode_received_internal, unit_data_received_internal, unit_data_send_internal(2), unit_scheduler_wanted_internal(2), unit_scheduler_done_internal(2), error_to_host_internal(2), error_from_host_internal(2), decoded_unit_number);
   
   -------- DATA PREPERATION & SEND --------
 
@@ -351,7 +357,7 @@ begin
 
   -- Map internal signals to ports
   unit_en <= unit_en_internal(63 downto 3);
-  decoded_access_mode <= decoded_access_mode_internal;
+  decoded_access_mode <= unit_acc_mode_received_internal;
   unit_data_received <= unit_data_received_internal;
   unit_data_send_internal(63 downto 3) <= unit_data_send(63 downto 3);
   unit_scheduler_wanted_internal(63 downto 3) <= unit_scheduler_wanted;

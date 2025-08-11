@@ -4,7 +4,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 --! Entity implementing a UART serializer for transmission.
 entity Serializer is
@@ -30,7 +30,7 @@ architecture Behavioral of Serializer is
   --! Shift register holding start, data, parity, and stop bits.
   signal reg : std_logic_vector(DATA_BITS+STOP_BITS+PARITY_ACTIVE downto 0) := (others => '1'); -- data + stop + start + parity bits
   --! Bit counter for serialization progress.
-  signal counter : std_logic_vector(3 downto 0) := (others => '1');
+  signal counter : unsigned(3 downto 0) := (others => '1');
   --! Constant vector of stop bits to append to frame.
   constant stop_bits_suffix : std_logic_vector(STOP_BITS-1 downto 0) := (others => '1');
 begin

@@ -3,7 +3,7 @@
 
 library IEEE;
   use IEEE.STD_LOGIC_1164.all;
-  use IEEE.numeric_std.all;
+  use IEEE.NUMERIC_STD.all;
 use work.UnitDataArray_Type_PKG.ALL;
 
 --! Extracts the data of one unit of the input unit data vector and sets it to the output as well as the matching unit number.
