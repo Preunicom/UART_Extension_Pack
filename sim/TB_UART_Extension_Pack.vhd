@@ -13,6 +13,11 @@ architecture TESTBENCH of TB_UART_Extension_Pack is
       signal tb_error : out std_logic
     );
   end component;
+  component TB_ExtPack_Management
+    Port(
+      signal tb_error : out std_logic
+    );
+  end component;
   component TB_Decoder
     Port(
       signal tb_error : out std_logic
@@ -94,6 +99,7 @@ architecture TESTBENCH of TB_UART_Extension_Pack is
     );
   end component;
   signal tb_error_TB_Main_Unit : std_logic;
+  signal tb_error_TB_ExtPack_Management : std_logic;
   signal tb_error_TB_Decoder : std_logic;
   signal tb_error_TB_PriorityScheduler : std_logic;
   signal tb_error_TB_Encoder : std_logic;
@@ -112,6 +118,7 @@ architecture TESTBENCH of TB_UART_Extension_Pack is
   signal tb_error_TB_ACK_Unit : std_logic;
 begin
   Main_Unit: TB_Main_Unit port map(tb_error_TB_Main_Unit);
+  ExtPack_Management: TB_ExtPack_Management port map(tb_error_TB_ExtPack_Management);
   Decoder: TB_Decoder port map(tb_error_TB_Decoder);
   PriorityScheduler: TB_PriorityScheduler port map(tb_error_TB_PriorityScheduler);
   Encoder: TB_Encoder port map(tb_error_TB_Encoder);
@@ -131,6 +138,7 @@ begin
 
   tb_error <= '0' when 
     (tb_error_TB_Main_Unit = '0')
+    and (tb_error_TB_ExtPack_Management = '0')
     and (tb_error_TB_Decoder = '0')
     and (tb_error_TB_PriorityScheduler = '0')
     and (tb_error_TB_Encoder = '0')

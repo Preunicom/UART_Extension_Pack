@@ -89,6 +89,7 @@ begin
             elsif counter_ready = '1' then
               -- no data received for too long
               --> Waiting for next unit number as we missed the data
+              recv_error <= '1';
               state <= S0;
             else
               -- Waiting for unit data or timer ready

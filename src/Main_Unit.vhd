@@ -214,10 +214,10 @@ architecture Behavioral of Main_Unit is
     Port ( 
       clk : in std_logic;
       rst : in std_logic;
-      unit_en : out std_logic_vector(63 downto 3);
-      decoded_access_mode : out std_logic_vector(1 downto 0);
-      unit_data_received : out std_logic_vector(HOST_DATA_BITS-1 downto 0);
-      unit_data_send : in unit_data_array;
+      recv_unit_en : out std_logic_vector(63 downto 3);
+      recv_unit_access_mode : out std_logic_vector(1 downto 0);
+      recv_unit_data : out std_logic_vector(HOST_DATA_BITS-1 downto 0);
+      send_unit_data : in unit_data_array;
       unit_scheduler_wanted : in std_logic_vector(63 downto 3);
       unit_scheduler_done : out std_logic_vector(63 downto 3);
       error_to_host : in std_logic_vector(63 downto 3);
@@ -321,6 +321,3 @@ begin
   -------------- UNITS END ----------------
 
 end Behavioral;
-
--- TODO: TB für ExtPack_Management
--- TODO: Rename signals if necessary

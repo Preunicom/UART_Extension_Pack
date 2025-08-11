@@ -7,30 +7,28 @@ entity TB_Main_Unit is
   );
 end TB_Main_Unit;
 
--- Testbench for 9 fully used Units:
+-- Testbench for the Main_Unit example:
+-- ExtPack Management --> generic map(10000000, 1000000, 8, 1, 1, 0)
 -- Special units:
--- U0: Reset --> generic map(HOST_DATA_BITS)
--- U1: Error --> generic map(HOST_DATA_BITS)
--- U2: ACK --> generic map(HOST_DATA_BITS, 2)
+-- U0: Reset --> generic map(8)
+-- U1: Error --> generic map(8)
+-- U2: ACK --> generic map(8, 2)
 -- Normal units:
--- U3: UART --> generic map(HOST_DATA_BITS, FPGA_FREQ, 250000, 8, 1, 0, 0)
--- U4: GPIO --> generic map(HOST_DATA_BITS, 1, 2)
--- U5: Timer --> generic map(HOST_DATA_BITS, FPGA_FREQ, HOST_BAUD)
--- U6: SPI --> generic map(HOST_DATA_BITS, FPGA_FREQ, 9600, 1, 0, 0, 8)
--- U7: I2C --> generic map(HOST_DATA_BITS, FPGA_FREQ, 100000)
--- U8: SRAM --> generic map(HOST_DATA_BITS, FPGA_FREQ, 8)
+-- U3: UART --> generic map(8, 12000000, 250000, 8, 1, 0, 0)
+-- U4: GPIO --> generic map(8, 1, 2)
+-- U5: Timer --> generic map(8, 12000000, 1000000)
+-- U6: SPI --> generic map(8, 12000000, 9600, 1, 0, 0, 8)
+-- U7: I2C --> generic map(8, 12000000, 100000)
+-- U8: SRAM --> generic map(8, 12000000, 8)
 architecture TESTBENCH of TB_Main_Unit is
   component Main_Unit
     Generic(
-      -- FPGA_FREQ has to be minimum 2*HOST_BAUD
       FPGA_FREQ : integer := 12000000;
       HOST_BAUD : integer := 1000000;
-      -- HOST_DATA_BITS + HOST_STOP_BITS + HOST_PARITY_ACTIVE <= 15 has to be fullfilled
-      -- HOST_DATA_BITS >= 8 has to be fullfilled
       HOST_DATA_BITS : integer := 8;
       HOST_STOP_BITS : integer := 1;
-      HOST_PARITY_ACTIVE : integer := 0; -- 0: No Parity; 1: Even or Odd Parity
-      HOST_PARITY_MODE : integer := 0 -- 0: Even Parity; 1: Odd Parity
+      HOST_PARITY_ACTIVE : integer := 0;
+      HOST_PARITY_MODE : integer := 0
     );
     Port ( 
       clk : in STD_LOGIC;
@@ -345,3 +343,5 @@ begin
     and (tb_exp_sram_wen = tb_sram_wen) else '1';
 
 end TESTBENCH;
+
+-- TODO: Doxygen für Testbenches

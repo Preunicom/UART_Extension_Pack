@@ -7,7 +7,7 @@ entity TB_PriorityScheduler is
   );
 end TB_PriorityScheduler;
 
-architecture Behavioral of TB_PriorityScheduler is
+architecture TESTBENCH of TB_PriorityScheduler is
   component PriorityScheduler
     Port ( 
       clk, rst : in STD_LOGIC;
@@ -88,4 +88,4 @@ begin
     and (tb_exp_scheduler_done = tb_scheduler_done) else '1';
 
 
-end Behavioral;
+end TESTBENCH;

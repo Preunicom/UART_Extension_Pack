@@ -33,6 +33,7 @@ begin
       if rst = '1' then
         outp_en <= (others => '0');
         outp_data <= (others => '0');
+        outp_acc_mode <= (others => '0');
       else
         outp_en <= (others => '0');
         -- Set the selected output enable bit according to inp_en.

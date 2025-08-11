@@ -8,7 +8,7 @@ entity TB_Encoder is
   );
 end TB_Encoder;
 
-architecture Behavioral of TB_Encoder is
+architecture TESTBENCH of TB_Encoder is
   component Encoder
     Generic (
       DATA_BITS : integer := 8
@@ -94,4 +94,4 @@ begin
     and (tb_exp_uart_out = tb_uart_out)
     and (tb_exp_uart_out_valid = tb_uart_out_valid) else '1';
 
-end Behavioral;
+end TESTBENCH;

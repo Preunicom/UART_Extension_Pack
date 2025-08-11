@@ -8,7 +8,7 @@ entity TB_Decoder is
   );
 end TB_Decoder;
 
-architecture Behavioral of TB_Decoder is
+architecture TESTBENCH of TB_Decoder is
   component Decoder
     Generic (
       DATA_BITS : integer := 8;
@@ -108,4 +108,4 @@ begin
     and (tb_exp_access_mode = tb_access_mode)
     and (tb_exp_unit_data = tb_unit_data) else '1';
 
-end Behavioral;
+end TESTBENCH;
