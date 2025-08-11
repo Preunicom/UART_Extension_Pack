@@ -56,13 +56,12 @@ architecture Behavioral of SPI_Wrapper is
   --! Component declaration for SPI_Unit: handles low-level SPI transfers.
   component SPI_Unit
     Generic (
-      --! IN_FREQ_HZ must be at least 2 × SPI_FREQ_HZ.
       IN_FREQ_HZ : integer := 12000000;
       SPI_FREQ_HZ : integer := 9600;
       AMOUNT_SLAVES : integer := 1;
       DATA_BITS : integer := 8;
       SPI_MODE : integer := 0;
-      LEAST_SIG_BIT_FIRST : integer := 0 -- true or false
+      LEAST_SIG_BIT_FIRST : integer := 0
     );
     Port (
       clk : in std_logic;

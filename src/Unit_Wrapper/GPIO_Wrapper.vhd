@@ -49,8 +49,8 @@ architecture Behavioral of GPIO_Wrapper is
       OUTPUTS : integer := 8
     );
     Port (
-      clk : in std_logic; --! Clock signal.
-      rst : in std_logic; --! Reset signal.
+      clk : in std_logic;
+      rst : in std_logic;
       write_en : in std_logic;
       config_in : in STD_LOGIC_VECTOR(OUTPUTS-1 downto 0);
       values_out : out STD_LOGIC_VECTOR(INPUTS-1 downto 0);
@@ -116,12 +116,13 @@ begin
         elsif (last_values_read /= values_read) -- Interrupt
           or ((access_mode(0) = '1') and (last_write_enable = '0' and write_en = '1')) then -- new request from host: Get input pin values
             -- Schedule current GPIO input values for host send.
-            if scheduling_active = '0' then
+            if scheduling_active = '1' then
               -- Overwriting pending GPIO data: raise error.
               error_to_host <= '1';
             end if;
             scheduler_wanted <= '1';
             unit_data_out <= values_read;
+            scheduling_active <= '1';
           end if;
       end if;
     end if;

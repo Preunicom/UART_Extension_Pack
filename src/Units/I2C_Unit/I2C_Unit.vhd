@@ -43,7 +43,7 @@ architecture Behavioral of I2C_Unit is
       SDA_out : out std_logic;
       write_en : in std_logic;
       addr_data : in std_logic_vector(6 downto 0);
-      mode_recv : in std_logic; -- 0: write, 1: read
+      mode_recv : in std_logic;
       send_data : in std_logic_vector(7 downto 0);
       data_saved : out std_logic;
       recv_data : out std_logic_vector(7 downto 0);
@@ -55,7 +55,6 @@ architecture Behavioral of I2C_Unit is
   --! Component declaration for I2C_Prescaler (generates read/write enables and SCL).
   component I2C_Prescaler
     generic (
-      -- IN_FREQ_HZ has to be minimum 4*OUT_FREQ_HZ
       IN_FREQ_HZ  : integer := 12000000;
       OUT_FREQ_HZ : integer := 100000
     );

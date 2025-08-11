@@ -67,14 +67,13 @@ architecture Behavioral of SPI_Unit is
   --! Component declaration for prescaler generating SPI clock edges.
   component SPI_Prescaler
     generic (
-      -- IN_FREQ_HZ has to be minimum 2*OUT_FREQ_HZ
       IN_FREQ_HZ  : integer := 12000000;
       OUT_FREQ_HZ : integer := 9600;
       DATA_BITS : integer := 8;
       SPI_MODE : integer := 0
     );
     port (
-      clk, rst      : in  STD_LOGIC;
+      clk, rst : in  STD_LOGIC;
       clk_prescaled_rising_edge : out STD_LOGIC;
       clk_prescaled_falling_edge : out STD_LOGIC
     );
@@ -123,7 +122,7 @@ architecture Behavioral of SPI_Unit is
     Generic(
       DATA_BITS : integer := 8;
       SPI_MODE : integer := 0;
-      LSB : integer := 0 -- true or false
+      LSB : integer := 0
     );
     Port ( 
       clk, clk_en_prescaled, rst, write_enable : in std_logic;

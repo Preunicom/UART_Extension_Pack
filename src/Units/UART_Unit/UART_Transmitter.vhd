@@ -54,11 +54,10 @@ architecture Behavioral of UART_Transmitter is
   --! Component declaration for serializer converting parallel data to serial format.
   component Serializer
     Generic(
-      -- DATA_BITS + STOP_BITS + PARITY_ACTIVE <= 15 has to be fullfilled
       DATA_BITS : integer := 8;
       STOP_BITS : integer := 1;
-      PARITY_ACTIVE : integer := 0; -- 0: No Parity; 1: Even or Odd Parity
-      PARITY_MODE : integer := 0    -- 0: Even Parity; 1: Odd Parity
+      PARITY_ACTIVE : integer := 0;
+      PARITY_MODE : integer := 0
     );
     Port ( 
       clk, clk_en_prescaled, rst, write_enable : in std_logic;

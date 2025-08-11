@@ -66,8 +66,8 @@ architecture Behavioral of Timer_Wrapper is
       BASE_FREQ : integer := 50000
     );
     port (
-      clk : in std_logic; --! Clock signal.
-      rst : in std_logic; --! Reset signal.
+      clk : in std_logic;
+      rst : in std_logic;
       en : in std_logic;
       prescale_factor_write_en : in std_logic;
       prescale_factor : in integer;

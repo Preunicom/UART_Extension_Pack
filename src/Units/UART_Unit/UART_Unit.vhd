@@ -50,11 +50,10 @@ architecture Behavioral of UART_Unit is
     Generic (
       IN_FREQ_HZ : integer := 12000000;
       BAUD_FREQ_HZ : integer := 9600;
-      -- DATA_BITS + STOP_BITS + PARITY_ACTIVE <= 15 has to be fullfilled
       DATA_BITS : integer := 8;
       STOP_BITS : integer := 1;
-      PARITY_ACTIVE : integer := 0; -- 0: No Parity; 1: Even or Odd Parity
-      PARITY_MODE : integer := 0 -- 0: Even Parity; 1: Odd Parity
+      PARITY_ACTIVE : integer := 0;
+      PARITY_MODE : integer := 0
     );
     Port ( 
       clk, rst : in std_logic;
@@ -69,11 +68,10 @@ architecture Behavioral of UART_Unit is
     Generic(
       IN_FREQ_HZ : integer := 12000000;
       BAUD_FREQ_HZ : integer := 9600;
-      -- DATA_BITS + STOP_BITS + PARITY_ACTIVE <= 15 has to be fullfilled
       DATA_BITS : integer := 8;
       STOP_BITS : integer := 1;
-      PARITY_ACTIVE : integer := 0; -- 0: No Parity; 1: Even or Odd Parity
-      PARITY_MODE : integer := 0 -- 0: Even Parity; 1: Odd Parity
+      PARITY_ACTIVE : integer := 0;
+      PARITY_MODE : integer := 0
     );
     Port ( 
       clk, rst : in std_logic;

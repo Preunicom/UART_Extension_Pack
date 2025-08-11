@@ -56,13 +56,12 @@ architecture Behavioral of I2C_Wrapper is
   --! Component declaration for I2C_Unit: handles low-level I2C operations.
   component I2C_Unit
     generic(
-      -- IN_FREQ_HZ has to be minimum 4*OUT_FREQ_HZ
       IN_FREQ_HZ  : integer := 12000000;
       I2C_FREQ_HZ : integer := 100000
     );
     port(
-      clk : in std_logic; -- Clock signal.
-      rst : in std_logic; -- Reset signal.
+      clk : in std_logic;
+      rst : in std_logic;
       write_en : in std_logic;
       adr : in std_logic_vector(6 downto 0);
       mode_recv : in std_logic;
