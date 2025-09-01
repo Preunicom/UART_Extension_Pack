@@ -6,3 +6,7 @@
 !.gitignore
 !Doxyfile
 !README.md
+!.github/
+!.github/**
+!LICENSE
+!CONTRIBUTING.md
