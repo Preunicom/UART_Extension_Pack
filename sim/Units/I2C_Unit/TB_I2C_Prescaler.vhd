@@ -1,9 +1,16 @@
+--! @file
+--! @brief Testbench for the I2C_Prescaler
+--! @details
+--! This file contains the testbench for the I2C_Prescaler entity.
+--! It tests:
+--! - Normal operation from 10MHz to 1 MHz
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_I2C_Prescaler is
   Port (
-    tb_error : out std_logic
+    tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_I2C_Prescaler;
 

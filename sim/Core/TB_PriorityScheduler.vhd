@@ -1,9 +1,17 @@
+--! @file
+--! @brief Testbench for the PriorityScheduler
+--! @details
+--! This file contains the testbench for the PriorityScheduler entity.  
+--! It tests:
+--! - Normal operation
+--! - Overlapping schedul requests
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_PriorityScheduler is
   Port(
-    signal tb_error : out std_logic
+    signal tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_PriorityScheduler;
 

@@ -1,9 +1,16 @@
+--! @file
+--! @brief Testbench for the SPI_CLK_Manager
+--! @details
+--! This file contains the testbench for the SPI_CLK_Manager entity.
+--! It tests:
+--! - Normal operation in SPI mode 0 (with virtual edges)
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_SPI_CLK_Manager is
   Port (
-    tb_error : out std_logic
+    tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_SPI_CLK_Manager;
 

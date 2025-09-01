@@ -1,9 +1,18 @@
+--! @file
+--! @brief Testbench for the GPIO_Wrapper
+--! @details
+--! This file contains the testbench for the GPIO_Wrapper entity.  
+--! It tests:
+--! - Set
+--! - Get
+--! - Interrrupt
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_GPIO_Wrapper is
   Port(
-    signal tb_error : out std_logic
+    signal tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_GPIO_Wrapper;
 
@@ -86,12 +95,12 @@ begin
 
   -- one clock cycle delayed because of GPIO Bank Unit register (only for interrupts)
   tb_exp_unit_data_out <= (others => 'U'), (others => '0') after 1*tbase,
-    "00000000000001" after 7*tbase, "00000000000000" after 10*tbase, -- Interrupt
+    "00000000000001" after 5*tbase, "00000000000000" after 10*tbase, -- Interrupt
     "00000000000001" after 22*tbase, "00000000000000" after 34*tbase; -- Request from host
 
   -- one clock cycle delayed because of GPIO Bank Unit input sync register
   tb_exp_scheduler_wanted <= 'U', '0' after 1*tbase,
-    '1' after 7*tbase, '0' after 10*tbase,
+    '1' after 5*tbase, '0' after 10*tbase,
     '1' after 22*tbase, '0' after 34*tbase;
   
   tb_exp_error_to_host <= '0';

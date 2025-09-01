@@ -1,9 +1,17 @@
+--! @file
+--! @brief Testbench for the Reset_Unit
+--! @details
+--! This file contains the testbench for the Reset_Unit entity.  
+--! It tests:
+--! - Resetting ExtPack
+--! - Send reset status
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_Reset_Unit is
   Port(
-    signal tb_error : out std_logic
+    signal tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_Reset_Unit;
 

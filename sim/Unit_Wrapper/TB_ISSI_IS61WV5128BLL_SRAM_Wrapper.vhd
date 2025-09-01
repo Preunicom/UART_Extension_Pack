@@ -1,10 +1,21 @@
+--! @file
+--! @brief Testbench for the ISSI_IS61WV5128BLL_SRAM_Wrapper
+--! @details
+--! This file contains the testbench for the ISSI_IS61WV5128BLL_SRAM_Wrapper entity.  
+--! It tests:
+--! - Set adr.
+--! - Reset adr.
+--! - Write data
+--! - Read data
+--! - Too much address writes --> Error from host
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.all;
 
 entity TB_ISSI_IS61WV5128BLL_SRAM_Wrapper is
   Port(
-    signal tb_error : out std_logic
+    signal tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_ISSI_IS61WV5128BLL_SRAM_Wrapper;
 

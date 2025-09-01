@@ -1,9 +1,16 @@
+--! @file
+--! @brief Testbench for the SPI_Unit with SPI mode 0
+--! @details
+--! This file contains the testbench for the SPI_Unit entity with SPI mode 0.
+--! It tests:
+--! - Normal operation in SPI mode 0
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_SPI_Unit_Mode0 is
   Port (
-    tb_error : out std_logic
+    tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_SPI_Unit_Mode0;
 

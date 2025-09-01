@@ -1,9 +1,20 @@
+--! @file
+--! @brief Testbench for the Timer_Wrapper
+--! @details
+--! This file contains the testbench for the Timer_Wrapper entity.  
+--! It tests:
+--! - Set start value
+--! - Enable
+--! - Disable
+--! - Restart
+--! - Set prescaler
+
 library IEEE;
   use IEEE.STD_LOGIC_1164.all;
 
 entity TB_Timer_Wrapper is
   Port(
-    signal tb_error : out std_logic
+    signal tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end entity;
 
@@ -63,7 +74,7 @@ begin
     '1' after 607*tbase, '0' after 608*tbase, -- set start_value (0xFE)
     '1' after 1502*tbase, '0' after 1503*tbase, -- set prescale factor
     '1' after 2502*tbase, '0' after 2503*tbase, -- set start_value (0xFF)
-    '1' after 4102*tbase, '0' after 4103*tbase; -- en
+    '1' after 4102*tbase, '0' after 4103*tbase; -- !en
 
   tb_access_mode <= "00",
     "11" after 104*tbase,

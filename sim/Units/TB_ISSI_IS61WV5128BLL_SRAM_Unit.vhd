@@ -1,10 +1,18 @@
+--! @file
+--! @brief Testbench for the ISSI_IS61WV5128BLL_SRAM_Unit
+--! @details
+--! This file contains the testbench for the ISSI_IS61WV5128BLL_SRAM_Unit entity.  
+--! It tests:
+--! - Read
+--! - Write
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity TB_ISSI_IS61WV5128BLL_SRAM_Unit is
   Port(
-    signal tb_error : out std_logic
+    signal tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_ISSI_IS61WV5128BLL_SRAM_Unit;
 

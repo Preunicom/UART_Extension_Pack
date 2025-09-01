@@ -1,9 +1,18 @@
+--! @file
+--! @brief Testbench for the I2C_Unit
+--! @details
+--! This file contains the testbench for the I2C_Unit entity.
+--! It tests:
+--! - Sending
+--! - Repeated start
+--! - Restarting
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_I2C_Unit is
   Port (
-    tb_error : out std_logic
+    tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_I2C_Unit;
 

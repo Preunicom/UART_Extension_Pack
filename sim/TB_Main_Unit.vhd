@@ -1,25 +1,41 @@
+--! @file
+--! @brief Testbench for the Main_Unit
+--! @details
+--! This file contains the testbench for the Main_Unit entity.  
+--! It tests:
+--! - Reset Unit: reset/get reset
+--! - Error Unit: -
+--! - ACK Unit: ACK enable, disable, get ACK
+--! - UART Unit: send, receive + stress testing sending more load
+--! - GPIO Unit: set, get, interrupt
+--! - Timer Unit: set start value, restart, enable, disable
+--! - SPI Unit: receive, send
+--! - I2C Unit: send, receive, set adr.
+--! - SRAM Unit: save, read, set adr.
+--!
+--! The tested configuration of Main_Unit is:
+--! - ExtPack Management --> generic map(10000000, 1000000, 8, 1, 1, 0)
+--! - Special units:
+--!   - U0: Reset --> generic map(8)
+--!   - U1: Error --> generic map(8)
+--!   - U2: ACK --> generic map(8, 2)
+--! - Normal units:
+--!   - U3: UART --> generic map(8, 12000000, 250000, 8, 1, 0, 0)
+--!   - U4: GPIO --> generic map(8, 1, 2)
+--!   - U5: Timer --> generic map(8, 12000000, 1000000)
+--!   - U6: SPI --> generic map(8, 12000000, 9600, 1, 0, 0, 8)
+--!   - U7: I2C --> generic map(8, 12000000, 100000)
+--!   - U8: SRAM --> generic map(8, 12000000, 8)
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_Main_Unit is
   Port(
-    signal tb_error : out std_logic
+    signal tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_Main_Unit;
 
--- Testbench for the Main_Unit example:
--- ExtPack Management --> generic map(10000000, 1000000, 8, 1, 1, 0)
--- Special units:
--- U0: Reset --> generic map(8)
--- U1: Error --> generic map(8)
--- U2: ACK --> generic map(8, 2)
--- Normal units:
--- U3: UART --> generic map(8, 12000000, 250000, 8, 1, 0, 0)
--- U4: GPIO --> generic map(8, 1, 2)
--- U5: Timer --> generic map(8, 12000000, 1000000)
--- U6: SPI --> generic map(8, 12000000, 9600, 1, 0, 0, 8)
--- U7: I2C --> generic map(8, 12000000, 100000)
--- U8: SRAM --> generic map(8, 12000000, 8)
 architecture TESTBENCH of TB_Main_Unit is
   component Main_Unit
     Generic(
@@ -237,8 +253,8 @@ begin
     '0' after 668*tbase, '0' after 678*tbase, '0' after 688*tbase, '0' after 698*tbase, '0' after 708*tbase, '1' after 718*tbase, '0' after 728*tbase, '0' after 738*tbase, '0' after 748*tbase, '1' after 758*tbase, '1' after 768*tbase, --0b00010000 (UART in - data) (0x10)
     '0' after 778*tbase, '0' after 788*tbase, '0' after 798*tbase, '1' after 808*tbase, '0' after 818*tbase, '0' after 828*tbase, '0' after 838*tbase, '0' after 848*tbase, '0' after 858*tbase, '1' after 868*tbase, '1' after 878*tbase, --0b00000100 (GPIO interrupt - unit) (0x04)
     '0' after 888*tbase, '1' after 898*tbase, '0' after 908*tbase, '0' after 918*tbase, '0' after 928*tbase, '0' after 938*tbase, '0' after 948*tbase, '0' after 958*tbase, '0' after 968*tbase, '1' after 978*tbase, '1' after 988*tbase, --0b00000000 (GPIO interrupt - data) (0x01)
-    '0' after 1128*tbase, '0' after 1138*tbase, '0' after 1148*tbase, '1' after 1158*tbase, '0' after 1168*tbase, '0' after 1178*tbase, '0' after 1188*tbase, '0' after 1198*tbase, '0' after 1208*tbase, '1' after 1218*tbase, '1' after 1228*tbase, --0b00000100 (GPIO interrupt - unit) (0x04)
-    '0' after 1238*tbase, '0' after 1248*tbase, '0' after 1258*tbase, '0' after 1268*tbase, '0' after 1278*tbase, '0' after 1288*tbase, '0' after 1298*tbase, '0' after 1308*tbase, '0' after 1318*tbase, '0' after 1328*tbase, '1' after 1338*tbase, --0b00000000 (GPIO interrupt - data) (0x00)
+    '0' after 1118*tbase, '0' after 1128*tbase, '0' after 1138*tbase, '1' after 1148*tbase, '0' after 1158*tbase, '0' after 1168*tbase, '0' after 1178*tbase, '0' after 1188*tbase, '0' after 1198*tbase, '1' after 1208*tbase, '1' after 1218*tbase, --0b00000100 (GPIO interrupt - unit) (0x04)
+    '0' after 1228*tbase, '0' after 1238*tbase, '0' after 1248*tbase, '0' after 1258*tbase, '0' after 1268*tbase, '0' after 1278*tbase, '0' after 1288*tbase, '0' after 1298*tbase, '0' after 1308*tbase, '0' after 1318*tbase, '1' after 1328*tbase, --0b00000000 (GPIO interrupt - data) (0x00)
     '0' after 3428*tbase, '1' after 3438*tbase, '0' after 3448*tbase, '1' after 3458*tbase, '0' after 3468*tbase, '0' after 3478*tbase, '0' after 3488*tbase, '0' after 3488*tbase, '0' after 3508*tbase, '0' after 3518*tbase, '1' after 3528*tbase, --0b00000101 (Timer interrupt - unit) (0x05)
     '0' after 3538*tbase, '1' after 3548*tbase, '1' after 3558*tbase, '1' after 3568*tbase, '1' after 3578*tbase, '1' after 3588*tbase, '1' after 3598*tbase, '1' after 3608*tbase, '1' after 3618*tbase, '0' after 3628*tbase, '1' after 3638*tbase, --0b11111111 (Timer interrupt - data) (0xFF)
     '0' after 8247*tbase, '0' after 8257*tbase, '0' after 8267*tbase, '0' after 8277*tbase, '0' after 8287*tbase, '0' after 8297*tbase, '0' after 8307*tbase, '0' after 8317*tbase, '0' after 8327*tbase, '0' after 8337*tbase, '1' after 8347*tbase, --0b00000000 (Reset unit - unit) (0x00)
@@ -343,5 +359,3 @@ begin
     and (tb_exp_sram_wen = tb_sram_wen) else '1';
 
 end TESTBENCH;
-
--- TODO: Doxygen für Testbenches

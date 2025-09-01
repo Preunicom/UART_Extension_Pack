@@ -1,9 +1,19 @@
+--! @file
+--! @brief Testbench for the SPI_Wrapper
+--! @details
+--! This file contains the testbench for the SPI_Wrapper entity.  
+--! It tests:
+--! - Set valid slave id
+--! - Set invalid slave id --> error from host
+--! - Send/Receive data
+--! - Too slow scheduling --> error to host
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_SPI_Wrapper is
   Port(
-    signal tb_error : out std_logic
+    signal tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_SPI_Wrapper;
 

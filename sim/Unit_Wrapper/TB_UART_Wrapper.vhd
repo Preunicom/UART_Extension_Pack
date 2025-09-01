@@ -1,9 +1,19 @@
+--! @file
+--! @brief Testbench for the UART_Wrapper
+--! @details
+--! This file contains the testbench for the UART_Wrapper entity.  
+--! It tests:
+--! - Send
+--! - Receive
+--! - Frame error --> Error to host
+--! - Too fast data sending --> Error from host
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_UART_Wrapper is
   Port(
-    signal tb_error : out std_logic
+    signal tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_UART_Wrapper;
 

@@ -1,9 +1,16 @@
+--! @file
+--! @brief Testbench for the Serializer
+--! @details
+--! This file contains the testbench for the Serializer entity.  
+--! It tests:
+--! - Normal operation
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_Serializer is
   Port (
-    tb_error : out std_logic
+    tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_Serializer;
 

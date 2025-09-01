@@ -26,6 +26,7 @@ Connect the ExtPack_Management with the units. The index in vectors need to matc
 All units are using the same first generic and the same first 10 ports.  
 Following generics and ports are unit specific.  
 Units with input pins have to be synced. This can be done by using the IO_Sync or IO_Sync_Vector component.
+If it is used only for internal communication in the FPGA with components using the same clock speed, syncing is not necessary.
 
 ### Define host communication
 Set the generic values of the ExtPack_Management component to your specific UART configuration of your host.  

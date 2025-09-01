@@ -1,10 +1,19 @@
+--! @file
+--! @brief Testbench for the Decoder
+--! @details
+--! This file contains the testbench for the Decoder entity.  
+--! It tests:
+--! - Normal operation
+--! - UART error handling
+--! - Normal operation after an UART error occured
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.std_logic_unsigned.all;
 
 entity TB_Decoder is
   Port(
-    signal tb_error : out std_logic
+    signal tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_Decoder;
 

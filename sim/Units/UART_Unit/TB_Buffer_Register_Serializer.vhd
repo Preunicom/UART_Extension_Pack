@@ -1,9 +1,17 @@
+--! @file
+--! @brief Testbench for the Buffer_Register_Serializer
+--! @details
+--! This file contains the testbench for the Buffer_Register_Serializer entity.  
+--! It tests:
+--! - Normal operation
+--! - Ignored data
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_Buffer_Register_Serializer is
   Port (
-    tb_error : out std_logic
+    tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_Buffer_Register_Serializer;
 

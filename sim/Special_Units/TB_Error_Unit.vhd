@@ -1,9 +1,18 @@
+--! @file
+--! @brief Testbench for the Error_Unit
+--! @details
+--! This file contains the testbench for the Error_Unit entity.  
+--! It tests:
+--! - Decoder error
+--! - Unit error from host
+--! - Unit error to host
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity TB_Error_Unit is
   Port(
-    signal tb_error : out std_logic
+    signal tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_Error_Unit;
 

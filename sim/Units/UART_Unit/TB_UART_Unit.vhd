@@ -1,13 +1,24 @@
+--! @file
+--! @brief Testbench for the Timer_Unit
+--! @details
+--! This file contains the testbench for the Timer_Unit entity.  
+--! It tests:
+--! - Send data
+--! - Receive data
+--! - Frame error
+--! - Parity error
+--! - Ignored sending request while full
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity TB_UARTUnit is
+entity TB_UART_Unit is
   Port (
-    tb_error : out std_logic
+    tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
-end TB_UARTUnit;
+end TB_UART_Unit;
 
-architecture TESTBENCH of TB_UARTUnit is
+architecture TESTBENCH of TB_UART_Unit is
     component UART_Unit 
       Generic (
         IN_FREQ_HZ : integer := 12000000;

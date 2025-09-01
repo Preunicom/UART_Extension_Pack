@@ -1,10 +1,17 @@
+--! @file
+--! @brief Testbench for the Encoder
+--! @details
+--! This file contains the testbench for the Encoder entity.  
+--! It tests:
+--! - Normal operation
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.std_logic_unsigned.all;
 
 entity TB_Encoder is
   Port(
-    signal tb_error : out std_logic
+    signal tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
   );
 end TB_Encoder;
 
