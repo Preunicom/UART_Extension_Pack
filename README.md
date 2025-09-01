@@ -1,207 +1,42 @@
 # UART Extension Pack (ExtPack)
 
 ## Features
-The ExtPack is able to add units (like GPIO, Timer or UART) to a UART capable device.
+The ExtPack is able to communicate with an UART capable device like a microcontroller (named host in the following) and can extend its periphery.
+There are units (like GPIO, Timer or UART) which can be controlled by the host.
+There are up to 64 units (Three of them are not customizable as they are units used to provide basic important features for the communication like resets, errors and acknowledges).
 
 ## Communication with Host
 The ExtPack communicates with the host over UART.  
-The communication with the host has to be at least 8 data bits.
+The communication data bits with the host has to be at least 8 data bits.
 Stop bits and parity bit can be set as wished.
+In sum there can be a maximum of 15 bits per UART package.
 
 ### Protocol with host
 The ExtPack uses a custom protocol which uses UART as base.  
 Each host to ExtPack data package consists of two UART packages following each other in less then three UART package cycles.  
-The first one includes the unit number to communicate with (bits 5 downto 0) and the access mode for the unit (bits 7 downto 6). If there are more then 8 host UART data bits the following bits are ignored.  
-The second one includes the data for the unit. If the unit uses less then your host UART data bits, the top bits are truncated in the unit wrapper (same the other way round if the unit has more bits than the host UART data bits).  
-In the other direction from ExtPack to host the protocol is nearly the same with the difference of missing the access mode of the first UART package. These bits are always zero.
+The first one includes the unit number to communicate with (bits 0...5) and the access mode for the unit (bits 6...7). If there are more than 8 host UART data bits the following bits are ignored.  
+The second one includes the data for the unit. If the unit uses less then your host UART data bits, the top bits are truncated in the unit wrapper (same the other way round if the unit works with more bits than the host UART data bits the data is filled with zeros).  
+In the other direction from ExtPack to host the protocol is nearly the same with the difference of missing the access mode of the first UART package. These bits have to be always zero.
 
 ## Usage
 ### Declare and define units
-Units are declared in the Main_Unit between "CUSTOM UNITS" and "UNITS END".
-the first generic and the first 10 ports are the same for all units.
+Use the ExtPack_Management component.  
+Then use the units you like as components.  
+Connect the ExtPack_Management with the units. The index in vectors need to match the unit number you want to set for the unit. (The available unit numbers are 3...63)  
+All units are using the same first generic and the same first 10 ports.  
 Following generics and ports are unit specific.  
-The specific ports have to be additionally declared in the constraints file and in the entity of Main_Unit between "UNIT PORTS" and "UNIT PORTS END". 
-**Note:** The last line before "UNIT PORTS END" must not have a semicolon at the end!  
-Units with input pins have to use an IO_Sync. Every input pin has to declare an IO_Sync or IO_Sync_Vector between "UNIT SYNC" and "SYNC END".  
-The corresponding signal has to be declared between "UNIT SYNC SIGNALS" and "SYNC SIGNALS END".  
-Use the input pin signal declared in port(...) as "async_in" of IO_SYNC(_Vector) and the "sync_out" with the declared signal to the unit input.
+Units with input pins have to be synced. This can be done by using the IO_Sync or IO_Sync_Vector component.
+If it is used only for internal communication in the FPGA with components using the same clock speed, syncing is not necessary.
 
 ### Define host communication
-Set the default values of Main_Unit to your specific UART configuration of your host.  
-**Note:** Make sure you have >= 8 data bits for your host communication as well as a BAUD rate less or equal of half your FPGA frequency
-
-## Special Units
-### Reset Unit
-The unit zero is the reset unit. This unit tells the host if the ExtPack got reset with the highest possible unit data value.  
-Additionally, it is possible to reset the ExtPack by sending the highest possible unit data value to unit zero.
-
-### Error Unit
-The unit one is the error unit. It handles errors of all units and sends status messages to the host about these errors.  
-The message structure is shown in the following:
-- Bit 0: Indicates a UART error when receiving UART data from the host.
-- Bit 1: Indicates an error of any unit while sending data to host. (for example because of too slow scheduling)
-- Bit 2: Indicates an error of any unit while processing data from the host. (for example when the UART Unit can not send data as the unit still processes the last data)
-All other bits are zero.
-
-### ACK Unit
-The Acknowledge Unit sends, if activated, every received data package back to the host. 
-The host then can for example check if the data was correctly received.
-The ACK unit can be activated by sending a number unequal zero to the unit.
-If sent zero the unit gets deactivated.
-**Node:** Both packages activate and deactivate send acknowledges to the host.
-**Note:** The unit has to get the decoder output enable signal as "write_en" as it should react to all units' data.
-The signal is internally delayed by one clock cyle to match the unit data.
-The "unit_number" parameter is the decoded unit number from the decoder output.
-
-## Custom Units
-### UART_Unit
-Can be configured with BAUD rate, data bits, stop bits and parity bit.  
-Needs two pins (rx and tx) of the FPGA.  
-BAUD has to be less or equal than the FPGA frequency. 
-**Note:** Integer divisor baud rates lead to more stable UART communication  
-Data bits have to be more than 5 and all bits (stop, data and parity) have to be less or equal 15.  
-Normally: 
-  - data bits: 5-9
-  - stop bits: 1-2
-  - parity bit: 0-1
-
-UART messages are directly forwarded from unit to the host or from the host to the unit.  
-Access mode is ignored.  
-**Note:** UART messages with parity or frame errors are ignored!  
-**Note:** If there is too much traffic on the ExtPack and UART Unit has to less priority and is receiving too much load it is possible that UART packages are getting lost because it is scheduled too slow or never because of starvation.
-The system operates on a Best-Effort Delivery basis, meaning it strives to transmit data as efficiently as possible but does not guarantee delivery.
-
-### SPI_Unit
-Can be configured with data rate, amount slaves, SPI mode, LSB or MSB and the amount of data bits per message.  
-The SPI_FREQ_HZ has to be lower or equal to half of the IN_FREQ_HZ.  
-Available SPI_MODEs are 0-3.  
-LEAST_SIG_BIT_FIRST is a boolean value (1 = LSB, 0 = MSB).  
-DATA_BITS have to be less or equal to 14.  
-It needs following pins:  
-
-- SCK pin
-- CS pins (amount is set in the configuration)
-- MISO pin
-- MOSI pin
-
-The access mode handles data sending and the current slave ID:
-
-- "*0": Sends a message to the set slave.
-- "*1": Sets slave to communicate with.
-
-There are three situations where errors are forwarded to the Error_Unit:
-
-- Too slow scheduling (error_to_host)
-- Sending command while SPI_Unit not ready (error_from_host)
-- Slave ID set command with invalid slave ID (error_from_host)
-
-### I2C_Unit
-Can be configured with a data rate.  
-The I2C_FREQ_HZ has to be lower or equal to quarter of the IN_FREQ_HZ.  
-I2C uses MSB.  
-It uses repeated start when sending packages directly following on each other to different slaves or to the same slave with another mode (send/receive).  
-Packages to the same slave with the same mode (send/receive) following on each other are directly sent after the ACK.
-The Unit supports slave clock stretching.  
-**Note:** The I2C Unit does not work with multiple masters. It has to be the only master on the bus.
-
-**Note:** This unit can not be synced as the pin is inout!
-
-The I2C_Unit needs following pins:  
-
-- SCL (inout) (The pin/connection has to be connected with a pull-up resistor)
-- SDA (inout) (The pin/connection has to be connected with a pull-up resistor)
-
-The access mode handles data sending and the current slave ID:
-
-- "*1": Sets partner address (lowest 7 bits of received data)
-- "10": Receives a message from the partner with currently set partner address
-- "00": Sends a message to the partner with currently set partner address
-
-There are three situations where errors are forwarded to the Error_Unit:
-
-- Too slow scheduling (error_to_host)
-- Sending command while another command is already waiting for the I2C Unit to be ready (error_from_host)
-- NACK received while sending (error_from_host)
-
-### GPIO_Unit
-Can be configured with in and out pin amount.  
-Pin amount has to be at least 1 and maximum the amount of data bits of the host UART communication.
-The access mode controls the type of pins.
-  - "00" or "10": Set output pins
-  - "01" or "11": Request values of input pins
-
-If there is an interrupt on a input pin detected a message with the current pin values is sent to the host.  
-**Note:** Debouncing is not prevented. Therefore its possible to lose interrupts if they are faster than the scheduling and the UART transmission to the host.  
-**Note:** The output pins are set to the given values from the host. There is no way to only set **one** specific pin to a value.
-
-## Timer_Unit
-Can be configured via UART (No configuration in VHDL code necessary).  
-The timer is an x-bit timer with x being the amount of bits of the host UART communication.  
-It counts from a given start value (default 0) up to the maximum value of x bit. The overflow triggers an interrupt which is sent to the host.  
-The timer frequency is at 5% of host baud rate.  
-**Note:** The reason is, that that is the maximum of ExtPack packages (consists of two UART packages: unit number and unit data) that are being able to be transmitted to the host via 8N1 UART, which is the fastest supported host UART mode when looking at packages transmission rate.  
-The speed of counting (prescaler) can also be set as a divisor of this 5% of host BAUD frequency. (default: 1)  
-For example: With a host baud rate of 1 MHz a prescale divisor of 2 results in 25 KHz.  
-The access mode handles all this configurations: 
- - "00": Enables/disables the timer. 
-    - 0 as value disables the timer.
-    - Any value greater than 0 enables the timer.
- - "01": Restarts the timer. (value is ignored)
- - "10": Sets the value as the prescale divisor. (**Note:** Even values lead to a preciser timer)
- - "11": Sets the value as the start value of the timer.
-
- **Note:** Think of the fact, that scheduling and sending the timer overflow interrupt to the host will need some time.  
- **Note:** As the timer counts even if disabled, because disabling only targets the interrupt, you have to restart the timer to apply the set start value and get the result as expected.  
- 
- **Timer init suggestion:**
- 1) set prescale factor and or start value (the order doesn't matter if the timer is restarted afterwards)
- 2) restart the timer
- 3) enable the timer
-
-**Timer change suggestion:**
- 1) disable the timer
- 2) init the timer like described above
-
-## ISSI_IS61WV5128BLL_SRAM_Unit (SRAM_Unit)
-The ISSI_IS61WV5128BLL_SRAM_Unit (short: SRAM_Unit) is used to communicate with the internal SRAM Module (of the Cmod A7 35T).
-It can be configured with the time needed to access data in ns (8/10/20/25/35) (Use the datasheet to identify the correct one; The Cmod A7 35T needs the 8ns configuration)
-Additionally the FPGA frequency has to be given.
-As the part uses the same clock as the FPGA the pins does not have to be synced.
-
-The SRAM_Unit needs following pins:  
-
-- sram_adr (out (vector: 19x))
-- sram_data (inout (vector: 8x))
-- sram_oen (out)
-- sram_cen (out)
-- sram_wen (out)
-
-The access mode handles writing, reading and setting address:
-
-- "00": Reseting the address to 0x0000 and setting the next address slot to write to 0
-- "01": Setting the next address slot to the data
-- "10": Reading the data from the set address
-- "11": Writing the data to the set address
-
-There are three situations where errors are forwarded to the Error_Unit:
-
-- Too slow scheduling (error_to_host)
-- Reading or writing while another read/write operation is still processed (error_from_host)
-- Writing in an address slot above the address length (error_from_host)
-
-The address is set in blocks of HOST_DATA_BITS. The last block may not be used completely (bits above the used ones are ignored).
-The first block sets the LSB. The second one the next, etc.
-When a block is set completely above the address (no bit is still unset in the address) there will be an error_from_host and the received data will we ignored.
-To start again, reset the address to zero (access_mode: "00").
-
-If there was a read or write operation the next address block to set is reset to the first block but the address is still valid and not reset to zero.
-This allows the host to modify for example the last bit of the address without setting all blocks again.
+Set the generic values of the ExtPack_Management component to your specific UART configuration of your host.  
+**Note:** Make sure to match all port conditions in the Doxygen documentation.
 
 ## Internal structure
 ### Incoming data from host
 (1) UART_Unit -> (2) Decoder -> (3) MUX -> (4) Unit
 1) **UART_Unit**  
-Receives the data via UART from rx_pin_host.
+Receives the data via UART from the RX pin.
 2) **Decoder**  
 Decodes the received data in unit_number, access_mode and unit_data.
 3) **MUX**  
@@ -214,10 +49,13 @@ Performs unit specific actions with the received data.
 1) **Unit**  
 Provides the data to send to the host.
 2) **PriorityScheduler**  
-Schedules the units with their priority (higher unit_number is less priority).
+Schedules the units with their priority (higher unit number is less priority).
 3) **DEMUX**  
-Choose the unit_data chosen from PriorityScheduler and gives it to the Encoder.
+Choose the unit data chosen from PriorityScheduler and gives it to the Encoder.
 4) **Encoder**  
 Encodes the data in the protocol.
 5) **UART_Unit**  
-Sends the data to the host over UART.
+Sends the data to the host via UART over the TX pin.
+
+## VHDL
+The used VHDL version is VHDL 2K.

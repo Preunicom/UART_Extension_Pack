@@ -1,0 +1,46 @@
+--! @file
+--! @brief Top level testbench combining all tb_error signals of all testbenches related to I2C_Unit to show an overview in tests.
+--! @details
+--! This file contains the top level testbench and combines all error states of the testbenches in the I2C_Unit project. 
+--!
+--! It tests all I2C_Unit components by using the testbenches as components.
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity TB_I2C_Module is
+  Port (
+    tb_error : out std_logic --! '0' if everything works like expected, '1' otherwise.
+  );
+end TB_I2C_Module;
+
+architecture TESTBENCH of TB_I2C_Module is
+  component TB_I2C_Prescaler
+    Port (
+      tb_error : out std_logic
+    );
+  end component;
+  component TB_I2C_Communication
+    Port (
+      tb_error : out std_logic
+    );
+  end component;
+  component TB_I2C_Unit
+    Port (
+      tb_error : out std_logic
+    );
+  end component;
+  signal tb_error_TB_I2C_Prescaler : std_logic;
+  signal tb_error_TB_I2C_Communication : std_logic;
+  signal tb_error_TB_I2C_Unit : std_logic;
+begin
+  I2C_Prescaler: TB_I2C_Prescaler port map(tb_error_TB_I2C_Prescaler);
+  I2C_Communiction: TB_I2C_Communication port map(tb_error_TB_I2C_Communication);
+  I2C_Unit: TB_I2C_Unit port map(tb_error_TB_I2C_Unit);
+
+  tb_error <= '0' when 
+    (tb_error_TB_I2C_Prescaler = '0')
+    and (tb_error_TB_I2C_Communication = '0')
+    and (tb_error_TB_I2C_Unit = '0') else '1';
+
+end TESTBENCH;
