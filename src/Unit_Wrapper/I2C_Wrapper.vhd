@@ -12,8 +12,9 @@ use IEEE.NUMERIC_STD.all;
 --! @brief Wraps an I2C_Unit to handle host commands and interface with the scheduler.
 --! @details I2C uses MSB.  
 --! It uses repeated start when sending packages directly following on each other to different slaves or to the same slave with another mode (send/receive).  
---! Packages to the same slave with the same mode (send/receive) following on each other are directly sent after the ACK.
---! The Unit supports slave clock stretching.  
+--! Packages to the same slave with the same mode (send/receive) following on each other are directly sent after the ACK.  
+--! The internal buffer helps to have longer transactions by storing data while waiting for the previous items in the transaction to be processed.  
+--! The Unit supports slave clock stretching of slaves.  
 --! @note 
 --! - The I2C Unit does not work with multiple masters. It has to be the only master on the bus.\n
 --! - This unit can not be synced as the pin is inout!
@@ -33,7 +34,8 @@ entity I2C_Wrapper is
   Generic (
     HOST_DATA_BITS : integer := 8; --! Width of the host UART data in bits.
     IN_FREQ_HZ : integer := 12000000; --! Input clock frequency in Hz (must be at least 4x I2C_FREQ_HZ).
-    I2C_FREQ_HZ : integer := 100000 --! I2C bus frequency in Hz.
+    I2C_FREQ_HZ : integer := 100000; --! I2C bus frequency in Hz.
+    I2C_BUF_LEN : integer := 10 --! I2C buffer length in data bytes.
   );
   Port (
     clk : in STD_LOGIC; --! Clock signal.
@@ -82,19 +84,33 @@ architecture Behavioral of I2C_Wrapper is
   --! Indicates that a receive transaction is active.
   signal scheduling_active : std_logic := '0';
 
-  --! Buffer for data to send, zero-extended to 14 bits.
-  signal unit_data_in_buffer : std_logic_vector(13 downto 0) := (others => '0');
   --! Buffer for received data, zero-extended to 14 bits.
   signal unit_data_out_buffer : std_logic_vector(13 downto 0) := (others => '0');
+  --! @brief Subdata type for I2C buffered payload data.
+  --! @details Array of std_logic_vector used to store the payload data for each buffered I2C transaction.
+  type i2c_buf_data_t is array (I2C_BUF_LEN-1 downto 0) of std_logic_vector(13 downto 0); 
+  --! Buffer for data to send, zero-extended to 14 bits.
+  signal i2c_buf_data : i2c_buf_data_t := (others => (others => '0'));
 
-  --! Strobe to start I2C_Unit transaction.
-  signal I2C_write_en : std_logic := '0';
+  --! @brief Subdata type for I2C partner addresses.
+  --! @details Array of 7-bit std_logic_vector to store the target addresses for each buffered I2C transaction.
+  type i2c_buf_addr_t is array (I2C_BUF_LEN-1 downto 0) of std_logic_vector(6 downto 0); 
+  --! Buffer for the address of the data to send in the data buffer.
+  signal i2c_buf_addr: i2c_buf_addr_t := (others => (others => '0'));
+
+  --! @brief Subdata type for I2C receive mode flags.
+  --! @details Array of single-bit flags, where '1' indicates the transaction is a receive operation and '0' indicates a send operation. One element per buffered transaction.
+  type i2c_buf_recv_mode_t is array (I2C_BUF_LEN-1 downto 0) of std_logic; 
+  --! Buffer of mode flags: '1' for receive, '0' for send.
+  signal i2c_buf_recv_mode: i2c_buf_recv_mode_t := (others => '0');
+
+  --! The amount of free slots in the buffer.
+  signal free_i2c_buf_slots : natural range 0 to I2C_BUF_LEN := I2C_BUF_LEN;
+
+  --! Flag to start I2C_Unit transaction. Is '1' if any valid data is in the buffer, '0' otherwise.
+  signal i2c_write_en : std_logic := '0';
   --! Current 7-bit partner address.
   signal current_partner_adr : std_logic_vector(6 downto 0) := (others => '0');
-  --! Indicates I2C_Unit is ready for a new transaction.
-  signal I2C_ready : std_logic;
-  --! Mode flag: '1' for receive, '0' for send.
-  signal I2C_mode_recv : std_logic;
 
   --! Previous I2C_data_saved for edge detection.
   signal last_I2C_data_saved : std_logic;
@@ -106,32 +122,43 @@ architecture Behavioral of I2C_Wrapper is
   --! I2C_Unit output: receive data valid indicator.
   signal recv_data_valid : std_logic;
 
-  --! Error: I2C transaction attempted while not ready.
-  signal error_I2C_not_ready : std_logic := '0';
+  --! Error: I2C transaction attempted while no free space in buffer.
+  signal error_I2C_buffer_full : std_logic := '0';
   --! Error: I2C partner did not acknowledge.
   signal error_I2C_NACK : std_logic := '0';
 
 begin
   --! The I2C Unit handling the I2C communication.
-  I2C: I2C_Unit generic map(IN_FREQ_HZ, I2C_FREQ_HZ) port map(clk, rst, I2C_write_en, current_partner_adr, I2C_mode_recv, unit_data_in_buffer(7 downto 0), I2C_data_saved, unit_data_out_buffer(7 downto 0), recv_data_valid, error_I2C_NACK, SCL, SDA);
+  I2C: I2C_Unit generic map(IN_FREQ_HZ, I2C_FREQ_HZ) port map(clk, rst, i2c_write_en, i2c_buf_addr(0), i2c_buf_recv_mode(0), i2c_buf_data(0)(7 downto 0), I2C_data_saved, unit_data_out_buffer(7 downto 0), recv_data_valid, error_I2C_NACK, SCL, SDA);
 
-  --! Handles host write_en edges, sets partner address, and starts I2C transactions if ready.
+  --! Handles host write_en edges, sets partner address, and starts I2C transactions if ready by using a buffer.
   I2C_COMM: process(clk)
   begin
     if rising_edge(clk) then
       if rst = '1' then
-        error_I2C_not_ready <= '0';
-        unit_data_in_buffer(HOST_DATA_BITS-1 downto 0) <= (others => '0');
-        I2C_write_en <= '0';
-        I2C_mode_recv <= '0';
-        I2C_ready <= '1';
+        error_I2C_buffer_full <= '0';
         current_partner_adr <= (others => '0');
-      else      
-        error_I2C_not_ready <= '0';
+        i2c_buf_addr <= (others => (others => '0'));
+        i2c_buf_recv_mode <= (others => '0');
+        i2c_buf_data <= (others => (others => '0'));
+        free_i2c_buf_slots <= I2C_BUF_LEN;
+        i2c_write_en <= '0';
+      else
+        error_I2C_buffer_full <= '0';
         if last_I2C_data_saved = '0' and I2C_data_saved = '1' then
-          -- Data was saved
-          I2C_write_en <= '0';
-          I2C_ready <= '1';
+          -- Shift the data in the buffer one idx to the front if valid data exists
+          free_i2c_buf_slots <= free_i2c_buf_slots + 1;
+          if free_i2c_buf_slots < I2C_BUF_LEN - 1 then
+            -- Buffer not empty after the processed item is poped.
+            for i in 0 to I2C_BUF_LEN-2 loop
+              i2c_buf_addr(i) <= i2c_buf_addr(i+1);
+              i2c_buf_recv_mode(i) <= i2c_buf_recv_mode(i+1);
+              i2c_buf_data(i) <= i2c_buf_data(i+1);
+            end loop;
+          else
+            -- No data in buffer remaining
+            i2c_write_en <= '0';
+          end if;
         end if;
         if last_write_enable = '0' and write_en = '1' then
           -- Rising edge of write_en detected.
@@ -139,20 +166,22 @@ begin
             -- Set current partner address (access mode bit0=1).
             current_partner_adr <= unit_data_in(6 downto 0);
           else
-            if I2C_ready = '1' then
-              unit_data_in_buffer(HOST_DATA_BITS-1 downto 0) <= unit_data_in;
-              I2C_write_en <= '1';
-              I2C_ready <= '0';
+            if free_i2c_buf_slots > 0 then
+              -- Free buffer slot --> Take this slot
+              free_i2c_buf_slots <= free_i2c_buf_slots - 1;
+              i2c_write_en <= '1';
+              i2c_buf_addr(I2C_BUF_LEN - free_i2c_buf_slots) <= current_partner_adr;
               if access_mode(1) = '1' then
                 -- Receive data (access mode bit1=1).
-                I2C_mode_recv <= '1';
+                i2c_buf_recv_mode(I2C_BUF_LEN - free_i2c_buf_slots) <= '1';
               else
                 -- Send data (access mode bit1=0).
-                I2C_mode_recv <= '0';
+                i2c_buf_recv_mode(I2C_BUF_LEN - free_i2c_buf_slots) <= '0';
               end if;
+              i2c_buf_data(I2C_BUF_LEN - free_i2c_buf_slots)(HOST_DATA_BITS-1 downto 0) <= unit_data_in;
             else
-              -- Error: I2C not ready.
-              error_I2C_not_ready <= '1';
+              -- Error: No free buffer slot.
+              error_I2C_buffer_full <= '1';
             end if;
           end if;
         end if;
@@ -197,7 +226,7 @@ begin
       if rst = '1' then
         error_from_host <= '0';
       else
-        error_from_host <= error_I2C_not_ready or error_I2C_NACK;
+        error_from_host <= error_I2C_buffer_full or error_I2C_NACK;
       end if;
     end if;
   end process;

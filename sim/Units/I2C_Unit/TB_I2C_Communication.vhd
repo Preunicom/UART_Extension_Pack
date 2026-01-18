@@ -47,11 +47,12 @@ architecture TESTBENCH of TB_I2C_Communication is
   signal tb_error_unit, tb_exp_error_unit : std_logic;
   constant tbase : time := 100 ns;
   signal tb_SDA_no_pullup : std_logic := 'Z';
+  signal tb_SDA_ext_no_pullup : std_logic := 'Z';
 
 begin
   COMP: I2C_Communication port map(tb_clk, tb_rst, tb_clk_en_read, tb_clk_en_write, tb_SDA, tb_SDA_no_pullup, tb_write_en, tb_addr_data, tb_mode_recv, tb_send_data, tb_data_saved, tb_recv_data, tb_recv_data_valid, tb_is_idle, tb_error_unit);
 
-  tb_SDA <= '0' when tb_SDA_no_pullup = '0' else 'H';
+  tb_SDA <= '0' when tb_SDA_no_pullup = '0' or tb_SDA_ext_no_pullup = '0' else 'H';
 
   -- 10 MHz
   CLOCK: process
@@ -69,7 +70,9 @@ begin
 
   tb_rst <= '1', '0' after 2*tbase;
 
-  tb_SDA_no_pullup <= 'Z';
+  tb_SDA_ext_no_pullup <= 'Z',
+    '0' after 29*tbase, 'Z' after 31*tbase,
+    '0' after 47*tbase, 'Z' after 49*tbase;
 
   tb_write_en <= '0',
     '1' after 10*tbase, '0' after 11*tbase;
@@ -97,11 +100,9 @@ begin
 
   tb_exp_SDA <= 'H',
     '0' after 12*tbase, 'H' after 23*tbase,
-    '0' after 27*tbase, 'H' after 29*tbase,
-    '0' after 31*tbase, 'H' after 33*tbase,
+    '0' after 27*tbase, 'H' after 33*tbase,
     '0' after 37*tbase, 'H' after 41*tbase,
-    '0' after 45*tbase, 'H' after 47*tbase,
-    '0' after 49*tbase, 'H' after 50*tbase;
+    '0' after 45*tbase, 'H' after 50*tbase;
 
   tb_error <= '0' when 
     (tb_exp_data_saved = tb_data_saved)

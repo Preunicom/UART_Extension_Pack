@@ -102,7 +102,8 @@ architecture Behavioral of Main_Unit is
     Generic (
       HOST_DATA_BITS : integer := 8;
       IN_FREQ_HZ : integer := 12000000;
-      I2C_FREQ_HZ : integer := 100000
+      I2C_FREQ_HZ : integer := 100000;
+      I2C_BUF_LEN : integer := 10
     );
     Port ( 
       clk, rst : in STD_LOGIC;
@@ -315,7 +316,7 @@ begin
   --! Unit 6 - SPI_Unit implemented via SPI_Wrapper.
   U06_SPI: SPI_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 9600, 1, 0, 0, 8) port map(clk, rst_ext_pack, unit_en(6), decoded_access_mode, unit_data_received, unit_data_send(6), unit_scheduler_wanted(6), unit_scheduler_done(6), error_to_host(6), error_from_host(6), spi_sck, spi_cs, spi_mosi, spi_miso_sync);
   --! Unit 7 - I2C_Unit implemented via I2C_Wrapper.
-  U07_I2C: I2C_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 100000) port map(clk, rst_ext_pack, unit_en(7), decoded_access_mode, unit_data_received, unit_data_send(7), unit_scheduler_wanted(7), unit_scheduler_done(7), error_to_host(7), error_from_host(7), i2c_scl, i2c_sda);
+  U07_I2C: I2C_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 100000, 10) port map(clk, rst_ext_pack, unit_en(7), decoded_access_mode, unit_data_received, unit_data_send(7), unit_scheduler_wanted(7), unit_scheduler_done(7), error_to_host(7), error_from_host(7), i2c_scl, i2c_sda);
   --! Unit 8 - ISSI_IS61WV5128BLL_SRAM_Unit implemented via ISSI_IS61WV5128BLL_SRAM_Wrapper.
   U08_RAM: ISSI_IS61WV5128BLL_SRAM_Wrapper generic map(HOST_DATA_BITS, FPGA_FREQ, 8) port map(clk, rst_ext_pack, unit_en(8), decoded_access_mode, unit_data_received, unit_data_send(8), unit_scheduler_wanted(8), unit_scheduler_done(8), error_to_host(8), error_from_host(8), sram_adr, sram_data, sram_oen, sram_cen, sram_wen);
   -------------- UNITS END ----------------
