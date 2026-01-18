@@ -20,7 +20,7 @@ entity I2C_Unit is
   port(
     clk : in std_logic; --! Clock signal.
     rst : in std_logic; --! Reset signal.
-    write_en : in std_logic; --! Strobe to start a transaction (read or write).
+    write_en : in std_logic; --! Flag to start a transaction (read or write).
     adr : in std_logic_vector(6 downto 0); --! 7-bit partner address.
     mode_recv : in std_logic; --! Mode: '0' = write, '1' = read.
     send_data : in std_logic_vector(7 downto 0); --! Byte to send on write.
@@ -72,7 +72,7 @@ architecture Behavioral of I2C_Unit is
   --! Prescaled enable for write phase timing.
   signal clk_en_write : std_logic;
   --! Indicates I2C bus idle; releases SCL when '1'.
-  signal SCL_en : std_logic;
+  signal not_SCL_en : std_logic;
   --! Internal SDA input/output (open-drain control).
   signal SDA_in, SDA_out : std_logic;
   --! Internal SCL input/output (open-drain control).
@@ -81,14 +81,14 @@ architecture Behavioral of I2C_Unit is
 begin
 
   --! Instantiate I2C communication core.
-  COMM: I2C_Communication port map(clk, rst, clk_en_read, clk_en_write, SDA_in, SDA_out, write_en, adr, mode_recv, send_data, data_saved, recv_data, recv_data_valid, SCL_en, error);
+  COMM: I2C_Communication port map(clk, rst, clk_en_read, clk_en_write, SDA_in, SDA_out, write_en, adr, mode_recv, send_data, data_saved, recv_data, recv_data_valid, not_SCL_en, error);
   --! Instantiate I2C prescaler.
   PRES: I2C_Prescaler generic map(IN_FREQ_HZ, I2C_FREQ_HZ) port map(clk, rst, clk_en_read, clk_en_write, SCL_in, SCL_out);
   
   SDA     <= '0' when SDA_out = '0' else 'Z';
-  SDA_in  <= SDA;
+  SDA_in  <= SDA; -- '0' or 'H'
 
-  SCL     <= '0' when ((SCL_out = '0') and (not (SCL_en = '1'))) else 'Z';
-  SCL_in  <= SCL;
+  SCL     <= '0' when ((SCL_out = '0') and (not (not_SCL_en = '1'))) else 'Z';
+  SCL_in  <= SCL; -- '0' or 'H'
 
 end Behavioral;

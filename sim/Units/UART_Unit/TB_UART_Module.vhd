@@ -52,7 +52,7 @@ architecture TESTBENCH of TB_UART_Module is
   signal tb_error_TB_Deserializer : std_logic;
   signal tb_error_TB_Buffer_Register_Deserializer : std_logic;
 begin
-  UARTUnit: TB_UART_Unit port map(tb_error_TB_UART_Unit);
+  UART_Unit: TB_UART_Unit port map(tb_error_TB_UART_Unit);
   Prescaler: TB_Prescaler port map(tb_error_TB_Prescaler);
   Serializer: TB_Serializer port map(tb_error_TB_Serializer);
   Buffer_Register_Serializer: TB_Buffer_Register_Serializer port map(tb_error_TB_Buffer_Register_Serializer);

@@ -24,7 +24,8 @@ architecture TESTBENCH of TB_I2C_Wrapper is
       HOST_DATA_BITS : integer := 8;
       -- IN_FREQ_HZ has to be minimum 4*I2C_FREQ_HZ
       IN_FREQ_HZ : integer := 12000000;
-      I2C_FREQ_HZ : integer := 100000
+      I2C_FREQ_HZ : integer := 100000;
+      I2C_BUF_LEN : integer := 10
     );
     Port ( 
       clk, rst : in STD_LOGIC;
@@ -63,7 +64,7 @@ architecture TESTBENCH of TB_I2C_Wrapper is
 
 begin
 
-  COMP: I2C_Wrapper generic map(8, 10000000, 100000) port map(tb_clk, tb_rst, tb_write_en, tb_access_mode, tb_unit_data_in, tb_unit_data_out, tb_scheduler_wanted, tb_scheduler_done, tb_error_to_host, tb_error_from_host, tb_SCL_no_pullup, tb_SDA_no_pullup);
+  COMP: I2C_Wrapper generic map(8, 10000000, 100000, 1) port map(tb_clk, tb_rst, tb_write_en, tb_access_mode, tb_unit_data_in, tb_unit_data_out, tb_scheduler_wanted, tb_scheduler_done, tb_error_to_host, tb_error_from_host, tb_SCL_no_pullup, tb_SDA_no_pullup);
 
   tb_SDA <= tb_SDA_no_pullup when tb_SDA_no_pullup /= 'Z' else 'H';
   tb_SCL <= tb_SCL_no_pullup when tb_SCL_no_pullup /= 'Z' else 'H';
@@ -96,7 +97,8 @@ begin
 
   SCL_en <= '1', '0' after 1*tbase,
     '1' after 101*tbase, '0' after 1951*tbase,
-    '1' after 2601*tbase, '0' after 6351*tbase;
+    '1' after 2601*tbase, '0' after 6351*tbase,
+    '1' after 8101*tbase, '0' after 10851*tbase;
 
   tb_exp_SCL <= '0' when SCL_en = '1' and SCL_temp = '0' else 'H';
 
@@ -107,24 +109,32 @@ begin
     '1' after 20*tbase, '0' after 21*tbase,
     '1' after 2500*tbase, '0' after 2501*tbase,
     '1' after 2550*tbase, '0' after 2551*tbase,
-    '1' after 2600*tbase, '0' after 2601*tbase; -- skipped with error
+    '1' after 2600*tbase, '0' after 2601*tbase, -- skipped with error
+    '1' after 8000*tbase, '0' after 8001*tbase,
+    '1' after 9500*tbase, '0' after 9501*tbase;
 
   tb_access_mode <= "00",
     "01" after 10*tbase, "00" after 11*tbase, -- Set adr.
     "00" after 20*tbase, "00" after 21*tbase, -- Send data
     "00" after 2500*tbase, "00" after 2501*tbase, -- Send data
     "10" after 2550*tbase, "00" after 2551*tbase, -- Recv data
-    "00" after 2600*tbase, "00" after 2601*tbase; -- Send data
+    "00" after 2600*tbase, "00" after 2601*tbase, -- Send data
+    "10" after 8000*tbase, "00" after 8001*tbase, -- Recv data
+    "10" after 9500*tbase, "00" after 9501*tbase; -- Recv data
 
   tb_unit_data_in <= "00000000",
-     "11000001" after 10*tbase, "00000000" after 11*tbase, -- 0x41
+     "11000001" after 10*tbase, "00000000" after 11*tbase, -- 0x41 (ignores MSB)
      "00001111" after 20*tbase, "00000000" after 21*tbase, -- 0x0F
      "10000001" after 2500*tbase, "00000000" after 2501*tbase, -- 0x81
      "00000000" after 2550*tbase, "00000000" after 2551*tbase, -- 0x00 (ignored - recv mode)
-     "11110000" after 2600*tbase, "00000000" after 2601*tbase; -- 0xF0
+     "11110000" after 2600*tbase, "00000000" after 2601*tbase, -- 0xF0
+     "00000000" after 8000*tbase, "00000000" after 8001*tbase, -- 0x00 (ignored - recv mode)
+     "00000000" after 9500*tbase, "00000000" after 9501*tbase; -- 0x00 (ignored - recv mode)
 
   tb_scheduler_done <= '0',
-    '1' after 6200*tbase, '0' after 6201*tbase;
+    '1' after 6200*tbase, '0' after 6201*tbase,
+    '1' after 9800*tbase, '0' after 9801*tbase,
+    '1' after 10700*tbase, '0' after 10701*tbase;
 
   tb_SDA_no_pullup <= 'Z',
     '0' after 927*tbase, 'Z' after 1027*tbase, --Adr ACK
@@ -132,13 +142,20 @@ begin
     '0' after 3427*tbase, 'Z' after 3527*tbase, --Adr ACK
     '0' after 4327*tbase, 'Z' after 4427*tbase, --Data ACK
     '0' after 5327*tbase, 'Z' after 5427*tbase, --Adr ACK
-    '0' after 5427*tbase, '0' after 5527*tbase, 'Z' after 5627*tbase, 'Z' after 5727*tbase, '0' after 5827*tbase, '0' after 5927*tbase, '0' after 6027*tbase, 'Z' after 6127*tbase; -- DATA (0x31)
+    '0' after 5427*tbase, '0' after 5527*tbase, 'Z' after 5627*tbase, 'Z' after 5727*tbase, '0' after 5827*tbase, '0' after 5927*tbase, '0' after 6027*tbase, 'Z' after 6127*tbase, -- DATA (0x31)
+    '0' after 8927*tbase, 'Z' after 9027*tbase, --Adr ACK
+    '0' after 9027*tbase, '0' after 9127*tbase, '0' after 9227*tbase, '0' after 9327*tbase, '0' after 9427*tbase, '0' after 9527*tbase, '0' after 9627*tbase, 'Z' after 9727*tbase, -- DATA (0x01)
+    '0' after 9927*tbase, '0' after 10027*tbase, '0' after 10127*tbase, '0' after 10227*tbase, '0' after 10327*tbase, '0' after 10427*tbase, '0' after 10527*tbase, 'Z' after 10627*tbase; -- DATA (0x01)
 
   tb_exp_unit_data_out <= (others => 'U'), (others => '0') after 1*tbase,
-    "00000000ZZ000Z" after 6179*tbase, (others => '0') after 6200*tbase;
+    "00000000ZZ000Z" after 6179*tbase, (others => '0') after 6200*tbase,
+    "0000000000000Z" after 9779*tbase, (others => '0') after 9800*tbase,
+    "0000000000000Z" after 10679*tbase, (others => '0') after 10700*tbase;
 
   tb_exp_scheduler_wanted <= 'U', '0' after 1*tbase,
-    '1' after 6179*tbase, '0' after 6200*tbase;
+    '1' after 6179*tbase, '0' after 6200*tbase,
+    '1' after 9779*tbase, '0' after 9800*tbase,
+    '1' after 10679*tbase, '0' after 10700*tbase;
   
   tb_exp_error_to_host <= '0';
 
@@ -165,7 +182,17 @@ begin
     '0' after 5427*tbase, '0' after 5527*tbase, 'H' after 5627*tbase, 'H' after 5727*tbase, '0' after 5827*tbase, '0' after 5927*tbase, '0' after 6027*tbase, 'H' after 6127*tbase, -- DATA (0x31)
     'H' after 6227*tbase, --NACK (Recv end)
     '0' after 6327*tbase, --STOP_PREP
-    'H' after 6377*tbase; --STOP
+    'H' after 6377*tbase, --STOP
+    '0' after 8077*tbase, --START
+    'H' after 8127*tbase, '0' after 8227*tbase, '0' after 8327*tbase, '0' after 8427*tbase, '0' after 8527*tbase, '0' after 8627*tbase, 'H' after 8727*tbase, 'H' after 8827*tbase, -- ADR (0x83)
+    '0' after 8927*tbase, --ACK
+    '0' after 9027*tbase, '0' after 9127*tbase, '0' after 9227*tbase, '0' after 9327*tbase, '0' after 9427*tbase, '0' after 9527*tbase, '0' after 9627*tbase, 'H' after 9727*tbase, -- DATA (0x01)
+    '0' after 9827*tbase, --ACK
+    '0' after 9927*tbase, '0' after 10027*tbase, '0' after 10127*tbase, '0' after 10227*tbase, '0' after 10327*tbase, '0' after 10427*tbase, '0' after 10527*tbase, 'H' after 10627*tbase, -- DATA (0x01) 
+    'H' after 10727*tbase, -- NACK
+    '0' after 10827*tbase, -- STOP_PREP
+    'H' after 10877*tbase; --STOP
+
  
   tb_error <= '0' when 
     (tb_exp_unit_data_out = tb_unit_data_out)

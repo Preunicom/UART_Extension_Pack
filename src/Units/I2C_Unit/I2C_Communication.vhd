@@ -13,7 +13,7 @@ entity I2C_Communication is
     clk_en_write : in std_logic; --! Prescaled enable pulse for write/update.
     SDA_in : in std_logic; --! Serial data input sampled from SDA line.
     SDA_out : out std_logic; --! Serial data output to SDA line ('0' drive, '1' release/open).
-    write_en : in std_logic; --! Strobe to start/continue a transaction.
+    write_en : in std_logic; --! Flag to start/continue a transaction.
     addr_data : in std_logic_vector(6 downto 0); --! 7-bit partner address.
     mode_recv : in std_logic; --! Mode select: '0' = write, '1' = read.
     send_data : in std_logic_vector(7 downto 0); --! Data byte to send in write mode.
@@ -31,7 +31,7 @@ architecture Behavioral of I2C_Communication is
   --! @details S=Send, R=Receive, A=Address, B=Bit, ACK_Z=ACK_Z_state, ACK_R=ACK_Read 
   type communication_state_type is (IDLE, START, PREP_REP_START, REP_START,
                                     SA0, SA1, SA2, SA3, SA4, SA5, SA6, SRW, AACK_Z, AACK_R,
-                                    SB0, SB1, SB2, SB3, SB4, SB5, SB6, SB7, SACK,
+                                    SB0, SB1, SB2, SB3, SB4, SB5, SB6, SB7, SACK, SACK_DELAY,
                                     RB0, RB1, RB2, RB3, RB4, RB5, RB6, RB7, RACK_Z, RACK_R,
                                     STOP_PREP, STOP, ERR
                                     );
@@ -136,10 +136,7 @@ begin
           when AACK_R => 
             -- Read ACK
             if clk_en_read = '1' then
-              if SDA_in = '1' then
-                -- NACK
-                communication_state <= ERR;
-              else 
+              if SDA_in = '0' then
                 -- ACK
                 if ctrl_reg(0) = '0' then
                   -- Send
@@ -148,6 +145,9 @@ begin
                   -- Receive
                   communication_state <= RB0;
                 end if;
+              else 
+                -- NACK
+                communication_state <= ERR;
               end if;
             end if;
           when SB0 => 
@@ -200,10 +200,7 @@ begin
           when RACK_R => 
             -- Read ACK
             if clk_en_read = '1' then
-              if SDA_in = '1' then
-                -- NACK
-                communication_state <= ERR;
-              else 
+              if SDA_in = '0' then
                 -- ACK
                 if write_en = '1' then
                   -- Send/Recv next
@@ -224,6 +221,9 @@ begin
                   -- Stop 
                   communication_state <= STOP_PREP;
                 end if;
+              else
+                -- NACK
+                communication_state <= ERR;
               end if;
             end if;
           when RB0 => 
@@ -279,18 +279,24 @@ begin
                   -- Receive next
                   SDA_out <= '0'; -- ACK to continue reading
                   data_saved <= '1';
-                  communication_state <= RB0;
+                  communication_state <= SACK_DELAY;
                 else
                   -- Send next or new addr --> Repeated Start
                   ctrl_reg <= addr_data & mode_recv;
                   send_reg <= send_data;
                   data_saved <= '1';
-                  communication_state <= REP_START; -- NACK --> SDA is already high --> No PREP needed
+                  communication_state <= PREP_REP_START;
                 end if;
               else 
                 -- Stop 
                 communication_state <= STOP_PREP;
               end if;
+            end if;
+          when SACK_DELAY =>
+            -- wait for the ACK of the receivced byte to be sent before reading the next data
+            if clk_en_write = '1' then
+              SDA_out <= '1';
+              communication_state <= RB0;
             end if;
           when ERR => 
             error <= '1';

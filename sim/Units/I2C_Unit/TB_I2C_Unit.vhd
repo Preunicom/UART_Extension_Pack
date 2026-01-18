@@ -142,6 +142,7 @@ begin
     '0' after 824*tbase, 'Z' after 834*tbase,
     '0' after 924*tbase, 'Z' after 934*tbase,
     '1' after 936*tbase, '0' after 945*tbase, '1' after 955*tbase, '0' after 965*tbase, '1' after 975*tbase, '0' after 985*tbase, '1' after 995*tbase, '1' after 1005*tbase, 'Z' after 1010*tbase,
+    '0' after 1294*tbase, 'Z' after 1304*tbase, -- Addr. ACK
     '1' after 1384*tbase, 'Z' after 1394*tbase; -- NACK
 
   tb_exp_data_saved <= '0',
@@ -189,7 +190,7 @@ begin
     '0' after 985*tbase, '1' after 995*tbase, 'H' after 1010*tbase,
     '0' after 1024*tbase, 'H' after 1029*tbase,
     '0' after 1209*tbase, 'H' after 1274*tbase,
-    '0' after 1284*tbase, 'H' after 1294*tbase, '1' after 1384*tbase,
+    '0' after 1284*tbase, 'H' after 1304*tbase, '1' after 1384*tbase,
     '0' after 1394*tbase, 'H' after 1399*tbase;
 
     tb_error <= '0' when
